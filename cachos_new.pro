@@ -5,7 +5,7 @@ PRO cachos_new,band,exptime
 folder='im_jitter_NOgains/'
 ;folder ='im_sky_ESOReflex/'
 
-data='_NOgains'
+
 
 s=500
 sx=[2048,2048]
@@ -17,9 +17,6 @@ outdir='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_
 tmp = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp/
 
 
-outdir=py_pruebas
-indir=py_pruebas
-tmp=py_pruebas
 
 for chip=1, 4 do begin
 
@@ -41,8 +38,8 @@ for i=1,cube_d do begin ;###############
 
 
 
-datos=readfits(indir+'total'+strn(chip)+'.fits', EXTEN_NO=0,header0)
-cube = readfits(indir+'total'+strn(chip)+'.fits', EXTEN_NO=1,header1)
+datos=readfits(indir+'cube_chip'+strn(chip)+'_canvas.fits', EXTEN_NO=0,header0)
+cube = readfits(indir+'cube_chip'+strn(chip)+'_canvas.fits', EXTEN_NO=1,header1)
 l=size(cube)
 lado=l[1]
 x_pix=sxpar(header1,'CRPIX1')
