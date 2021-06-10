@@ -5,7 +5,7 @@ PRO DEEPASTRO_new,band,exptime
 folder='im_jitter_NOgains/'
 ;folder ='im_sky_ESOReflex/'
 
-data='_NOgains'
+
 
 s=500
 sx=[2048,2048]
@@ -17,32 +17,18 @@ outdir='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_
 tmp = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp/
 psf_path='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder
 
-indir=py_pruebas
-outdir=py_pruebas
-tmp=py_pruebas
+
 
 
 for chip=1, 4 do begin
 
 readcol, indir+'xy_off_xy_alig_chip'+strn(chip)+'.txt', x_off, y_off,x_off_s,y_off_s,Format ='A,A,A,A',COUNT=count
 cube_d=count
-;x_off=float(x_off)
-;y_off=float(y_off)
-;x_off_s=float(x_off_s)
-;y_off_s=float(y_off_s)
-
-
 
 for i=1,cube_d do begin ;###############
 
-
-
-
-
 datos=readfits(tmp+'im'+strn(i)+'chip'+strn(chip)+'_'+band+'dit_'+strn(exptime)+'_cacho.fits',EXTEN_NO=0,header0)
 im = readfits(tmp+ 'im'+strn(i)+'chip'+strn(chip)+'_'+band+'dit_'+strn(exptime)+'_cacho.fits', EXTEN_NO=1,header1)
-
-
 
 print,'Este son dim del cacho',size(im)
 	
@@ -96,19 +82,14 @@ guide_y = ""
       	x, y, f, sx, sy, sf, c, STARS = stars, $
         LOGFILE = logfilename, /CUBIC
 
-  ;writefits, 'stars.fits', stars
-  ;writefits, 'bg_sf.fits', background
-  ;writefits, 'resid.fits', im-stars-background
-  ;subtracted =  im-stars
-  ;writefits, 'subtracted.fits', im-stars
-  ;writefits, 'bg.fits', median_filter(subtracted,12)
+ 
   
-  writefits, outdir+ 'stars_im'+strn(i)+'_chip'+strn(chip)+'_.fits', stars
-  writefits, outdir+ 'bg_sf_im'+strn(i)+'_chip'+strn(chip)+'_.fits', background
-  writefits, outdir+ 'resid_im'+strn(i)+'_chip'+strn(chip)+'_.fits', im-stars-background
+  writefits, tmp+ 'stars_im'+strn(i)+'_chip'+strn(chip)+'_.fits', stars
+  writefits, tmp+ 'bg_sf_im'+strn(i)+'_chip'+strn(chip)+'_.fits', background
+  writefits, tmp+ 'resid_im'+strn(i)+'_chip'+strn(chip)+'_.fits', im-stars-background
   subtracted =  im-stars
-  writefits, outdir+'subtracted_im'+strn(i)+'_chip'+strn(chip)+'_.fits', im-stars
-  writefits, outdir+'bg_deep_im'+strn(i)+'_chip'+strn(chip)+'_.fits', median_filter(subtracted,12)
+  writefits, tmp+'subtracted_im'+strn(i)+'_chip'+strn(chip)+'_.fits', im-stars
+  writefits, tmp+'bg_deep_im'+strn(i)+'_chip'+strn(chip)+'_.fits', median_filter(subtracted,12)
 
   ; save list
   ; select stars in region with more than covfrac coverage
