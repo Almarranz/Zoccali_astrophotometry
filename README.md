@@ -1,5 +1,5 @@
 # Zoccali_astrophotometry
-Zoccali astrophotometry
+at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
 Photometry for WHOLE images
 #####IDL#####
