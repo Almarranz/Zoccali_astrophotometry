@@ -111,8 +111,8 @@ for chip=1,4 do begin
       
  endelse
  
-       writefits, outdir+'total'+strn(chip)+'.fits',cube_ref,h0_ref
-	   writefits, outdir+'total'+strn(chip)+'.fits',total,header_ref,/app
+       writefits, outdir+'cube_chip'+strn(chip)+'_canvas.fits',cube_ref,h0_ref
+	   writefits, outdir+'cube_chip'+strn(chip)+'_canvas.fits',total,header_ref,/app
        
        writefits, outdir+'mask_cube_chip'+strn(chip)+'_canvas.fits',cube_ref,h0_ref
 	   writefits, outdir+'mask_cube_chip'+strn(chip)+'_canvas.fits',mask_cube,header_ref,/app
