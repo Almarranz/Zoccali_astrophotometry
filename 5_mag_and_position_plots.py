@@ -4,22 +4,12 @@
 # In[1]:
 
 
-from astropy.io import fits
 import glob
-import random
-import statistics
-from astropy.io.fits import getheader
 import os
-from astropy import stats
-from astropy.stats import sigma_clipped_stats
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy
 from scipy.spatial import distance
-from astropy.stats import sigma_clip
 from scipy.stats import gaussian_kde
-from astropy.table import QTable
-import pandas as pd
 import json
 
 
