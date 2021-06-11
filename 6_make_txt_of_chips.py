@@ -66,10 +66,10 @@ for chip in range(1,5):
     dy=[0.106*np.std(dic_y['y_chip%s'%(chip)][i])/np.sqrt(len(dic_x['x_chip%s'%(chip)][i]))
         for i in range(len(dic_x['x_chip%s'%(chip)]))]
     
-    fn = get_pkg_data_filename(tmp+'wt_chip%s.fits'%(chip))#, package='astropy.wcs.tests')
-    f = fits.open(fn)
+    
+    f = fits.open(tmp+'wt_chip%s.fits'%(chip))
     w = WCS(f[1].header)
-    #print(w)
+    print(w)
     coord_gal=[w.pixel_to_world(x_mean[i], y_mean[i]).galactic for i in range(len(x_mean))]
     coord=[w.pixel_to_world(x_mean[i], y_mean[i]) for i in range(len(x_mean))]
     t_ra = QTable([coord], names=["lines coord"])
