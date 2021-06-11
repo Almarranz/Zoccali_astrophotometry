@@ -4,19 +4,13 @@
 # In[1]:
 
 
-from astropy.io import fits
+
 import glob
-import random
-import statistics
-from astropy.io.fits import getheader
 import os
-from astropy import stats
-from astropy.stats import sigma_clipped_stats
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy
 from scipy.spatial import distance
-from astropy.stats import sigma_clip
+
 
 
 # In[2]:
@@ -31,7 +25,7 @@ from astropy.stats import sigma_clip
 # In[3]:
 
 
-band='Ks'
+band='H'
 exptime=10
 #chip=4
 folder='im_jitter_NOgains/'
