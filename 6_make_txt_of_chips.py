@@ -54,8 +54,8 @@ for chip in range(1,5):
     f = fits.open(tmp+'wt_chip%s.fits'%(chip))
     w = WCS(f[1].header)
     print(w)
-    coord_gal=[w.pixel_to_world(x_mean[i], y_mean[i]).galactic for i in range(len(x_mean))]
-    coord=[w.pixel_to_world(x_mean[i], y_mean[i]) for i in range(len(x_mean))]
+    coord_gal=w.pixel_to_world(x_mean, y_mean).galactic
+    coord=w.pixel_to_world(x_mean, y_mean)
     t_ra = QTable([coord], names=["lines coord"])
     t_gal= QTable([coord_gal], names=["lines coord"])
     df_ra=t_ra.to_pandas()
@@ -63,7 +63,9 @@ for chip in range(1,5):
     df_gal=t_gal.to_pandas()
     gal=df_gal.to_numpy()
     total=np.c_[ra,x_mean,dx,y_mean,dy, dic_mag['mag_chip%s'%(chip)],dic_dmag['dmag_chip%s'%(chip)],gal[:,0],gal[:,1]]
+    np.savetxt(results+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
     np.savetxt(tmp+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
+    print('Done with chip %s'%(chip))
     print('Done with chip %s'%(chip))
 
 # In[ ]:
