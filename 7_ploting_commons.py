@@ -4,26 +4,10 @@
 # In[1]:
 
 
-from astropy.io import fits
-import glob
-import random
-import statistics
-from astropy.io.fits import getheader
-import os
-from astropy import stats
-from astropy.stats import sigma_clipped_stats
+
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy
-from scipy.spatial import distance
-from astropy.stats import sigma_clip
-from astropy.wcs import WCS
-from astropy.utils.data import get_pkg_data_filename
 from astropy.table import QTable
-import pandas as pd
-import csv
-from csv import writer
-from csv import reader
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from scipy.stats import gaussian_kde
@@ -32,7 +16,7 @@ from scipy.stats import gaussian_kde
 # In[2]:
 
 
-band='Ks'
+band='H'
 exptime=10
 #chip=1
 folder='im_jitter_NOgains/'
