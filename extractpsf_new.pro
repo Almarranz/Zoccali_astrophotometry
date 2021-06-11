@@ -1,8 +1,8 @@
-PRO EXTRACTPSF_new
+PRO EXTRACTPSF_new,band,exptime
 
 
-band='H'
-exptime=10
+;band='H'
+;exptime=10
 folder='im_jitter_NOgains/'
 ;folder='im_sky_ESOReflex/'
 
@@ -17,10 +17,11 @@ for chip=1,4 do begin
 ;for i=imagen,imagen do begin ;###############
 readcol, indir+'xy_off_xy_alig_chip'+strn(chip)+'.txt', x_off, y_off,x_off_s,y_off_s,Format ='A,A,A,A',COUNT=count
 cube_d=fix(count)
+print, 'Number of images',count
 
 for i=1, cube_d do begin ;###############
 
-cube = readfits(tmp+'im'+strn(i)+'chip'+strn(chip)+'_'+band+'dit_'+strn(exptime)+'_cacho.fits', EXTEN_NO=1)
+cube = readfits(tmpdir+'im'+strn(i)+'chip'+strn(chip)+'_'+band+'dit_'+strn(exptime)+'_cacho.fits', EXTEN_NO=1)
 l=size(cube)
 lado=l[1]
 im=cube
@@ -163,6 +164,7 @@ endif
 
 ; Select isolated stars
 isolated_stars, x, y, m, x_psf, y_psf, m_psf, delta_mag, delta_r, ind_iso
+                
 x_psf = x_psf[ind_iso]
 y_psf = y_psf[ind_iso]
 m_psf = m_psf[ind_iso]
