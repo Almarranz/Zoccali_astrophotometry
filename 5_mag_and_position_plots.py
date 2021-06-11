@@ -2,6 +2,10 @@
 # coding: utf-8
 
 # In[1]:
+#This scripts plots the dmag vs mag and dx vs mag
+#Generate a josn file with arrays of differentes legnts of the diferentes positions 
+#and mag. There are different legnth couse not all the stars have the same numeber
+#of mesaurements
 
 
 import glob
@@ -33,7 +37,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 
 for chip in range(1,5):
     if band=='H':
-        ind=['A','B','C','D','E','F','G','H']#,'I']
+        ind=['A','B','C','D','E','F','G','H']#,'I'] # solo las listas con mas de 3 pointings
     elif band=='Ks':
         ind=['B','D','E','F','H']
     mag_med=[]
@@ -45,7 +49,7 @@ for chip in range(1,5):
         print('Usando ESO')
     else:
         zp_list=np.loadtxt(results+"zp_%s_chip%s.txt"%(band,chip))
-        print('Usando my sky')
+        print('Usando my sky, chip%s'%(chip))
     if band=='H':
         zp1=26.32
     else:
