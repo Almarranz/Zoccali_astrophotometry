@@ -13,7 +13,7 @@ import json
 
 # In[ ]:
 
-
+#Este cambio irá al nuevo branch????
 band='H'
 exptime=10
 #chip=1
