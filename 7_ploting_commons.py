@@ -3,7 +3,7 @@
 
 # In[1]:
 
-
+#Prueba de restore
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -338,7 +338,7 @@ ax[1,1].tick_params(axis='both', which='major', labelsize=20)
 
 # In[ ]:
 
-
+print(len(lst_1))
 
 
 
