@@ -50,6 +50,8 @@ for chip in range(1,5):
     dy=[0.106*np.std(dic_y['y_chip%s'%(chip)][i])/np.sqrt(len(dic_x['x_chip%s'%(chip)][i]))
         for i in range(len(dic_x['x_chip%s'%(chip)]))]
     
+    flux=np.loadtxt(tmp+'f_chip%s.txt'%(chip))
+    df=np.loadtxt(tmp+'df_med_chip%s.txt'%(chip))
     
     f = fits.open(tmp+'wt_chip%s.fits'%(chip))
     w = WCS(f[1].header)
@@ -62,12 +64,17 @@ for chip in range(1,5):
     ra=df_ra.to_numpy()#ra is (ra,dec)
     df_gal=t_gal.to_pandas()
     gal=df_gal.to_numpy()
+    
+    total_f=np.c_[ra,flux,df,x_mean,y_mean]
     total=np.c_[ra,x_mean,dx,y_mean,dy, dic_mag['mag_chip%s'%(chip)],dic_dmag['dmag_chip%s'%(chip)],gal[:,0],gal[:,1]]
+    
     np.savetxt(results+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
     np.savetxt(tmp+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
-    print('Done with chip %s'%(chip))
-    print('Done with chip %s'%(chip))
-
+    
+    np.savetxt(tmp+name+'fluxes_chip%s.txt'%(chip),total_f,header='ra,dec,f,df,x_mean,y_mean',fmt='%.6f')
+    np.savetxt(results+name+'fluxes_chip%s.txt'%(chip),total_f,header='ra,dec,f,df,x_mean,y_mean',fmt='%.6f')
+    print('############### Done with chip %s ##############'%(chip))
+ 
 # In[ ]:
 
 
