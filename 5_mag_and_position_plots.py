@@ -6,7 +6,7 @@
 #Generate a josn file with arrays of differentes legnts of the diferentes positions 
 #and mag. There are different legnth couse not all the stars have the same numeber
 #of mesaurements
-
+#also generated mean fluxes a df
 
 import glob
 import os
