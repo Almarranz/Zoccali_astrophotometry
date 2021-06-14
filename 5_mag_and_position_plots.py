@@ -44,6 +44,8 @@ for chip in range(1,5):
     error_mag_med=[]
     x_all=[]
     y_all=[]
+    f_med=[]
+    df_med=[]
     if folder=='im_sky_ESOReflex/':
         zp_list=np.loadtxt(results+"zp_%s_ESO_chip%s.txt"%(band),chip)
         print('Usando ESO')
@@ -89,7 +91,7 @@ for chip in range(1,5):
             mean_y=np.mean([diff[i][0][1],diff[i][1][1]])
             list_D.append((mean_x,mean_y,diff[i][0][2],diff[i][1][2]))
         list_D=np.array(list_D)
-        #print('comunes a listas de 1 a %s'%(im_b),len(list_D))
+        print('comunes a listas de 1 a %s'%(im_b),len(list_D))
         for j in range(3,len(zp_ind)+1):#loop comparando las comunes de 1,2 con las demas(123,1234,...,12...8)
             aux=[]
             aux_x=[]
@@ -114,7 +116,7 @@ for chip in range(1,5):
             list_D=np.array(list_D)
             #np.savetxt(tmp+'x_band'+band+'_dit'+str(exptime)+'_chip'+str(chip)+'.txt',aux_x,fmt='%.5f')
             #np.savetxt(tmp+'y_band'+band+'_dit'+str(exptime)+'_chip'+str(chip)+'.txt',aux_y,fmt='%.5f')
-            #print('comunes a listas de 1 a %s'%(j),len(list_D))
+            print('comunes a listas de 1 a %s'%(j),len(list_D))
         x_all.append(aux_x)
         y_all.append(aux_y)
 
@@ -127,11 +129,15 @@ for chip in range(1,5):
         fluxes=[list_D[i][2:] for i in range(len(list_D))]
         for i in range(len(fluxes)):
             suma=[]
+            suma_f=[]
             for j in range(len(fluxes[0])):
                 #print(zp_im[zp_ind[j]-1])
                 suma.append(zp_im[zp_ind[j]-1]-2.5*np.log10(fluxes[i][j]/exptime))
+                suma_f.append(fluxes[i][j])
             mag_med.append((np.mean(suma)))
             error_mag_med.append((np.std(suma)/np.sqrt(len(fluxes[0]))))  
+            f_med.append(np.mean(suma_f))
+            df_med.append((np.std(suma_f)/np.sqrt(len(fluxes[0]))))
     fig,ax=plt.subplots(1,figsize=(10,10))
     #plt.gca().invert_yaxis()
     #plt.plot(mag,e_mag,'x',scalex=True,alpha=0.5,color='k')
@@ -164,6 +170,8 @@ for chip in range(1,5):
     fig,ax=plt.subplots(1,2,figsize=(20,10))
     np.savetxt(tmp+'mag_media_chip%s.txt'%(chip),mag_med)
     np.savetxt(tmp+'error_mag_med_chip%s.txt'%(chip),error_mag_med)
+    np.savetxt(tmp+'f_chip%s.txt'%(chip),f_med,fmt='%.6e')
+    np.savetxt(tmp+'df_med_chip%s.txt'%(chip),df_med,fmt='%.6e')
     
     ax[0].plot(mag_med,dx,'.',scalex=True,alpha=0.3,color=c,markersize=1)
     ax[0].set_xlabel('[%s]'%(band),fontsize=20)
