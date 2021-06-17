@@ -32,13 +32,21 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 # In[3]:
 
 
-chip=1
+chip=2
 magerr_si=0.02
 a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si =np.loadtxt(sirius+'the_brick.txt',unpack=True)
 si=np.loadtxt(sirius+'the_brick.txt')
 
 ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b =np.loadtxt(results+name+'_chip%s.txt'%(chip),unpack=True)
 ch=np.loadtxt(results+name+'_chip%s.txt'%(chip))
+############# ONLY VALID FOR CHIP 2 !!!!!!!!!! #######################
+x_new=x_mean+15.233111 # this is the offset from the same star take it by hand
+y_new=y_mean+12.357933 # it works! make the map for clicking a retriving the value
+######################################################################
+print(ch[0,4])
+ch[:,2]=x_new
+ch[:,4]=y_new
+print(ch[0,4])
 
 six=[]
 siy=[]
