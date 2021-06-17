@@ -14,7 +14,9 @@ from astropy.wcs import WCS
 
 
 #Works well with chips 1 and 4. Does not work with chip 2 and 3. Don`t know why yet.
-
+#I thing the trick is to mark the same stras in both lists and add the diferences of x and y to
+#to the whole list of x and y at the hawki list, then do the compare lists and 
+# and the polywarp. YOU DIDNT DO IT YET!!!!!!
 band='H'
 exptime=10
 folder='im_jitter_NOgains/'
