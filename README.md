@@ -17,4 +17,4 @@ Photometry for WHOLE images
  Also returns some txt files and .json files with mean mag and mag (text files) and x and y position for the common stars (stars that are presentes within 1.5 pixel apart in all lists)
 6_make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in degrees)
 7_plotting_commmons.  Make plots of the stars on the overplottings areas of both surveys
- 
+8_aling_chips_brick.pri. Aligns the chips with SIRIUS. 
