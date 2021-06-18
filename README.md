@@ -5,7 +5,7 @@ Photometry for WHOLE images
 #####IDL#####
 1. aling_new.pro. Aligns the images with correl_optimize, put them in a cube and generate a list for offsets.
 2.cachos_new.pro. cut off the images from the cube using the offset list generated in aling_new
-3.extractpsf_new.pro. Este hay que adaptarlo para que saque la psf de las imagenes de cachos
+3.extractpsf_new.pro. Gets the psf over cachos.
 4.deepastro_new. pro. Runs starfinder on the reduced aligned cachos (extracted from the cube)
 
 #####PYTHON#####
