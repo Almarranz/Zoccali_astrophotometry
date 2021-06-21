@@ -20,4 +20,5 @@ Photometry for WHOLE images
 ##################NOTE######################## 
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 ###############################################
-8_aling_chips_brick.pri. Aligns the chips with SIRIUS. 
+8_aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment. Somthing happend, I didnt 
+9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
