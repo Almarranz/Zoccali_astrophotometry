@@ -17,8 +17,16 @@ Photometry for WHOLE images
  Also returns some txt files and .json files with mean mag and mag (text files) and x and y position for the common stars (stars that are presentes within 1.5 pixel apart in all lists)
 6_make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in degrees)
 7_plotting_commmons.  Make plots of the stars on the overplottings areas of both surveys
-##################NOTE######################## 
+##################WARNING######################## 
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 ###############################################
-8_aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment. Somthing happend, I didnt 
+8_aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
+
+
+#################NOTE##########################
+2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the Ks to the whole list.
+When looping with distancia =1 the improvement is huge. But them something happen in script 5 and the erros in position
+ are too big and the numer of stars for chip too small.
+A test script is almost ready at:
+Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/cube_lists_alignment_improved....in_process..ipynb
