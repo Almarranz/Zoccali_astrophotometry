@@ -26,7 +26,8 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 
 #################NOTE##########################
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the Ks to the whole list.
-When looping with distancia =1 the improvement is huge. But them something happen in script 5 and the erros in position
- are too big and the numer of stars for chip too small.
-A test script is almost ready at:
+When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
+stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final improvent for the uncertainty in the position doesnt seem to be
+significt.
+A test script is (almost?) ready at:
 Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/cube_lists_alignment_improved....in_process..ipynb
