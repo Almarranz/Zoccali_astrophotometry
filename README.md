@@ -22,7 +22,7 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 ###############################################
 8_aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
-
+10_photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
 
 #################NOTE##########################
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the Ks to the whole list.
