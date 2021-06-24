@@ -76,6 +76,7 @@ if band =='Ks':
 
 
 #HAWKI ZP with SIRUIS reference, common stars
+#polts the stars used for ZP and crosses out the ones elminated for the sigmaclipping algoritm when calculating the mean
 fig, ax=plt.subplots(4,1,figsize=(10,20))
 for i in range(0,4):
     
@@ -136,7 +137,8 @@ print(media)
 '''
 
 # In[7]:
-
+#plots the difference in mage between ref stars in SIRIUS and Zocalli. indicates the std by bins of 1mg withs and indicates
+#the number of stars in that bin and the number of stars in that bin rejected by the clipping algorithim ,
 
 fig,ax = plt.subplots(4,1,figsize=(10,20))
 for k in range(0,4):
