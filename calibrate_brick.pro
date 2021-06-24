@@ -1,4 +1,4 @@
-PRO calibrate_brick,chip,band
+PRO calibrate_brick,band
 
 
 ;band='Ks'
@@ -123,7 +123,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	endif
 
 	if band eq 'Ks' then begin
-	  good = where(m_si gt 11.0 and dm_si lt magerr_si)    
+	  good = where(m_si gt 12.0 and dm_si lt magerr_si)    
 	endif
 
 	; appendix _si means all valid stars in SIRIUS catalogue

@@ -30,7 +30,7 @@ y_off=float(y_off)
 x_off_s=float(x_off_s)
 y_off_s=float(y_off_s)
 
-
+stop
 
 for i=1,cube_d do begin ;###############
 

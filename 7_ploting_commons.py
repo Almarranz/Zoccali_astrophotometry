@@ -16,7 +16,7 @@ from scipy.stats import gaussian_kde
 # In[2]:
 
 
-band='H'
+band='Ks'
 exptime=10
 #chip=1
 folder='im_jitter_NOgains/'

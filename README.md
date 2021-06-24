@@ -1,4 +1,4 @@
-# Zoccali_astrophotometry
+2_cube_lists_alignment_improved?.py# Zoccali_astrophotometry
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
 Photometry for WHOLE images
@@ -25,9 +25,9 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 10_photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
 
 #################NOTE##########################
-2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the Ks to the whole list.
+2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the kx ky to the whole list.
 When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
 stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final improvent for the uncertainty in the position doesnt seem to be
 significt.
 A test script is (almost?) ready at:
-Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/cube_lists_alignment_improved....in_process..ipynb
+Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry/cube_lists_alignment_improved?.py

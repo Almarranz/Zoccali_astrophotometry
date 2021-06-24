@@ -13,7 +13,7 @@ from scipy.spatial import distance
 # In[2]:
 
 
-band='H'
+band='Ks'
 exptime=10
 #chip=1
 folder='im_jitter_NOgains/'

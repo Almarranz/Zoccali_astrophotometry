@@ -20,7 +20,7 @@ psf_path='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/di
 
 
 
-for chip=1, 4 do begin
+for chip=2, 4 do begin
 
 readcol, indir+'xy_off_xy_alig_chip'+strn(chip)+'.txt', x_off, y_off,x_off_s,y_off_s,Format ='A,A,A,A',COUNT=count
 cube_d=count
