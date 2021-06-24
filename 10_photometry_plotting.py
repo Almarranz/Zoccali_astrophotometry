@@ -194,6 +194,8 @@ for k in range(0,4):
     ax[k].tick_params(axis='x', labelsize=20)
     ax[k].tick_params(axis='y', labelsize=20)
     ax[k].set_ylim(-1,1)
+    x0=min(mags_bins)
+    x1=max(mags_bins+1)
     ax[k].set_xlim(x0,x1)
     #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
     fig.text(0.5, 0.08, '[%s]'%(band),fontsize=30, ha='center')
