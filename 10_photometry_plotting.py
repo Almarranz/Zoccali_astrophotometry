@@ -54,7 +54,7 @@ for i in range(0,2):
 plt.savefig(results + 'dmag_vs_mag_align_with_SIRIUS.png')
 # In[ ]:
 
-sig=2
+sig=3
 if band =='H':
     y1=27
     y0=26
@@ -81,16 +81,19 @@ for i in range(0,4):
     
     zp,mag_ref = np.loadtxt(tmp+'ZP_ref_sirius_%s_chip%s.txt'%(band,i+1),unpack=True)
     s=sigma_clipped_stats(zp,sigma=sig,maxiters=10)
-    ax[i].scatter(mag_ref,zp,color='k')
+    mask_sig=sigma_clip(zp,sigma=sig,maxiters=10)
+    nope=np.where(mask_sig.mask==True)
+    ax[i].scatter(mag_ref,zp,color='k',alpha=0.5)
     ax[i].legend(['Chip%s #%s'%(i+1,len(zp))],fontsize=20,markerscale=0,shadow=True,loc=2,handlelength=0,handletextpad=0)
-    ax[i].axhline(s[1],color='r',ls='--',lw=5)
-    ax[i].set_ylim(y0,y1)
+    ax[i].scatter(mag_ref[nope],zp[nope],color='red',marker='x',s=100,alpha=0.7)
+    ax[i].axhline(s[1],color='green',ls='--',lw=5)
+    #ax[i].set_ylim(y0,y1)
     ax[i].set_xlim(x0,x1)
     ax[i].grid()
     ax[i].tick_params(axis='x', labelsize=20)
     ax[i].tick_params(axis='y', labelsize=20)
     
-    ax[i].text(x1-2,y1-0.2,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(zp)-1)),fontsize='xx-large',color='r',zorder=3)
+    ax[i].text(x1-2,min(zp),'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(zp)-1)),fontsize='xx-large',color='green',zorder=3,weight='bold')
     fig.text(0.5, 0.08, '[%s]'%(band),fontsize=30, ha='center')
     fig.text(-0, 0.5, 'ZP', va='center', rotation='vertical',fontsize=30)
 
@@ -148,7 +151,11 @@ for k in range(0,4):
     ALL_si_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip))
     
     
-
+    zp,mag_ref = np.loadtxt(tmp+'ZP_ref_sirius_%s_chip%s.txt'%(band,chip),unpack=True)
+    s=sigma_clipped_stats(zp,sigma=sig,maxiters=10)
+    mask_sig=sigma_clip(zp,sigma=sig,maxiters=10)
+    nope=np.where(mask_sig.mask==True)
+    
     distancia=1
     diff=[]
     for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
@@ -159,8 +166,8 @@ for k in range(0,4):
     print('comunes listas %s y %s ----> '%('HA','SIRIUS'),len(diff))
     resta=[]
     mags=[]
-    nbins=(np.ceil(max(m_ref))-round(min(m_ref)))
-    mags_bins=round(min(m_ref))+np.arange(nbins)
+    nbins=(np.ceil(max(m_ref))-np.floor(min(m_ref)))
+    mags_bins=np.floor(min(m_ref))+np.arange(nbins)
     print(mags_bins)
     for i in range(len(diff)):
         #print(diff[i][0][2]-diff[i][1][2])
@@ -173,19 +180,20 @@ for k in range(0,4):
     mmag =np.zeros(shape=(int(nbins)))
     sig_mag =np.zeros(shape=(int(nbins)))
     for j in range(int(nbins)):
-        thisbin=np.where((mags[:,0]>=mags_bins[j])&(mags[:,0]<=mags_bins[j]+1))
+        thisbin=np.where((mag_ref>mags_bins[j])&(mag_ref<=mags_bins[j]+1))
         vals = resta[thisbin]
+        nope_thisbin=np.where((mag_ref[nope]>mags_bins[j])&(mag_ref[nope]<mags_bins[j]+1))
         if len(vals)>1:
-            bin_rej=sigma_clip(vals, sigma=2, maxiters=2,masked=True)
-            sig_bin=sigma_clipped_stats(vals,sigma=2,maxiters=2)
+            bin_rej=sigma_clip(vals, sigma=2, maxiters=5,masked=True)
+            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=10)
             mmag[j]=sig_bin[0]
             sig_mag[j]=sig_bin[2]
         ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
         ax[k].text(mags_bins[j]+0.4,-0.5,'%.3f'%(sig_mag[j]),color='red',fontsize=14)  
-        ax[k].text(mags_bins[j]+0.4,-0.7,'%s'%(len(np.where(bin_rej.mask==False)[0])),color='blue',fontsize=14)
-        ax[k].text(mags_bins[j]+0.4,-0.9,'%s'%(len(vals)-len(np.where(bin_rej.mask==False)[0])),color='orange',fontsize=14)
+        ax[k].text(mags_bins[j]+0.4,-0.7,'%s'%(len(vals)),color='blue',fontsize=14)
+        ax[k].text(mags_bins[j]+0.4,-0.9,'%s'%(len(nope_thisbin[0])),color='orange',fontsize=14)
         
-    ax[k].scatter(mags[:,0],mags[:,0]-mags[:,1],color='k',alpha=0.2)
+    ax[k].scatter(mags[:,1],mags[:,0]-mags[:,1],color='k',alpha=0.2)
     ax[k].legend(['Chip%s #%s'%(chip,len(mags))],fontsize=20,markerscale=0,shadow=True,loc=1, handlelength=-1)
     #for lh in leg.legendHandles: 
      #   lh.set_visible(False)
@@ -194,16 +202,11 @@ for k in range(0,4):
     ax[k].tick_params(axis='x', labelsize=20)
     ax[k].tick_params(axis='y', labelsize=20)
     ax[k].set_ylim(-1,1)
-    x0=min(mags_bins)
-    x1=max(mags_bins+1)
-    ax[k].set_xlim(x0,x1)
+    #ax[k].set_xlim(x0,x1)
     #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
     fig.text(0.5, 0.08, '[%s]'%(band),fontsize=30, ha='center')
     fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRref}$', va='center', rotation='vertical',fontsize=30)
 
-
-
-plt.savefig(pruebas + 'Diff_mag_align_with_SIRIUS.png')   
 
 
 
