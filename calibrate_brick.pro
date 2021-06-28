@@ -341,7 +341,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 		thisbin = where(abs(mag_ref_sirius - mags[j]) le 0.5)
 		vals = dm[thisbin]
 		if n_elements(vals) gt 1 then begin
-		RESISTANT_Mean,vals,2.0,Mean,Sigma,Num_Rej
+		RESISTANT_Mean,vals,3.0,Mean,Sigma,Num_Rej
 		mmag[j] = Mean
 		sigmag[j] = Sigma * sqrt(n_elements(thisbin) - Num_Rej - 1)
 		xyouts, mags[j]-0.5, -0.3, strn(sigmag[j],FORMAT='(f5.3)'), color = blue, charsize = 0.8
@@ -409,7 +409,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	   
 
 	;Write calibrate list of stars to file
-	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(8(e, 4X))', /NOCOMMENT
+	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(6(f, 4X))', /NOCOMMENT
 endfor
 
 end

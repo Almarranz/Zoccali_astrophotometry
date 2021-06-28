@@ -54,7 +54,7 @@ for i in range(0,2):
 plt.savefig(results + 'dmag_vs_mag_align_with_SIRIUS.png')
 # In[ ]:
 
-sig=3
+sig=2
 if band =='H':
     y1=27
     y0=26
@@ -96,12 +96,14 @@ for i in range(0,4):
     
     ax[i].text(x1-2,min(zp),'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(zp)-1)),fontsize='xx-large',color='green',zorder=3,weight='bold')
     fig.text(0.5, 0.08, '[%s]'%(band),fontsize=30, ha='center')
+    fig.text(0.5, 0.06, 'mean ZP(2$\sigma$). Croosed out stars are out of 2$\sigma$',fontsize=20, ha='center')
+    
     fig.text(-0, 0.5, 'ZP', va='center', rotation='vertical',fontsize=30)
-
+    
 plt.savefig(results + 'ZP_align_with_SIRIUS.png')
 # In[5]:
 
-
+'''
 # Hawki calibrated stars
 chip=1
 ra ,dec , m, dm, f, df,x,y=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
@@ -113,7 +115,7 @@ ALL_si=np.loadtxt(tmp+'ALL_SIRUS_on_%s_chip%s.txt'%(band,chip))
 x_ref,y_ref,m_ref,dm_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip),unpack=True)
 ALL_si_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip))
 
-
+'''
 # In[6]:
 
 '''
@@ -187,7 +189,7 @@ for k in range(0,4):
         nope_thisbin=np.where((mag_ref[nope]>mags_bins[j])&(mag_ref[nope]<mags_bins[j]+1))
         if len(vals)>1:
             bin_rej=sigma_clip(vals, sigma=2, maxiters=5,masked=True)
-            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=10)
+            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=5)
             mmag[j]=sig_bin[0]
             sig_mag[j]=sig_bin[2]
         ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
@@ -206,9 +208,9 @@ for k in range(0,4):
     ax[k].set_ylim(-1,1)
     #ax[k].set_xlim(x0,x1)
     #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
-    fig.text(0.5, 0.08, '[%s]'%(band),fontsize=30, ha='center')
+    fig.text(0.5, 0.08, '$[%s]_{Zoc}$'%(band),fontsize=30, ha='center')
     fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRref}$', va='center', rotation='vertical',fontsize=30)
-
+    fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
 
 
 
