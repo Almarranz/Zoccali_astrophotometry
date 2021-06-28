@@ -21,7 +21,7 @@ magerr_si = 0.02 ; max acceptable sirius magnitude uncertainty for photometric c
 
 for chip=1,4 do begin
 
-exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
+    exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
 	readcol, tmp + 'alig_SIRUS_chip'+strn(chip)+'.txt', ra,dec,f,df,x,y, Format ='A,A,A,A,A,A'
 
@@ -119,7 +119,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
 	if band eq 'H' then begin
 	;  good = where(m_si gt 11.0  and m_si lt 14 and dm_si lt 0.04)
-	  good = where(m_si gt 11.0  and dm_si lt magerr_si)
+	  good = where(m_si gt 12.0  and m_si lt 14 and  dm_si lt magerr_si)
 	endif
 
 	if band eq 'Ks' then begin
@@ -376,10 +376,10 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	device, /close 
 
 	; Exclude stars near borders or gaps
-	mask = 3
+	mask = 3 ; if I choose a bigger number then exp[round(x[i])... goes out of range. You may need to fix that. So far I think I wont need to eliminate stars near border.
 	valid = []
 	for i=0, n_elements(x)-1 do begin
-	  value = total(where(exp[round(x[i])-mask:round(x[i])+mask, round(y[i])-mask:round(y[i])+mask] eq 0))
+	  value = total(where(imagen[round(x[i])-mask:round(x[i])+mask, round(y[i])-mask:round(y[i])+mask] eq 0))
 	  ;value = total(where(exp[round(x[i])-mask:round(x[i])+mask, round(y[i])-mask:round(y[i])+mask] eq 0))
 	  if value eq -1 then begin
 	  valid = [valid, i]  
@@ -409,7 +409,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	   
 
 	;Write calibrate list of stars to file
-	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(6(f, 4X))', /NOCOMMENT
+	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(8(f, 4X))', /NOCOMMENT
 endfor
 
 end
