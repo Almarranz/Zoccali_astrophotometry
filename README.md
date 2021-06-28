@@ -1,4 +1,4 @@
-2_cube_lists_alignment_improved?.py# Zoccali_astrophotometry
+# Zoccali_astrophotometry
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
 Photometry for WHOLE images
@@ -23,6 +23,7 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 8_aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
 10_photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
+11_aligment_with_GNS.py Align with GNS 2deg polynomial and makes some plots. I have tried the aligments with the method of initial offset, the clinking on the same star one. The outcome is the same'
 
 #################NOTE##########################
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the kx ky to the whole list.
