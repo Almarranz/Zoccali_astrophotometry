@@ -1,8 +1,8 @@
-pro align_chips_brick,chip
+pro align_chips_brick,band,chip
 
 
 ;chip=2
-band='Ks'
+;band='Ks'
 exptime=10
 folder='im_jitter_NOgains/'
 indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
