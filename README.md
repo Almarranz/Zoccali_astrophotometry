@@ -18,15 +18,20 @@ Photometry for WHOLE images
  Also returns some txt files and .json files with mean mag and mag (text files) and x and y position for the common stars (stars that are presentes within 1.5 pixel apart in all lists)
 6. _make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in degrees)
 7. _plotting_commmons.  Make plots of the stars on the overplottings areas of both surveys
-##################WARNING######################## 
+
+################## WARNING ######################## 
+
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
+
 ###############################################
+
 8. _aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
 10. _photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
 11. _aligment_with_GNS.py Align with GNS 2deg polynomial and makes some plots. I have tried the aligments with the method of initial offset, the clinking on the same star one. The outcome is the same'
 
-#################NOTE##########################
+################# NOTE ##########################
+
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the kx ky to the whole list.
 When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
 stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final improvent for the uncertainty in the position doesnt seem to be
