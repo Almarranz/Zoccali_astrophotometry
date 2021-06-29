@@ -21,7 +21,7 @@ from astropy.io import fits
 
 # como comprobacion has hecho este mismo scripts usando IDL con el metodo de los initial offset. El resultado es el mismo.
 # el script de IDL se llama aligment_with_GNS.pro
-band='Ks'
+band='H'
 #band='Ks'
 exptime=10
 #Uncoment one of these
@@ -144,7 +144,7 @@ brick[:,7]=y_brick
 
 
 
-for loop in range(10):
+for loop in range(20):
     diff=[]
     for i in range(len(field18)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
         dist=distance.cdist(field18[i:i+1,-2:],brick[:,6:8], 'euclidean')
@@ -193,7 +193,8 @@ for loop in range(10):
 
 
 #now secod degree alignment
-for loop in range(10):
+distancia=1
+for loop in range(20):
     diff=[]
     indx=[]
     for i in range(len(field18)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
@@ -319,8 +320,6 @@ ax.set_title('Red is the std of stars in bins 1mag width. Blue is the percetange
 # In[17]:
 
 
-print(diff[0][0])
-print(diff[0][1])
 
 
 # In[18]:
@@ -337,14 +336,18 @@ x_shift=np.array(x_shift)*0.106
 y_shift=np.array(y_shift)*0.106
 fig,ax= plt.subplots(1,2,figsize=(20,10))
 ls=[x_shift,y_shift]
+
 nam=['x diff (arcsec)','y diff (arcsec)']
 #ax[0]=plt.suptitle('Sigma Threshold at reconstruct = %s, CHIP  %s'%(th,ch),fontsize=20)
 #plt.clf()
 for h in range(len(ls)):
+    sig_h=sigma_clipped_stats(ls[h],sigma=2,maxiters=20,cenfunc='mean')
     ax[h].hist(ls[h], bins=10,alpha=0.7, rwidth=0.85,color='g')
-    ax[h].axvline(np.mean(ls[h]), color='r', linestyle='dashed', linewidth=3)
+    #ax[h].axvline(np.mean(ls[h]), color='r', linestyle='dashed', linewidth=3)
+    ax[h].axvline(sig_h[0], color='r', linestyle='dashed', linewidth=3)
     ax[h].grid(axis='both', alpha=0.75)
-    ax[h].legend(['Chip%s: mean= %.4f, std=%.4f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
+    #ax[h].legend(['Chip%s: mean= %.4f, std=%.4f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
+    ax[h].legend([' mean= %.4f, std=%.4f'%(sig_h[0],sig_h[2])],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
     ax[h].set_xlabel(nam[h],fontsize=20)
     ax[h].set_ylabel('# stars',fontsize=20)
     ax[h].tick_params(axis='x', labelsize=20)
