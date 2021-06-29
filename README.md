@@ -1,7 +1,8 @@
 # Zoccali_astrophotometry
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
-Photometry for WHOLE images.
+Photometry for WHOLE images
+
 #####IDL#####
 1. aling_new.pro. Aligns the images with correl_optimize, put them in a cube and generate a list for offsets.
 2. cachos_new.pro. cut off the images from the cube using the offset list generated in aling_new
