@@ -119,7 +119,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
 	if band eq 'H' then begin
 	;  good = where(m_si gt 11.0  and m_si lt 14 and dm_si lt 0.04)
-	  good = where(m_si gt 11.0  and dm_si lt magerr_si)
+	  good = where(m_si gt 12.0  and dm_si lt magerr_si)
 	endif
 
 	if band eq 'Ks' then begin
@@ -409,7 +409,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	   
 
 	;Write calibrate list of stars to file
-	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(6(f, 4X))', /NOCOMMENT
+	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(8(f, 4X))', /NOCOMMENT
 endfor
 
 end
