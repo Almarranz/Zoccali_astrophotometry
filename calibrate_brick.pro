@@ -23,7 +23,7 @@ for chip=1,4 do begin
 
 exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
-	readcol, tmp + 'alig_SIRUS_chip'+strn(chip)+'.txt', ra,dec,f,df,x,y, Format ='A,A,A,A,A,A'
+	readcol, tmp + 'alig_SIRUS_chip'+strn(chip)+'.txt', ra,dec,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A'
 
 
 
@@ -36,6 +36,8 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	y=float(y)
 	f=float(f)
 	df=float(df)
+	dx=float(dx)
+	dy=float(dy)
 
 
 
@@ -267,11 +269,19 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
 	forprint, TEXTOUT= tmp + 'ref_sirius_' + band + '_chip' + strn(chip) + '.txt', x_ref_sirius ,y_ref_sirius, mag_ref_sirius, dmag_ref_sirius, format='(4(e, 4X))', /NOCOMMENT
 
-	; Make map of calibration stars
+	; Make map of calibration stars of SIRIUS
 	dat = ptr_new({X_size: 10, Y_size: 10, Sigma_x: 2, Sigma_y: 2, Angle: 0.0})
 	im = image_model(x_ref_sirius,y_ref_sirius,10^(-0.4 * mag_ref_sirius),xsize_hawki,ysize_hawki,'gaussian', dat)
 	;writefits, res_dir + 'phot_ref_' + band + '.fits', im
 	writefits, tmp_p + 'phot_ref_' + band + '.fits', im
+	
+	; Make map of calibration stars of HAWKI
+	dat = ptr_new({X_size: 10, Y_size: 10, Sigma_x: 2, Sigma_y: 2, Angle: 0.0})
+	im_H = image_model(x_ref_hawki,y_ref_hawki,f_ref_hawki,xsize_hawki,ysize_hawki,'gaussian', dat)
+	;writefits, res_dir + 'phot_ref_' + band + '.fits', im
+	writefits, tmp + 'phot_ref_' + band +'_chip'+strn(chip)+'.fits',dat, cabeza
+	writefits, tmp + 'phot_ref_' + band +'_chip'+strn(chip)+'.fits', im_H,header,/app
+
 
 
 
