@@ -14,7 +14,7 @@ import json
 # In[ ]:
 
 
-band='H'
+band='Ks'
 exptime=10
 #chip=1
 folder='im_jitter_NOgains/'
@@ -65,13 +65,13 @@ for chip in range(1,5):
     df_gal=t_gal.to_pandas()
     gal=df_gal.to_numpy()
     
-    total_f=np.c_[ra,flux,df,x_mean,y_mean]
+    total_f=np.c_[ra,flux,df,x_mean,y_mean,dx,dy]
     total=np.c_[ra,x_mean,dx,y_mean,dy, dic_mag['mag_chip%s'%(chip)],dic_dmag['dmag_chip%s'%(chip)],gal[:,0],gal[:,1]]
     
     np.savetxt(results+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
     np.savetxt(tmp+name+'_chip%s.txt'%(chip),total,header='ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b',fmt='%.6f')
     
-    np.savetxt(tmp+name+'fluxes_chip%s.txt'%(chip),total_f,header='ra,dec,f,df,x_mean,y_mean',fmt='%.6f')
+    np.savetxt(tmp+name+'fluxes_chip%s.txt'%(chip),total_f,header='ra,dec,f,df,x_mean,y_mean,dx,dy')
     np.savetxt(results+name+'fluxes_chip%s.txt'%(chip),total_f,header='ra,dec,f,df,x_mean,y_mean',fmt='%.6f')
     print('############### Done with chip %s ##############'%(chip))
  
