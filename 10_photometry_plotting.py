@@ -15,7 +15,7 @@ from astropy.stats import sigma_clip
 # In[3]:
 
 
-band='Ks'
+band='H'
 exptime=10
 #Uncoment one of these
 #folder='im_dark/'
@@ -35,7 +35,7 @@ fig,ax=plt.subplots(2,2,figsize=(20,20))
 a=1
 for i in range(0,2):
     for j in range(0,2):
-        ra ,dec , m, dm, f, df,x,y = np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,a),unpack=True)
+        ra ,dec , m, dm, f, df,x,y,dx,dy = np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,a),unpack=True)
         xy = np.vstack([m,dm])
         z = gaussian_kde(xy)(xy)
         
@@ -145,7 +145,7 @@ print(media)
 fig,ax = plt.subplots(4,1,figsize=(10,20))
 for k in range(0,4):
     chip=k+1
-    ra ,dec , m, dm, f, df,x,y=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
+    ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
     haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
 
     x_si,y_si,m_si,dm_si=np.loadtxt(tmp+'VALID_SIRUS_on_%s_chip%s.txt'%(band,chip),unpack=True)
@@ -216,7 +216,7 @@ for k in range(0,4):
 
 # In[ ]:
 chip=1
-ra ,dec , m, dm, f, df,x,y=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
+ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
 haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
 
 x_si,y_si,m_si,dm_si=np.loadtxt(tmp+'VALID_SIRUS_on_%s_chip%s.txt'%(band,chip),unpack=True)
@@ -228,7 +228,7 @@ ALL_si_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip))
 zp,mag_ref = np.loadtxt(tmp+'ZP_ref_sirius_%s_chip%s.txt'%(band,chip),unpack=True)
 s=sigma_clipped_stats(zp,sigma=3.0,maxiters=10)
 
-distancia=1
+distancia=0.25
 diff=[]
 for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
             dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si[:,0:2], 'euclidean')
