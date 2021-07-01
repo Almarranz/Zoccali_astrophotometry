@@ -31,13 +31,15 @@ dH_si=float(dH_si)
 K_si=float(K_si)
 dK_si=float(dK_si)   
 ;for chip =1, 4 do begin
-	readcol, tmp + 'NPL_054fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y, Format ='A,A,A,A,A,A'
+	readcol, tmp + 'NPL_054fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A'
 	a=float(a)
 	d=float(d)
 	f=float(f)
 	df=float(df)
 	x=float(x)
 	y=float(y)
+	dx=float(dx)
+	dy=float(dy)
 	 
 
 	imagen=readfits(indir+'cube_chip'+strn(chip)+'_canvas.fits',EXT=1,header)
@@ -138,13 +140,28 @@ dK_si=float(dK_si)
 	 ; iterative degree 1 alignment
 	 ; ------------------------------
 
-	 for it = 1, 40 do begin
+	 for it = 1, 10 do begin
 	  degree = 1
 	  polywarp, x_ref[subc1], y_ref[subc1], x[subc2], y[subc2], degree, Kx, Ky
 	  print, Kx
 	  print, Ky
 	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y
 	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y
+	  compare_lists, x_ref, y_ref, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+	  nc = n_elements(subc1)
+	  print, 'Iteration ' + strn(it)
+	  print, 'Found ' + strn(nc) + ' common stars.'
+	endfor
+	
+	
+	print, 'Now Degree 2 alignment.'
+	 for it = 1, 10 do begin
+	  degree = 2
+	  polywarp, x_ref[subc1], y_ref[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	  print, Kx
+	  print, Ky
+	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
+	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x
 	  compare_lists, x_ref, y_ref, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
 	  nc = n_elements(subc1)
 	  print, 'Iteration ' + strn(it)
@@ -161,7 +178,8 @@ dK_si=float(dK_si)
 
 
 	;forprint,format='(7f13.5)', TEXTOUT= tmp+'alig_SIRUS_chip'+strn(chip)+'.txt',ra_alig,dec_alig,f,df,xi,yi, /NOCOMMENT 
-	forprint,format='(f13.5,f13.5,f13.0,f13.0,f13.5,f13.5)', TEXTOUT= tmp+'alig_SIRUS_chip'+strn(chip)+'.txt',ra_alig,dec_alig,f,df,xi,yi, /NOCOMMENT 
+	;forprint,format='(f13.5,f13.5,f13.0,f13.0,f13.5,f13.5)', TEXTOUT= tmp+'alig_SIRUS_chip'+strn(chip)+'.txt',ra_alig,dec_alig,f,df,xi,yi, /NOCOMMENT 
+	forprint, TEXTOUT= tmp+'alig_SIRUS_chip'+strn(chip)+'.txt',ra_alig,dec_alig,f,df,xi,yi,dx,dy,format='(8(f, 4X))', /NOCOMMENT 
 
 	writefits, tmp_p +'sirius_chip' + strn(chip)+ '_0.fits',dat, cabeza
 	writefits, tmp_p +'sirius_chip' + strn(chip) + '_0.fits',im, header,/app
