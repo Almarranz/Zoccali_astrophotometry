@@ -172,7 +172,8 @@ field18=np.c_[field18,x_gns,y_gns]
 brick_all=[]
 brick_all=np.concatenate((dic_chips['chip_1'],dic_chips['chip_2'],dic_chips['chip_3'],dic_chips['chip_4']),axis=0)
 per=10# choose values with uncertainty in position smoller than 0.7 * mean(dx)
-valid=np.where((brick_all[:,8]<np.mean(brick_all[:,8])*per)&(brick_all[:,9]<np.mean(brick_all[:,9])*per))
+#valid=np.where((brick_all[:,8]<np.mean(brick_all[:,8])*per)&(brick_all[:,9]<np.mean(brick_all[:,9])*per))
+valid=np.where((brick_all[:,8]<0.013)&(brick_all[:,9]<0.013))#0.013pixels cooresponding to a distant of 2mas
 brick=brick_all[valid]
 print(len(brick),len(brick_all))
 ##########################################################
@@ -261,14 +262,13 @@ for h in range(len(ls)):
     ax[h].axvline(sig_h[0], color='r', linestyle='dashed', linewidth=3)
     ax[h].grid(axis='both', alpha=0.75)
     #ax[h].legend(['Chip%s: mean= %.4f, std=%.4f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
-    ax[h].legend([' #stars %s, mean= %.4f, std=%.4f'%(len(x_shift),sig_h[0],sig_h[2])],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
+    ax[h].legend([' dis=%s, #%s, mean= %.4f, std=%.4f'%(distancia,len(x_shift),sig_h[0],sig_h[2])],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
     #ax[h].legend([' #stars %s'%(len(x_shift))],fontsize=20,markerscale=0,shadow=True,loc=2,handlelength=0)
     ax[h].set_xlabel(nam[h],fontsize=20)
     ax[h].set_ylabel('# stars',fontsize=20)
     ax[h].tick_params(axis='x', labelsize=20)
     ax[h].tick_params(axis='y', labelsize=20)
-fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s'%(band),fontsize=20, ha='center')
-
+fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s. Degr=%s'%(band,degree),fontsize=20, ha='center')
 
 # In[10]:
 
@@ -301,10 +301,10 @@ for h in range(len(ls)):
     ax[h].axvline(sig_h[0], color='r', linestyle='dashed', linewidth=3)
     ax[h].grid(axis='both', alpha=0.75)
     #ax[h].legend(['Chip%s: mean= %.4f, std=%.4f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
-    ax[h].legend([' #stars %s, mean= %.4f, std=%.4f'%(len(x_shift),sig_h[0],sig_h[2])],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
+    ax[h].legend([' dis=%s,#%s, mean= %.4f, std=%.4f'%(distancia,len(x_shift),sig_h[0],sig_h[2])],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
     #ax[h].legend([' #stars %s'%(len(x_shift))],fontsize=20,markerscale=0,shadow=True,loc=2,handlelength=0)
     ax[h].set_xlabel(nam[h],fontsize=20)
     ax[h].set_ylabel('# stars',fontsize=20)
     ax[h].tick_params(axis='x', labelsize=20)
     ax[h].tick_params(axis='y', labelsize=20)
-fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s'%(band),fontsize=20, ha='center')
+fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s. Degr=%s'%(band,degree),fontsize=20, ha='center')
