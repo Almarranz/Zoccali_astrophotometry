@@ -1,4 +1,5 @@
 # Zoccali_astrophotometry
+Making sure where I am.
 #In this new branch I going to calibrate (with SIRIUS) using only stars from SIRIUS and Zoccally that are on chip3 of GNS
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
