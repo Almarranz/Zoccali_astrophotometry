@@ -1,5 +1,7 @@
 pro align_chips_brick,band,chip
 
+#Workin on branch: Calibration_with_SIRIUS_only_on_GNS
+
 
 ;chip=2
 ;band='Ks'
