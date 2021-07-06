@@ -1,4 +1,8 @@
 # Zoccali_astrophotometry
+********************************
+on branch: MAIN
+********************************
+
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
 README
 Photometry for WHOLE images
