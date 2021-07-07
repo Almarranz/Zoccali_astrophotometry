@@ -408,8 +408,10 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	dec = dec[valid]
 	m = m[valid]
 	dm = dm[valid]
-	f = m[valid]
-	df = dm[valid]
+	f = f[valid]
+	df = f[valid]
+	dx=dx[valid]
+	dy=dy[valid]
 
 
 	  ; map with only calibrated stars in HAWK-I
