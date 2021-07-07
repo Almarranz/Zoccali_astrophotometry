@@ -306,7 +306,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	set_plot,'PS', /interpolate
 	device, XOFFSET=0, YOFFSET=0, $
 	   ;FILENAME= res_dir + 'reference_stars_photometry' + strn(chip) +'.eps', XSIZE=20., YSIZE=10., $
-	   FILENAME= tmp_p + 'reference_stars_photometry' + strn(chip) +'.eps', XSIZE=20., YSIZE=20., $
+	   FILENAME= tmp + 'reference_stars_photometry' + strn(chip) +'.eps', XSIZE=20., YSIZE=20., $
 	   /portrait, /color, BITS_PER_PIXEL=8, encapsulated=1
 	!P.MULTI=0
 	!P.CHARSIZE=1.2
@@ -419,7 +419,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	   
 
 	;Write calibrate list of stars to file
-	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y, format='(8(f, 4X))', /NOCOMMENT
+	forprint, TEXTOUT= tmp + 'stars_calibrated_' + band + '_chip' + strn(chip) + '_sirius.txt', ra ,dec , m, dm, f, df,x,y,dx,dy, format='(10(f, 4X))', /NOCOMMENT
 endfor
 
 end
