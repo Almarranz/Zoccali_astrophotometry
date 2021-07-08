@@ -1,6 +1,6 @@
 # Zoccali_astrophotometry
 ********************************
-on branch: MAIN
+on branch: bad_aproach_old_main
 ********************************
 
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
