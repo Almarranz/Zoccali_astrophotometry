@@ -153,20 +153,20 @@ dK_si=float(dK_si)
 	  print, 'Found ' + strn(nc) + ' common stars.'
 	endfor
 	
-	
-	print, 'Now Degree 2 alignment.'
-	 for it = 1, 10 do begin
-	  degree = 2
-	  polywarp, x_ref[subc1], y_ref[subc1], x[subc2], y[subc2], degree, Kx, Ky
-	  print, Kx
-	  print, Ky
-	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
-	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x
-	  compare_lists, x_ref, y_ref, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
-	  nc = n_elements(subc1)
-	  print, 'Iteration ' + strn(it)
-	  print, 'Found ' + strn(nc) + ' common stars.'
-	endfor
+	;~.................. We dont want a super fine aligment with SIRIUS...............
+	;~ print, 'Now Degree 2 alignment.'
+	 ;~ for it = 1, 10 do begin
+	  ;~ degree = 2
+	  ;~ polywarp, x_ref[subc1], y_ref[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	  ;~ print, Kx
+	  ;~ print, Ky
+	  ;~ xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
+	  ;~ yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x
+	  ;~ compare_lists, x_ref, y_ref, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+	  ;~ nc = n_elements(subc1)
+	  ;~ print, 'Iteration ' + strn(it)
+	  ;~ print, 'Found ' + strn(nc) + ' common stars.'
+	;~ endfor
 
 	dat = ptr_new({X_size: 10, Y_size: 10, Sigma_x: 2, Sigma_y: 2, Angle: 0.0})
 	im = image_model(x_ref,y_ref,10^((-m_ref)/2.5),xsize_ref,xsize_ref,'gaussian', dat)
