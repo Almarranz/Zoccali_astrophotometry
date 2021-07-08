@@ -17,6 +17,7 @@ from astropy.wcs import WCS
 #I thing the trick is to mark the same stras in both lists and add the diferences of x and y to
 #to the whole list of x and y at the hawki list, then do the compare lists and 
 # and the polywarp. YOU DIDNT DO IT YET!!!!!!
+#look at /Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/8_SIRIUS_alignment_clicking...inprocess-Copy1
 band='H'
 exptime=10
 folder='im_jitter_NOgains/'

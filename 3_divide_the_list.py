@@ -30,7 +30,7 @@ results_GNS=indir+'results/'
 # In[9]:
 
 
-m=0
+m=0# just in case the limits for lists need adjustments 
 #m=0
 lim_x=[401,2150]
 lim_y=[401,2150]

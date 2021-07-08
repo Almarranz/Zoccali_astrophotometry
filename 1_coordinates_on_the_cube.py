@@ -65,7 +65,7 @@ for chip in range(1,5):
 
 
 # In[ ]:
-
+#Alingement checked at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/pruebas_scripts_git
 
 
 # In[ ]:
