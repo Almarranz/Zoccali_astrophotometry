@@ -59,7 +59,7 @@ for chip in range(1,5):
         coord=np.loadtxt(indir+'WHOLE_stars_im'+str(i+1)+'_chip'+str(chip)+'_.txt')
         coord[:,0]+=xc
         coord[:,1]+=yc
-        np.savetxt(tmp+'cube_stars_im'+str(i+1)+'_chip'+str(chip)+'.txt',coord,fmt='%.5e')
+        np.savetxt(tmp+'cube_stars_im'+str(i+1)+'_chip'+str(chip)+'.txt',coord,fmt='%.7e')
     print('Done with chip %s'%(chip))
         
 
@@ -67,24 +67,8 @@ for chip in range(1,5):
 # In[ ]:
 
 
-xy=np.zeros(shape=(len(f[1].data),len(f[1].data)))
-xy_si=np.zeros(shape=(len(f[1].data),len(f[1].data)))
-for i in range(len(x_mean)):
-    xy[int(round(x_mean[i])),int(round(y_mean[i]))]=mag[i]
-     
-for i in range(len(six[SI_chip])):
-    xy_si[int(round(six[SI_chip][i])),int(round(siy[SI_chip][i]))]=H_si[SI_chip][i]
-
-psf = Gaussian2DKernel(4,4)
-conv = convolve_fft(xy, psf, boundary='wrap')
-conv_SI = convolve_fft(xy_si, psf, boundary='wrap')
-fits.writeto(pruebas+'map_prueba.fits',conv_SI,overwrite=True)
-
 
 # In[ ]:
-print(wt.shape[1])
-
-
 
 
 # In[ ]:
