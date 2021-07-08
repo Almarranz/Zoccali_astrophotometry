@@ -64,8 +64,7 @@ if band =='Ks':
      y1=26
      y0=25
      x0=11
-     x1=15
- 
+     x1=15 
 # In[ ]:
 
 
@@ -215,7 +214,7 @@ for k in range(0,4):
 
 
 # In[ ]:
-chip=1
+chip=4
 ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
 haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
 
@@ -228,7 +227,7 @@ ALL_si_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip))
 zp,mag_ref = np.loadtxt(tmp+'ZP_ref_sirius_%s_chip%s.txt'%(band,chip),unpack=True)
 s=sigma_clipped_stats(zp,sigma=3.0,maxiters=10)
 
-distancia=0.25
+distancia=0.5
 diff=[]
 for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
             dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si[:,0:2], 'euclidean')
@@ -257,10 +256,10 @@ nam=['x diff (arcsec)','y diff (arcsec)']
 #ax[0]=plt.suptitle('Sigma Threshold at reconstruct = %s, CHIP  %s'%(th,ch),fontsize=20)
 #plt.clf()
 for h in range(len(ls)):
-    ax[h].hist(ls[h], bins=10,alpha=0.7, rwidth=0.85,color='g')
+    ax[h].hist(ls[h], bins='auto',alpha=0.7, rwidth=0.85,color='g')
     ax[h].axvline(np.mean(ls[h]), color='r', linestyle='dashed', linewidth=3)
     ax[h].grid(axis='both', alpha=0.75)
-    ax[h].legend(['Chip%s: mean= %.4f, std=%.3f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
+    ax[h].legend(['Chip%s: mean= %.4f, std=%.3f'%(chip,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
     ax[h].set_xlabel(nam[h],fontsize=20)
     ax[h].set_ylabel('# stars',fontsize=20)
     ax[h].tick_params(axis='x', labelsize=20)

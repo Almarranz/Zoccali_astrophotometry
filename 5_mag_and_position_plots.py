@@ -20,7 +20,7 @@ import json
 # In[2]:
 
 
-band='Ks'
+band='H'
 exptime=10
 #chip=1
 folder='im_jitter_NOgains/'
@@ -35,7 +35,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 # In[3]:
 
 
-for chip in range(1,5):
+for chip in range(1,2):
     if band=='H':
         ind=['A','B','C','D','E','F','G','H']#,'I'] # solo las listas con mas de 3 pointings
     elif band=='Ks':
@@ -77,7 +77,7 @@ for chip in range(1,5):
         diff_Ay=[]
         im_a=1
         im_b=2
-        list_D=[]
+        D=[]
         for i in range(dic_stars['stars_im'+str(im_a)].shape[0]): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
                     dist=distance.cdist(dic_stars['stars_im'+str(im_a)][i:i+1,0:2],dic_stars['stars_im'+str(im_b)][:,0:2], 'euclidean')
                     d=np.where(dist<distancia)
@@ -89,34 +89,34 @@ for chip in range(1,5):
         for i in range(len(diff)):
             mean_x=np.mean([diff[i][0][0],diff[i][1][0]])
             mean_y=np.mean([diff[i][0][1],diff[i][1][1]])
-            list_D.append((mean_x,mean_y,diff[i][0][2],diff[i][1][2]))
-        list_D=np.array(list_D)
-        print('comunes a listas de 1 a %s'%(im_b),len(list_D))
+            D.append((mean_x,mean_y,diff[i][0][2],diff[i][1][2]))
+        D=np.array(D)
+        print('comunes a listas de 1 a %s'%(im_b),len(D))
         for j in range(3,len(zp_ind)+1):#loop comparando las comunes de 1,2 con las demas(123,1234,...,12...8)
             aux=[]
             aux_x=[]
             aux_y=[]
-            for i in range(list_D.shape[0]): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
-                        dist=distance.cdist(list_D[i:i+1,0:2],dic_stars['stars_im'+str(j)][:,0:2], 'euclidean')
+            for i in range(D.shape[0]): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
+                        dist=distance.cdist(D[i:i+1,0:2],dic_stars['stars_im'+str(j)][:,0:2], 'euclidean')
                         d=np.where(dist<distancia)
                         if len(d[1])>0:
-                            aux.append((list_D[i],dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]]))
+                            aux.append((D[i],dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]]))
                             aux_x.append((diff_Ax[i]+(dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]][0],)))
                             aux_y.append((diff_Ay[i]+(dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]][1],)))
-            list_D=np.zeros(shape=(len(aux),j+2))
+            D=np.zeros(shape=(len(aux),j+2))
             diff_Ax=aux_x
             diff_Ay=aux_y
             for i in range(len(aux)):
                 mean_x=np.mean([aux[i][0][0],aux[i][1][0]])
                 mean_y=np.mean([aux[i][0][1],aux[i][1][1]])
-                list_D[i][0:2]=mean_x,mean_y
+                D[i][0:2]=mean_x,mean_y
                 for k in range(2,j+1):
-                    list_D[i][k]=aux[i][0][k]
-                list_D[i][j+1]=aux[i][1][2]
-            list_D=np.array(list_D)
+                    D[i][k]=aux[i][0][k]
+                D[i][j+1]=aux[i][1][2]
+            D=np.array(D)
             #np.savetxt(tmp+'x_band'+band+'_dit'+str(exptime)+'_chip'+str(chip)+'.txt',aux_x,fmt='%.5f')
             #np.savetxt(tmp+'y_band'+band+'_dit'+str(exptime)+'_chip'+str(chip)+'.txt',aux_y,fmt='%.5f')
-            print('comunes a listas de 1 a %s'%(j),len(list_D))
+            print('comunes a listas de 1 a %s'%(j),len(D))
         x_all.append(aux_x)
         y_all.append(aux_y)
 
@@ -126,7 +126,7 @@ for chip in range(1,5):
         else:
             ZP=25.63
             c='b'
-        fluxes=[list_D[i][2:] for i in range(len(list_D))]
+        fluxes=[D[i][2:] for i in range(len(D))]
         for i in range(len(fluxes)):
             suma=[]
             suma_f=[]
@@ -225,7 +225,7 @@ for chip in range(1,5):
 
 # In[ ]:
 
-print(ind)
+print(fx[8000])
 
 
 
