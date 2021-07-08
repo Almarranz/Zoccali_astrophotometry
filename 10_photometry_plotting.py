@@ -159,13 +159,14 @@ for k in range(0,4):
     mask_sig=sigma_clip(zp,sigma=sig,maxiters=10)
     nope=np.where(mask_sig.mask==True)
     
-    distancia=1
+    distancia=0.5
     diff=[]
     for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
-            dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si_ref[:,0:2], 'euclidean')
+            #dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si_ref[:,0:2], 'euclidean')
+            dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si[:,0:2], 'euclidean')
             d=np.where(dist<distancia)
             if len(d[1])>0:
-                diff.append((haw_cal[i],ALL_si_ref[d[1][np.argmin(dist[d])]]))
+                diff.append((haw_cal[i],ALL_si[d[1][np.argmin(dist[d])]]))
     print('comunes listas %s y %s ----> '%('HA','SIRIUS'),len(diff))
     resta=[]
     mags=[]
@@ -200,6 +201,7 @@ for k in range(0,4):
     ax[k].legend(['Chip%s #%s'%(chip,len(mags))],fontsize=20,markerscale=0,shadow=True,loc=1, handlelength=-1)
     #for lh in leg.legendHandles: 
      #   lh.set_visible(False)
+    ax[k].text(x1-2,0.5,'mean diff=%.4f'%(average),fontsize='xx-large',color='green',zorder=3,weight='bold')
     ax[k].axhline(average,color='g',ls='--',lw=2)
     ax[k].grid()
     ax[k].tick_params(axis='x', labelsize=20)
