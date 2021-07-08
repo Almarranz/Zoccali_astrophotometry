@@ -1,6 +1,6 @@
 # Zoccali_astrophotometry
 ********************************
-on branch: FIELD12
+on branch: main
 ********************************
 
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
