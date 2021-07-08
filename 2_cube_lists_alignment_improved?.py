@@ -38,10 +38,10 @@ exec(read_file)
 # In[4]:
 
 
-m=0
+m=0# just in case the limits for lists need adjustments 
 #m=0
 for chip in range(1,2):
-    n=np.loadtxt(jitter+'xy_off_xy_alig_chip'+str(chip)+'.txt')
+    n=np.loadtxt(jitter+'xy_off_xy_alig_chip'+str(chip)+'.txt')#to set a varible with the number of images.
     lim_x=[401,2150]
     lim_y=[401,2150]
     dic_stars={}
@@ -62,7 +62,7 @@ for chip in range(1,2):
         
         im_a=1
         im_b=l
-        for loop in range(5):
+        for loop in range(5): #numbers of loops. 5 seems to be good.
             diff=[]
             dic_whole['cube_stars_im'+str(i)+'_chip'+str(chip)]=lista
             list_E=[lista[r] for r in range(len(lista)) if lim_x[0]-m<lista[r,0]<lim_x[1]+m and lim_y[0]+m<lista[r,1]<=lim_y[1]-m ]
