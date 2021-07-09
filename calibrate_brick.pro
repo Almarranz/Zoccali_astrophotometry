@@ -409,7 +409,7 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 	m = m[valid]
 	dm = dm[valid]
 	f = f[valid]
-	df = f[valid]
+	df = df[valid]
 	dx=dx[valid]
 	dy=dy[valid]
 
