@@ -201,6 +201,7 @@ for k in range(0,4):
     #for lh in leg.legendHandles: 
      #   lh.set_visible(False)
     ax[k].axhline(average,color='g',ls='--',lw=2)
+    ax[k].text(min(mags[:,1]),average+0.5,'mean offset (%s$\sigma$) =%.3f, std= %.3f'%(sig,average,np.std(resta)),color='green',fontsize=14,zorder=3,weight='bold') 
     ax[k].grid()
     ax[k].tick_params(axis='x', labelsize=20)
     ax[k].tick_params(axis='y', labelsize=20)
@@ -294,6 +295,7 @@ for k in range(0,4):
     fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
    ''' 
 # In[ ]:
+'''
 chip=4
 ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
 haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
@@ -345,6 +347,7 @@ for h in range(len(ls)):
     ax[h].tick_params(axis='x', labelsize=20)
     ax[h].tick_params(axis='y', labelsize=20)
 fig.text(0.5, 0, 'Difference in position for common stars to SIRIUS, band %s'%(band),fontsize=20, ha='center')
+'''
 '''
 ax[1].hist(x_shift, bins=10,alpha=0.7, rwidth=0.85,color='g')
 ax[1].axvline(np.mean(x_shift), color='r', linestyle='dashed', linewidth=3)
