@@ -159,14 +159,13 @@ for k in range(0,4):
     mask_sig=sigma_clip(zp,sigma=sig,maxiters=10)
     nope=np.where(mask_sig.mask==True)
     
-    distancia=0.5
+    distancia=1
     diff=[]
     for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
-            #dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si_ref[:,0:2], 'euclidean')
-            dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si[:,0:2], 'euclidean')
+            dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si_ref[:,0:2], 'euclidean')
             d=np.where(dist<distancia)
             if len(d[1])>0:
-                diff.append((haw_cal[i],ALL_si[d[1][np.argmin(dist[d])]]))
+                diff.append((haw_cal[i],ALL_si_ref[d[1][np.argmin(dist[d])]]))
     print('comunes listas %s y %s ----> '%('HA','SIRIUS'),len(diff))
     resta=[]
     mags=[]
@@ -201,7 +200,6 @@ for k in range(0,4):
     ax[k].legend(['Chip%s #%s'%(chip,len(mags))],fontsize=20,markerscale=0,shadow=True,loc=1, handlelength=-1)
     #for lh in leg.legendHandles: 
      #   lh.set_visible(False)
-    ax[k].text(x1-2,0.5,'mean diff=%.4f'%(average),fontsize='xx-large',color='green',zorder=3,weight='bold')
     ax[k].axhline(average,color='g',ls='--',lw=2)
     ax[k].grid()
     ax[k].tick_params(axis='x', labelsize=20)
@@ -214,7 +212,87 @@ for k in range(0,4):
     fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
 
 
+#%%
+# In[7]:
+#This plot is not ready yet
 
+'''
+fig,ax = plt.subplots(4,1,figsize=(10,20))
+for k in range(0,4):
+    chip=k+1
+    ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
+    haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
+
+    x_si,y_si,m_si,dm_si=np.loadtxt(tmp+'VALID_SIRUS_on_%s_chip%s.txt'%(band,chip),unpack=True)
+    ALL_si=np.loadtxt(tmp+'VALID_SIRUS_on_%s_chip%s.txt'%(band,chip))
+
+    x_ref,y_ref,m_ref,dm_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip),unpack=True)
+    ALL_si_ref=np.loadtxt(tmp+'ref_sirius_%s_chip%s.txt'%(band,chip))
+    
+    
+   
+    
+    distancia=1
+    diff=[]
+    for i in range(len(ra)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
+            dist=distance.cdist(haw_cal[i:i+1,6:8],ALL_si[:,0:2], 'euclidean')
+            d=np.where(dist<distancia)
+            if len(d[1])>0:
+                diff.append((haw_cal[i],ALL_si[d[1][np.argmin(dist[d])]]))
+    print('comunes listas %s y %s ----> '%('HA','SIRIUS'),len(diff))
+    resta=[]
+    mags=[]
+    nbins=(np.ceil(max(m_si))-np.floor(min(m_si)))
+    mags_bins=np.floor(min(m_si))+np.arange(nbins)
+    print(mags_bins)
+    for i in range(len(diff)):
+        #print(diff[i][0][2]-diff[i][1][2])
+        resta.append(diff[i][0][2]-diff[i][1][2])
+        mags.append((diff[i][0][2],diff[i][1][2]))
+    diff=np.array(diff)
+    resta=np.array(resta)
+    average=np.mean(np.array(resta))
+    mags=(np.array(mags))
+    
+     
+    s=sigma_clipped_stats(mags[:,1],sigma=sig,maxiters=10)
+    mask_sig=sigma_clip(mags[:,1],sigma=sig,maxiters=10)
+    nope=np.where(mask_sig.mask==True)
+    
+    
+    mmag =np.zeros(shape=(int(nbins)))
+    sig_mag =np.zeros(shape=(int(nbins)))
+    for j in range(int(nbins)):
+        thisbin=np.where((mags[:,1]>mags_bins[j])&(mags[:,1]<=mags_bins[j]+1))
+        vals = resta[thisbin]
+        nope_thisbin=np.where((mags[:,1][nope]>mags_bins[j])&(mags[:,1][nope]<mags_bins[j]+1))
+        if len(vals)>1:
+            bin_rej=sigma_clip(vals, sigma=2, maxiters=5,masked=True)
+            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=5)
+            mmag[j]=sig_bin[0]
+            sig_mag[j]=sig_bin[2]
+        ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
+        ax[k].text(mags_bins[j]+0.4,-0.5,'%.3f'%(sig_mag[j]),color='red',fontsize=14,zorder=3)  
+        ax[k].text(mags_bins[j]+0.4,-0.7,'%s'%(len(vals)),color='blue',fontsize=14)
+        ax[k].text(mags_bins[j]+0.4,-0.9,'%s'%(len(nope_thisbin[0])),color='orange',fontsize=14)
+        
+    ax[k].scatter(mags[:,1],mags[:,0]-mags[:,1],color='k',alpha=0.2)
+    ax[k].scatter(mags[:,1][nope],resta[nope],color='red',marker='x',s=100,alpha=0.7)
+    ax[k].legend(['Chip%s #%s'%(chip,len(mags))],fontsize=20,markerscale=0,shadow=True,loc=1, handlelength=-1)
+    #for lh in leg.legendHandles: 
+     #   lh.set_visible(False)
+    ax[k].axhline(average,color='g',ls='--',lw=2)
+    ax[k].text(min(mags[:,1])-1,0.75,'mean offset (%s$\sigma$) =%.3f, std= %.3f'%(sig,average,np.std(resta)),color='green',fontsize=14,zorder=3,weight='bold') 
+    ax[k].grid()
+    ax[k].tick_params(axis='x', labelsize=20)
+    ax[k].tick_params(axis='y', labelsize=20)
+    ax[k].set_ylim(-1,1)
+    #ax[k].set_xlim(x0,x1)
+    #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
+    fig.text(0.5, 0.08, '$[%s]_{Zoc}$'%(band),fontsize=30, ha='center')
+    fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRref}$', va='center', rotation='vertical',fontsize=30)
+    fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
+   ''' 
 # In[ ]:
 chip=4
 ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
