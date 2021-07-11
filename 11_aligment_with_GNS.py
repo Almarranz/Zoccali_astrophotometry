@@ -7,14 +7,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from astropy.table import QTable
-from astropy import units as u
-from astropy.coordinates import SkyCoord
 from scipy.spatial import distance
-from astropy.wcs import WCS
 from astropy.stats import sigma_clip
 from astropy.stats import sigma_clipped_stats
-from astropy.io import fits
 
 
 # In[2]:
