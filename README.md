@@ -32,7 +32,7 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 8. _aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
 10. _photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
-11. _aligment_with_GNS.py Align with GNS 2deg polynomial and makes some plots. I have tried the aligments with the method of initial offset, the clinking on the same star one. The outcome is the same'
+11. _aligment_with_GNS.py'you have to open the lists on Aladin locate a two common stars and copy and paste their X and Y coordinates on the variables xm_ref ym_ref for GNS star and xm and ym for Zoc stars. The code them aligns the two list with 5 loops of a degree1 pol. and 40 loops of a degree 2 poli. Tryed same conde with idl with same results, at aligme/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/pruebas_scripts_git/aligment_with_GNS.pro'
 
 ################# NOTE ##########################
 
