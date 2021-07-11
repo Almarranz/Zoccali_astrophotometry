@@ -157,10 +157,14 @@ for chip in range(2,4):
     ##########################################################
     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
+    x_dis=[diff[i][1][6]-diff[i][0][0] for i in range(len(diff))]
+    y_dis=[diff[i][1][7]-diff[i][0][2] for i in range(len(diff))]
+    displa=np.array([x_dis,y_dis]).T
+    zoc_txt=np.c_[zoc_txt,displa]
     np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='a ,d , m, dm, f, df,x,y,dx,dy. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK')
-    
-    
+    np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
+
     # In[5]:
     
     
@@ -211,7 +215,7 @@ for chip in range(2,4):
     
     # In[6]:
     
-    
+    '''   
     from scipy.interpolate import fitpack
     from scipy import interpolate
     #x=[(diff[t][0][-2]) for t in range(len(diff))]
@@ -235,9 +239,11 @@ for chip in range(2,4):
     #plt.pcolormesh(xnew, ynew, znew)
     plt.pcolormesh(xgrid, ygrid, znew)
     plt.colorbar()
-    plt.title("Interpolated function.")
+    plt.title("Difference on position for the alignment")
+    plt.xlabel("X diff (pixel)")
+    plt.ylabel("Y diff (pixel)")
     plt.show()
-    
+    '''   
     
     # In[7]:
     
