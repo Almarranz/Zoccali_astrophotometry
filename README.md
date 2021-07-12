@@ -22,7 +22,8 @@ Photometry for WHOLE images
  Also returns some txt files and .json files with mean mag and mag (text files) and x and y position for the common stars (stars that are presentes within 1.5 pixel apart in all lists)
 6. _make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in degrees).
 
-7. DO NOT USE.
+7. DO NOT USE
+
 ################## WARNING ######################## 
 
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
