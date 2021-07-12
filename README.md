@@ -21,8 +21,6 @@ Photometry for WHOLE images
 5. _mag_and_position_plots. Plots mag vs drag and mag vs dx and dy for all list for each chip. Each uncertainty is the propagation error formula for the mean. Only data with al least four paintings. So NO list I.
  Also returns some txt files and .json files with mean mag and mag (text files) and x and y position for the common stars (stars that are presentes within 1.5 pixel apart in all lists)
 6. _make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in degrees)
-7. _plotting_commmons.  Make plots of the stars on the overplottings areas of both surveys
-
 ################## WARNING ######################## 
 
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
@@ -42,3 +40,4 @@ stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final 
 significt.
 A test script is (almost?) ready at:
 Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry/cube_lists_alignment_improved?.py
+7. plotting_commons is not useful anymora. A plot of common stars is done on 11.
