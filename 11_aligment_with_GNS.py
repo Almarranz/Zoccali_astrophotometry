@@ -10,7 +10,7 @@ import numpy as np
 from scipy.spatial import distance
 from astropy.stats import sigma_clip
 from astropy.stats import sigma_clipped_stats
-
+from scipy.stats import gaussian_kde
 
 # In[2]:
 
@@ -209,7 +209,9 @@ for chip in range(2,4):
     
     # In[ ]:
     
-    
+   
+
+
     
     
     
@@ -311,10 +313,48 @@ for chip in range(2,4):
         ax.text(mags_bins[j]+0.4,-1.7,'%s'%(len(vals)),color='blue',fontsize=14)
         ax.text(mags_bins[j]+0.4,-1.9,'%s'%(len(nope_thisbin[0])),color='orange',fontsize=14)
     
+  
+#%%
+
+    dx_cgns=[diff[c][0][5] for c in range(len(diff))]
+    dy_cgns=[diff[c][0][7] for c in range(len(diff))]
     
-    
+    dx_czoc=[diff[c][1][8] for c in range(len(diff))]
+    dy_czoc=[diff[c][1][9] for c in range(len(diff))]    
+#%%
+
     # In[ ]:
     
     
+    map_c='inferno'
+    uncx=[dx_cgns,dx_czoc]
+    uncy=[dy_cgns,dy_czoc]
+    le=['GNS','Zoc.']
     
+    fig, ax = plt.subplots(2,2,figsize=(15,10))
     
+    for g in range(2):
+        xy = np.vstack([mags[:,g],uncx[g]])
+        xy1 = np.vstack([mags[:,g],uncy[g]])
+        z = gaussian_kde(xy)(xy)
+        z1= gaussian_kde(xy1)(xy1)
+        
+        
+        #ax.invert_yaxis()
+        #ax.set_ylim(16,10)
+        ax[g,0].scatter(mags[:,g], uncx[g], c=z, s=5,alpha=1,cmap=map_c)
+        ax[g,0].set_xlabel('[%s]'%(band),fontsize=20)
+        ax[g,0].grid()
+        ax[g,0].set_ylim(0,0.02)
+        ax[g,1].set_ylim(0,0.02)
+        ax[g,0].set_ylabel('dX (arcsec)',fontsize=20)
+        ax[g,1].scatter(mags[:,1], uncy[g], c=z1, s=5,alpha=1,cmap=map_c)
+        ax[g,1].set_xlabel('[%s]'%(band),fontsize=20)
+        ax[g,1].set_ylabel('dY (arcsec)',fontsize=20)
+        ax[g,1].grid()
+        ax[g,0].set_ylim(0,0.0125)
+        ax[g,1].set_ylim(0,0.0125)
+        ax[g,1].legend([le[g]],fontsize=20,shadow=True,loc=1,markerscale=0, handlelength=0,handletextpad=0)
+        plt.suptitle('%s common stars to Zocalli (Chip %s) and GNS field 12'%(len(uncx[g]),chip),fontsize=20)
+    
+      
