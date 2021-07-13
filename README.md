@@ -42,5 +42,6 @@ When looping with distancia =1 the improvement is huge from the first loop to th
 stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final improvent for the uncertainty in the position doesnt seem to be
 significt.
 A test script is (almost?) ready at:
-Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry/cube_lists_alignment_improved?.py
+Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry/cube_lists_alignment_improved?.py.
+
 7_plotting_commons is not useful anymora. A plot of common stars is done on 11.
