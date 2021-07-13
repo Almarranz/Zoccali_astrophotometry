@@ -161,8 +161,8 @@ for chip in range(2,4):
     y_dis=[diff[i][1][7]-diff[i][0][2] for i in range(len(diff))]
     displa=np.array([x_dis,y_dis]).T
     zoc_txt=np.c_[zoc_txt,displa]
-    np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='a ,d , m, dm, f, df,x,y,dx,dy. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
-    np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK')
+    np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK')
+    np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
 
     # In[5]:
@@ -181,7 +181,7 @@ for chip in range(2,4):
     x_shift=[(diff[t][0][0]-diff[t][1][6]) for t in range(len(diff))]# if abs(diff[t][0][brillo]-diff[t][1][2])<l_mag]
     y_shift=[(diff[t][0][1]-diff[t][1][7]) for t in range(len(diff))]# if abs(diff[t][0][brillo]-diff[t][1][2])<l_mag]
     print(len(x_shift))
-    
+
     x_shift=np.array(x_shift)*0.106
     y_shift=np.array(y_shift)*0.106
     fig,ax= plt.subplots(1,2,figsize=(20,10))
@@ -207,7 +207,6 @@ for chip in range(2,4):
     # In[10]:
     
     
-    # In[ ]:
     
    
 
