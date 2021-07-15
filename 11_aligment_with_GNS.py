@@ -11,6 +11,7 @@ from scipy.spatial import distance
 from astropy.stats import sigma_clip
 from astropy.stats import sigma_clipped_stats
 from scipy.stats import gaussian_kde
+import sys
 
 # In[2]:
 
@@ -35,52 +36,59 @@ read_file = stream.read()
 exec(read_file)
 
 distancia=1
-chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
+chip=2# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
 
 
 # In[3]:
 
 
-x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
+
+
 field12=np.loadtxt(GNS+'field12_on_brick.txt')
-valid_H=np.where(mH < 90)
-raH=raH[valid_H]
-decH=decH[valid_H]
-mH=mH[valid_H]
-x_gns=x_gns[valid_H]*0.5
-y_gns=y_gns[valid_H]*0.5
+
+h_ks=field12[:,10]-field12[:,12]
+field12=np.c_[field12,h_ks]
+in_place=np.where((h_ks>1.3))
+field12=field12[in_place]
 field12[:,0]*=0.5
 field12[:,2]*=0.5
+np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
+
+# x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
+#sys.exit("STOP")
+
+x_gns=field12[:,0]
+y_gns=field12[:,2]
+
 gns_xy=np.array([x_gns,y_gns]).T
 
-for chip in range(2,4):
+for chip in range(chip,chip+1):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
     brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
     #We have to add the coordinates offset between the two lists
     #I this case I have choose this bu coomparing in Aladin
     if band=='H' and chip==3:
         ##########################################################
-    
-            
-        xm_ref=746*0.5 # xm_ref is GNS
-        ym_ref=988*0.5
-    
-        xm=1007
-        ym=280
-    
+   
+        xm_ref,ym_ref=264, 637# xm_ref is GNS
+        xm,    ym    =901,425
+ 
         xoff = xm_ref - xm
         yoff = ym_ref - ym
         ##########################################################
     elif band=='H' and chip==2:
         ##########################################################
        
+         
+
+
       
      
-        xm_ref=1096.52 *0.5 # xm_ref is GNS
-        ym_ref=  843.433*0.5
+        xm_ref,ym_ref=332.838000 ,244.081000 # xm_ref is GNS
+        xm,ym        = 967.8858643, 2221.4008789
+
     
-        xm=1185.6673584
-        ym=2395.6433105
+        
     
         xoff = xm_ref - xm
         yoff = ym_ref - ym
@@ -104,9 +112,9 @@ for chip in range(2,4):
     
     ##########################################################
     #now we are looping with a degree 1 ,2,...,
-    distancia=1
-    ciclo=5
-    for degree in range(1,3):#Using degree 3 polynomial doesnt seem to improve things
+   
+    ciclo=20
+    for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
             diff=[]
@@ -153,7 +161,7 @@ for chip in range(2,4):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        ciclo+=35
+        ciclo+=10
     ##########################################################
     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
@@ -161,14 +169,14 @@ for chip in range(2,4):
     y_dis=[diff[i][1][7]-diff[i][0][2] for i in range(len(diff))]
     displa=np.array([x_dis,y_dis]).T
     zoc_txt=np.c_[zoc_txt,displa]
-    np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK')
+    np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks')
     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
 
     # In[5]:
     
     
-    distancia=1
+    
     diff=[]
     for i in range(len(gns_xy)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
         dist=distance.cdist(gns_xy[i:i+1,0:2],brick[:,6:8], 'euclidean')
@@ -254,8 +262,7 @@ for chip in range(2,4):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
     #brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
     sig=2
-        
-    distancia=1
+
     diff=[]
     for i in range(len(gns_xy)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
         dist=distance.cdist(gns_xy[i:i+1,0:2],brick[:,6:8], 'euclidean')
@@ -356,4 +363,3 @@ for chip in range(2,4):
         ax[g,1].legend([le[g]],fontsize=20,shadow=True,loc=1,markerscale=0, handlelength=0,handletextpad=0)
         plt.suptitle('%s common stars to Zocalli (Chip %s) and GNS field 12'%(len(uncx[g]),chip),fontsize=20)
     
-      
