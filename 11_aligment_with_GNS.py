@@ -36,8 +36,8 @@ read_file = stream.read()
 exec(read_file)
 
 distancia=1
-chip=2# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
-
+chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
+unc=0.01
 
 # In[3]:
 
@@ -56,7 +56,10 @@ np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
 #sys.exit("STOP")
-
+# Here we are to select GNS stars by their uncertainty.
+dxy_gns=np.sqrt((field12[:,1]*0.106)**2+(field12[:,3]*0.106)**2)
+low_g=np.where(dxy_gns<unc)
+field12=field12[low_g]
 x_gns=field12[:,0]
 y_gns=field12[:,2]
 
@@ -65,6 +68,10 @@ gns_xy=np.array([x_gns,y_gns]).T
 for chip in range(chip,chip+1):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
     brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+    # Here we are to select ZOC stars by their uncertainty.
+    dxy_zoc=np.sqrt(brick[:,8]**2+brick[:,9]**2)
+    low_z=np.where(dxy_zoc<unc)
+    brick=brick[low_z]
     #We have to add the coordinates offset between the two lists
     #I this case I have choose this bu coomparing in Aladin
     if band=='H' and chip==3:
@@ -98,7 +105,7 @@ for chip in range(chip,chip+1):
     brick[:,6]+=xoff
     brick[:,7]+=yoff
     
-    
+    brick=np.array(brick)
     # In[4]:
     
     
