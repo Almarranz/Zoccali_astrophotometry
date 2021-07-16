@@ -1,0 +1,234 @@
+\documentclass[4paper,11pt]{report}
+\usepackage{amssymb, amsmath, amsbsy}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tablefootnote}
+\usepackage{chngpage}% este paquete es para poder usar ajustwidth
+\usepackage{lscape}
+\usepackage{hyperref}
+\usepackage{caption}
+
+\hypersetup{
+	colorlinks,
+	linkcolor={red!50!black},
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
+}
+\usepackage{xcolor}
+\makeindex
+\usepackage{multirow} % Para unir varias filas
+\usepackage{longtable} % Para crear tablas de mas de una pagina
+\usepackage{array}
+\usepackage{a4wide}
+\setlength\extrarowheight{2pt}
+
+%------------------------------
+\begin{document}
+%\title{Analysis of Zoccali´s data}
+%\maketitle
+\begin{Huge}
+	\begin{center}
+	Analysis of Zoccali´s data.
+	\end{center}
+\end{Huge}
+
+\section*{INTRODUCTION}
+All scripts (and README files) that I have used for the reduction and analysis are available at github: \href{https://github.com/Almarranz}{https://github.com/Almarranz}\\
+I have divided them into two repositories, one for reduction, one for astrophotometry: Zoccali\_Reduction and Zoccal\_astrophotometry, respectively.
+Each script is editable so H or Ks band can be chosen. Exposition time can also be chosen (DIT=2 or DIT=10) but we are only using data with DIT=10.\\
+
+Images have been downloaded from ESO site, program ID \href{http://archive.eso.org/wdb/wdb/eso/sched_rep_arc/query?progid=0103.B-0262(A)}{0103.B-0262(A)} , object NPL054 (pointing on the brick)\\
+
+In some of the scripts I have used \textit{polywarp.py}, a python version of \textit{polywarp.pro}. I have tested the python version against the IDL version with same results.
+
+\section*{REDUCTION}
+Six different  scripts:
+\begin{enumerate}
+	\item \textbf{01\_dark\_brick.py} \\
+	Averages the dark files from each chip
+	\item \textbf{02\_flat\_brick.py} \\
+	Uses \textit{hawki\_cal\_flat\_set01\_0000.fits} and \textit{hawki\_cal\_flat\_bpmflat\_set01\_0000.fits} files generated with GASGANO and creates flats and bpm.
+	\item \textbf{03\_fullbpm\_brick.py} \\
+	Follows \textit{fulbpm.pro} from GNS pipeline. Creates a bpm using the mean and std of the dark for each chip.   
+	\item \textbf{04\_makemask\_brick.py} \\
+	Masks bad pixels clusters bigger than 5 pixels.
+	\item \textbf{05\_sky\_jitter\_lowest.py} \\
+	Stacks all images for each chip, chooses the lowest value for each pixel and generates a ‘sky’ image.
+	Pixels in the sky image bigger than  mean $\pm5\ast\sigma$ are masked with random values around the mean.\\
+	Also generated (but not used in this version): text files with the gains of each chip (mode of each chip/mean of modes)  and a normalized sky 
+	\item \textbf{06\_reduce\_jitter\_NOgains\_brick\_headers.py} \\
+	Reduces the images ( (im-sky)/flat). Darks are not subtracted neither from the images or the sky in this version \\
+\end{enumerate}
+	\section*{ASTROPHOTOMETRY}
+First part: alignment of the images and running Starfinder over them.
+\begin{enumerate}
+	\item \textbf{aling\_new.pro.} \\
+	Generates cubes for each chip, all pointings aligned with the central region of the first one, that is common  to all images.
+	Sets images on a canvas bing enough to accommodate all jittered images. The astrometric information in the header of the cube is changed in a way that an image with 0 offset would lay at the center of the canvas. These astrometric parameters will be later used to transform RA and DEC coordinates in SIRIUS list into X and Y coordinates for photometric calibration.\\
+	Alings all images with the first one using \textit{correl\_optimize} (with /NUMPIX keyword on). Generates a list for each chip with offsets (CUMOFFSET X and Y) and shifts (from correl\_optimeze) between image 1 and the rest of them, see figure \ref{fig0:wt}
+	\item \textbf{cachos\_new.pro } \\
+	In order to save time when running Starfinder, the aligned images are cut off using the list of offsets generated with \textit{aling\_new.pro}. Starfinder will be run over these.
+	\item \textbf{extractpsf\_new.pro} \\
+	Runs Starfinder over cut off images and extracts psf for each image. I got ZPs from the ESO website for the date of the observation. Saturation level were chosen by optical inspection of the images.
+	\item \textbf{deepastro\_new. Pro} \\
+     Using the psf from extractpsf\_new.pro, runs Starfinder over the images. Generates a list for each image of positions and fluxes
+
+\end{enumerate}
+
+
+Second part: alignment of the images, analysis of the uncertainties, calibration with SIRIUS and alignment with GNS.
+\begin{enumerate}
+\item \textbf{coordinates\_on\_the\_cube.py.} \\
+Adds the offsets and shifts (from the list created in aling\_new.pro) to the coordinates of stars created by deepastro.pro in order to be able to look for common stars within the same reference frame. \\
+Also generates images of the different weights for each region. See figure \ref{fig2:wt}.
+
+\item \textbf{cube\_lists\_alignment\_improved?.py} \\
+%I have use both scripts with similar results.
+Aligns each list with the first one, using common stars from the central region of each image that is common to all of them. (This region is called list\_E, see figure  \ref{fig1:lists} ).
+%\underline{cube\_list\_alignment.py} uses a single loop of a degree 1 polynomial considering two stars as the same if they are 2 pixels apart.\\
+The script uses 5 loops of a degree 1 polynomial considering two stars as the same if they are 1 pixel apart.\\
+%The difference in final uncertainties doesn't seem to be significant whether using one script or the other. 
+
+\item \textbf{divide\_list.py} \\
+The data consists of 15 jittered pointings (for H band). Only the central region is common to all of them. So common stars in this central region are the only ones with 15 measurements. The rest of common stars in other regions have fewer measurements. In order to be able to calculate the uncertainties in all different  areas  I have divided the image in 9 different regions, and divided the lists of stars in 9 sublists : list\_A, list\_B, etc, accordingly with the number of pointings on each region. The borders that delimitates each region have been chosen by ocular inspection of the images. See figures \ref{fig2:wt} and \ref{fig1:lists}.\\
+A similar procedure has been follow for Ks band, that only has 8 pointings.
+
+
+\item \textbf{ZPs\_and\_meanoffset\_im1calibrator\_WHOLE.py} 
+
+Calculates the ZP and magnitudes of stars using as calibrator common stars in image 1. Looks for common stars to each image with image 1(in the central region). Using ZP from ESO website for the stars in the first image, extracts the magnitude for these stars \textbf{(mag1=ZP-2.5*log(f1/dit))}, with the magnitudes of stars in the first image calculates the ZP in the rest of the images using common stars to image1 \textbf{(ZP2=mag1 + 2.5*log(f2/dit))} and with the mean ZP calculates de magnitudes for the rest of the stars. Also generates plots of \textit{($mag_{1}$ $-$  $mag_{i})$ vs magi} .  See figure \ref{fig:4_script1}.
+
+
+\item \textbf{mag\_and\_position\_plots.py} \\
+Finds common stars to the same lists for each pointing ( i.e. common stars to every list\_A, to every list\_B, etc)  and generate a list with mean fluxes, mean magnitudes and uncertainties of mean magnitudes and fluxes for all the stars on that chip. Also a JSON type file is created with the X and Y position to  common stars through all pointings on that chip. This file has rows with different lengths since the different list of stars have different numbers of pointings.\\
+ONLY lists with more than 3 pointings are selected so no list\_I for H band and no lists A,C,H or I for Ks (See figure \ref{fig2:wt}). 
+Generates plots \textit{dmag vs mag } and \textit{dx,dy vs mag}, see figure \ref{fig3:5_script}.
+
+
+\item \textbf{make\_txt\_of\_chips.py } \\
+Uses JSON files previously created in \textit{mag\_and\_position\_plots.py}  and generates a list with RA, DEC, flux, mean flux, x\_mean, y\_mean, dx, dy. Using for dx and dy the error propagation formula for the mean, and transforms them to arcsec.
+
+%this is not valid anymore
+%\item \textbf{plotting\_commmons.py} \footnote{this is just grosso modo comparison. This script doesn't produce any useful list}\\
+%Make plots of d\_mag vs mag and d\_position vs mag for the stars in the overlapping area of boths surveys. See figure \ref{fig5:7_script}
+
+\item \textbf{aling\_chips\_brick.pro} \\
+Adapted from \textit{alignquadrants.pro}.\\
+Uses the astrometric information from the cube of aligned images to transform RA and DEC from SIRIUS lists into X and Y coordinates. Then you have to click on one common star, one on SIRIUS map, one on Zocalli´s, and the difference of coordinates on these common stars is added to the whole lists and then looks for common stars between both surveys with 1 pixel distance. After that, transforms, with  a degree 1 polynomial, Zoccali´s coordinates. Also generates maps from SIRIUS and Zoccali stars to check on alignment.  Only stars with mag$>$11 and d\_mag$<$0.02 are selected from SIRIUS.
+A second degree polynomial alignment can also be set.  
+\item \textbf{calibrate\_brick.pro } \\
+Adapted from \textit{calibrate.pro}.\\
+Uses SIRIUS list for photometry calibration. Selects common stars with mag$>$12 and d\_mag$<$0.02 and isolated  within 1". Looks for common stars with Zoccali and uses these common stars to caculate the ZP\\ (\textbf{zp = mag\_ref\_sirius + 2.5 * log10(f\_ref\_zoc/exptime)}).\\With the mean ZP of common stars the magnitudes of the whole list are computed. Also returns a map of the distribution for reference stars on the field, see figure \ref{fig6:9_script1}.
+\item \textbf{photometry\_plotting.py.} \\
+%Plots dmag vs mag.\\ 
+Plots the stars used for ZP calculation (common with SIRIUS) and crosses out the ones eliminated by the sigma clipping algorithm when calculating the mean. Also plots offsets in magnitude for reference stars versus magnitudes for  Zoccali  stars. See figure \ref{fig7:10_script}.
+
+\item \textbf{aligment\_with\_GNS.py} (ONLY ready for H band) \\
+You have to open the lists on Aladin, the one of field12 data on the brick and the ones with Zoccali data that overlaps with it (chip2 and chip3), and use the RA and DEC coordinates presents in each list to place objects on the sky, then locate two common stars and copy and paste their X and Y coordinates on the variables xm\_ref and ym\_ref for GNS star and xm and ym for Zocalli star in the script. The code then adds the offset in coordinates of these common stars to the Zoccali list and aligns it with GNS using 5 loops of a degree 1 and 40 loops of a degree 2 polynomial. It loops over chips 2 and 3, the ones overlapping the brick and GNS field12. Creates lists with coordinates of common stars and their difference in positions.\\
+Generates a histogram with X and Y offsets of commons stars and \textit{uncertainty in positions vs magnitude} for the same stars in both lists. See figure \ref{fig8:11_script}.
+
+\end{enumerate} 
+
+\begin{figure}[b]
+	\begin{center}
+		\includegraphics[scale=0.4]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/1_scriptA.png}
+		\caption{ Example list of CUMOFFSET and shifts generated for aling\_new.pro}
+		\label{fig0:wt}
+	\end{center}
+	
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.35]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/wt.png}
+		\caption{Weights of the different areas for all pointings in H and Ks band}
+		\label{fig2:wt}
+	\end{center}
+	
+\end{figure}
+
+\begin{figure}
+	\begin{subfigure}[b]{0.55\textwidth}
+		\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/list1.png}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.55\textwidth}
+		\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/list2.png}
+	\end{subfigure}
+    \captionsetup{justification=centering}
+	\caption{Cube of Zoccali images for chip1. Two different pointings are shown and the lists that cover the different areas, with list\_E being common to all pointings}
+	\label{fig1:lists}
+\end{figure}	
+
+\begin{figure}[b]
+\begin{center}
+	\includegraphics[scale=0.5]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/4_script1.png}
+	\caption{ Example of one of the plots generated for ZPs\_and\_meanoffset\_im1calibrator\_WHOLE.py. Offset of magnitude between image 1 and image2 vs magnitude of image2 after calibration of image 2 using image 1 as calibrator }
+	\label{fig:4_script1}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/5_script1.png}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/5_script2.png}
+\end{subfigure}
+\captionsetup{justification=centering}
+\caption{Examples of plots generated by mag\_and\_position\_plots.py, for all lists with more than 3 measurements  on chip 1. Left dmag vs mag. Right, uncertainty in position vs mag }
+\label{fig3:5_script}
+\end{figure}
+
+%\begin{figure}
+%	\begin{subfigure}[b]{0.49\textwidth}
+%		\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/7_script1.png}
+%	\end{subfigure}
+%	\begin{subfigure}[b]{0.49\textwidth}
+%		\includegraphics[width=\textwidth, height=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/7_script2.png}
+%	\end{subfigure}
+%	\captionsetup{justification=centering}
+%	\caption{Examples of plots generated by plotting\_commmons.py, stars in the same area for GNS and Zoccali. Left dmag vs mag GNS and Zocally. Right, uncertainty in position vs mag }
+%	\label{fig5:7_script}
+%\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.4]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/9_script1.png}
+		\caption{Distribution of reference stars for computing ZP on chip1}
+		\label{fig6:9_script1}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\textwidth, height=1.5\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/10_script1.png}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\textwidth, height=1.5\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/10_script2.png}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Examples of some of the plots generated by photometry\_plotting.py. Left, commons stars with SIRIUS used for ZP calculation, crossed out star are out of 2$\sigma$. Right, offset in magnitude for star used in ZP calculation common to SIRIUS and Zoccali }
+	\label{fig7:10_script}
+\end{figure}
+
+\begin{figure}
+	\begin{subfigure}[b]{\textwidth}
+		\includegraphics[width=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/11_script1.png}
+		\caption{Difference in position on X and Y axis of common stars to Zocalli and GNS, after a second degree polynomial alignment with GNS}
+	\end{subfigure}
+	\begin{subfigure}[b]{\textwidth}
+		\includegraphics[width=\textwidth]{/Users/amartinez/Desktop/PhD/Charlas/Scientific_writing/11_script3.png}		
+			\caption{Uncertainty in position versus magnitude for common stars to GNS and Zoccali on the the brick}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Example of some plots generated by aligment\_with\_GNS.py }.
+		%offset in magnitude for common stars between GNS and Zoccali. Numbers in red are the sdt in bins of 1mag width, blue is the number of stars in that bin and orange are the stars outo of 2$\sigma$ in that bin. }
+	\label{fig8:11_script}
+\end{figure}
+
+
+\end{document}
