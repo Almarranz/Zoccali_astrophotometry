@@ -33,7 +33,10 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
 exec(read_file)
-
+if band=='H':
+    ZP=26.32
+else:
+    ZP=25.63
 
 # In[4]:
 
@@ -47,6 +50,7 @@ for chip in range(1,2):
     dic_stars={}
     dic_whole={}
     for i in range(1,len(n)+1):
+        #x,y,f,dx,dy,df,c='cube_stars_im'+str(i)+'_chip'+str(chip)+'.txt'
         lista=np.loadtxt(tmp+'cube_stars_im'+str(i)+'_chip'+str(chip)+'.txt')
         #print('lista len:%s Chip:%s im:%s'%(len(lista),chip,i))
         dic_whole['cube_stars_im'+str(i)+'_chip'+str(chip)]=lista
@@ -62,17 +66,20 @@ for chip in range(1,2):
         
         im_a=1
         im_b=l
-        for loop in range(5): #numbers of loops. 5 seems to be good.
+        for loop in range(3): #numbers of loops. 3 seems to be good.
             diff=[]
             dic_whole['cube_stars_im'+str(i)+'_chip'+str(chip)]=lista
             list_E=[lista[r] for r in range(len(lista)) if lim_x[0]-m<lista[r,0]<lim_x[1]+m and lim_y[0]+m<lista[r,1]<=lim_y[1]-m ]
             list_E=np.array(list_E)
             dic_stars['listE_im'+str(i)]=list_E
+            
             for i in range(dic_stars['listE_im'+str(im_a)].shape[0]): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
                         dist=distance.cdist(dic_stars['listE_im'+str(im_a)][i:i+1,0:2],dic_stars['listE_im'+str(im_b)][:,0:2], 'euclidean')
                         d=np.where(dist<distancia)
                         if len(d[1])>0:
                             diff.append((dic_stars['listE_im'+str(im_a)][i],dic_stars['listE_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
+            #Select the best quality stars for aligmente (that should be those with 14<H<16.5 
+            diff=[diff[ma] for ma in range(len(diff)) if 14<ZP-2.5*np.log10(diff[ma][0][2]/10)<16.5 ] 
             dic_listas['stars_1'+str(l)]=[]
             dic_listas['stars_1'+str(l)]=diff
             print('comunes listas %s y %s ----> '%(im_a,im_b),len(diff))
@@ -80,6 +87,8 @@ for chip in range(1,2):
             y1=[]
             x2=[]
             y2=[]
+            
+            
             for i in range(len(dic_listas['stars_1'+str(l)])):
                 x1.append(dic_listas['stars_1'+str(l)][i][0][0])
                 y1.append(dic_listas['stars_1'+str(l)][i][0][1])
@@ -144,5 +153,13 @@ for chip in range(1,2):
         print('Saved aligned list of im%s'%(l))
 print('Done with chip %s'%(chip))
         #print('comunes listas %s y %s ----> '%(im_a,l),len(diff))
+
+#%%
+
+lis_mags=[ZP-2.5*np.log10(diff[ma][0][2]/10) for ma in range(len(diff))] 
+print(min(lis_mags))
+
+
+
 
 
