@@ -33,19 +33,21 @@ ureg = pint.UnitRegistry()# to give units to values
 # 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
 GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
 
-
+valid=np.where(GNS[:,14]>1.3)
 
 #%%
 
 dist=8*ureg.kpc
 s=3
-unc_xy=0.006
-unc_v=1
+# it would make a graph of unc_xy or unc_v for the smoller value. If the smoller valueis <1 it would discard those stars with 
+# bigger uncertainties  
+unc_xy=0.005
+unc_v=5
 
 
 ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
 stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-
+stars=stars[valid]
 dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
 dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
 dxy=np.sqrt(dx_dis**2+dy_dis**2)
@@ -135,8 +137,9 @@ if unc_v>unc_xy:
     # ax.set_ylim(0,0.03)
     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-    ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
-    ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+    if unc_xy <1:
+        ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
+        ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
     ax.tick_params(axis='x', labelsize=20)
     ax.tick_params(axis='y', labelsize=20)
     
@@ -171,8 +174,9 @@ else:
     # ax.set_ylim(0,0.03)
     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-    ax.axhline(unc_v/4, color='g', linestyle='dashed', linewidth=3,zorder=3)
-    ax.text(min(stars[:,2]),unc_v/4+unc_v/40,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+    if unc_v <1:
+        ax.axhline(unc_v/4, color='g', linestyle='dashed', linewidth=3,zorder=3)
+        ax.text(min(stars[:,2]),unc_v/4+unc_v/40,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
     ax.tick_params(axis='x', labelsize=20)
     ax.tick_params(axis='y', labelsize=20)
     
