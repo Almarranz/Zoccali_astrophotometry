@@ -40,7 +40,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 # In[4]:
 
 for chip in range(1,5):
-    distancia=2
+    distancia=1
     
     
     # In[5]:
