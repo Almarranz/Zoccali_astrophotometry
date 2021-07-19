@@ -35,6 +35,8 @@ read_file = stream.read()
 exec(read_file)
 if band=='H':
     ZP=26.32
+    lm_min=14
+    lm_max=16
 else:
     ZP=25.63
 
@@ -43,7 +45,7 @@ else:
 
 m=0# just in case the limits for lists need adjustments 
 #m=0
-for chip in range(1,2):
+for chip in range(1,5   ):
     n=np.loadtxt(jitter+'xy_off_xy_alig_chip'+str(chip)+'.txt')#to set a varible with the number of images.
     lim_x=[401,2150]
     lim_y=[401,2150]
@@ -79,7 +81,7 @@ for chip in range(1,2):
                         if len(d[1])>0:
                             diff.append((dic_stars['listE_im'+str(im_a)][i],dic_stars['listE_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
             #Select the best quality stars for aligmente (that should be those with 14<H<16.5 
-            diff=[diff[ma] for ma in range(len(diff)) if 14<ZP-2.5*np.log10(diff[ma][0][2]/10)<16.5 ] 
+            diff=[diff[ma] for ma in range(len(diff)) if (lm_min<ZP-2.5*np.log10(diff[ma][0][2]/10)<lm_max and lm_min<ZP-2.5*np.log10(diff[ma][1][2]/10)<lm_max)] 
             dic_listas['stars_1'+str(l)]=[]
             dic_listas['stars_1'+str(l)]=diff
             print('comunes listas %s y %s ----> '%(im_a,im_b),len(diff))
@@ -156,8 +158,7 @@ print('Done with chip %s'%(chip))
 
 #%%
 
-lis_mags=[ZP-2.5*np.log10(diff[ma][0][2]/10) for ma in range(len(diff))] 
-print(min(lis_mags))
+
 
 
 
