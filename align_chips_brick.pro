@@ -31,7 +31,7 @@ dH_si=float(dH_si)
 K_si=float(K_si)
 dK_si=float(dK_si)   
 ;for chip =1, 4 do begin
-	readcol, tmp + 'NPL_054fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A'
+	readcol, tmp + 'NPL_054fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A', SKIPLINE=1
 	a=float(a)
 	d=float(d)
 	f=float(f)
