@@ -187,8 +187,8 @@ for k in range(0,4):
         vals = resta[thisbin]
         nope_thisbin=np.where((mag_ref[nope]>mags_bins[j])&(mag_ref[nope]<mags_bins[j]+1))
         if len(vals)>1:
-            bin_rej=sigma_clip(vals, sigma=2, maxiters=5,masked=True)
-            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=5)
+            bin_rej=sigma_clip(vals, sigma=sig, maxiters=5,masked=True)
+            sig_bin=sigma_clipped_stats(vals,sigma=sig,maxiters=5)
             mmag[j]=sig_bin[0]
             sig_mag[j]=sig_bin[2]
         ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
@@ -217,7 +217,7 @@ for k in range(0,4):
 # In[7]:
 #This plot is not ready yet
 
-'''
+sig=3
 fig,ax = plt.subplots(4,1,figsize=(10,20))
 for k in range(0,4):
     chip=k+1
@@ -256,44 +256,45 @@ for k in range(0,4):
     mags=(np.array(mags))
     
      
-    s=sigma_clipped_stats(mags[:,1],sigma=sig,maxiters=10)
-    mask_sig=sigma_clip(mags[:,1],sigma=sig,maxiters=10)
+    s=sigma_clipped_stats(mags[:,0],sigma=sig,maxiters=10)
+    # mask_sig=sigma_clip(mags[:,0],sigma=sig,maxiters=10)
+    mask_sig=sigma_clip(resta,sigma=sig,maxiters=10)
     nope=np.where(mask_sig.mask==True)
     
     
     mmag =np.zeros(shape=(int(nbins)))
     sig_mag =np.zeros(shape=(int(nbins)))
     for j in range(int(nbins)):
-        thisbin=np.where((mags[:,1]>mags_bins[j])&(mags[:,1]<=mags_bins[j]+1))
+        thisbin=np.where((mags[:,0]>mags_bins[j])&(mags[:,0]<=mags_bins[j]+1))
         vals = resta[thisbin]
-        nope_thisbin=np.where((mags[:,1][nope]>mags_bins[j])&(mags[:,1][nope]<mags_bins[j]+1))
+        nope_thisbin=np.where((mags[:,0][nope]>mags_bins[j])&(mags[:,0][nope]<mags_bins[j]+1))
         if len(vals)>1:
-            bin_rej=sigma_clip(vals, sigma=2, maxiters=5,masked=True)
-            sig_bin=sigma_clipped_stats(vals,sigma=2.0,maxiters=5)
+            bin_rej=sigma_clip(vals, sigma=sig, maxiters=5,masked=True)
+            sig_bin=sigma_clipped_stats(vals,sigma=sig,maxiters=5)
             mmag[j]=sig_bin[0]
             sig_mag[j]=sig_bin[2]
-        ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
-        ax[k].text(mags_bins[j]+0.4,-0.5,'%.3f'%(sig_mag[j]),color='red',fontsize=14,zorder=3)  
-        ax[k].text(mags_bins[j]+0.4,-0.7,'%s'%(len(vals)),color='blue',fontsize=14)
-        ax[k].text(mags_bins[j]+0.4,-0.9,'%s'%(len(nope_thisbin[0])),color='orange',fontsize=14)
+            ax[k].errorbar(mags_bins[j]+0.5,mmag[j],sig_mag[j],color='red', elinewidth=3,capsize=10,capthick=2,barsabove=True,zorder=3)
+            ax[k].text(mags_bins[j]+0.4,-0.5-0.5,'%.3f'%(sig_mag[j]),color='red',fontsize=14,zorder=3)  
+            ax[k].text(mags_bins[j]+0.4,-0.7-0.5,'%s'%(len(vals)),color='blue',fontsize=14)
+            ax[k].text(mags_bins[j]+0.4,-0.9-0.5,'%s'%(len(nope_thisbin[0])),color='orange',fontsize=14)
         
-    ax[k].scatter(mags[:,1],mags[:,0]-mags[:,1],color='k',alpha=0.2)
-    ax[k].scatter(mags[:,1][nope],resta[nope],color='red',marker='x',s=100,alpha=0.7)
+    ax[k].scatter(mags[:,0],mags[:,0]-mags[:,1],color='k',alpha=0.2)
+    ax[k].scatter(mags[:,0][nope],resta[nope],color='orange',marker='x',s=100,alpha=0.7)
     ax[k].legend(['Chip%s #%s'%(chip,len(mags))],fontsize=20,markerscale=0,shadow=True,loc=1, handlelength=-1)
     #for lh in leg.legendHandles: 
      #   lh.set_visible(False)
     ax[k].axhline(average,color='g',ls='--',lw=2)
-    ax[k].text(min(mags[:,1])-1,0.75,'mean offset (%s$\sigma$) =%.3f, std= %.3f'%(sig,average,np.std(resta)),color='green',fontsize=14,zorder=3,weight='bold') 
+    ax[k].text(min(mags[:,0]),0.75,'mean offset (%s$\sigma$) =%.3f, std= %.3f'%(sig,average,np.std(resta)),color='green',fontsize=14,zorder=3,weight='bold') 
     ax[k].grid()
     ax[k].tick_params(axis='x', labelsize=20)
     ax[k].tick_params(axis='y', labelsize=20)
-    ax[k].set_ylim(-1,1)
+    ax[k].set_ylim(-1.5,1.5)
     #ax[k].set_xlim(x0,x1)
     #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
     fig.text(0.5, 0.08, '$[%s]_{Zoc}$'%(band),fontsize=30, ha='center')
     fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRref}$', va='center', rotation='vertical',fontsize=30)
     fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
-   ''' 
+   
 # In[ ]:
 '''
 chip=4
