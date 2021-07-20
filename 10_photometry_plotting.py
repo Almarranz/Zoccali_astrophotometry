@@ -292,7 +292,7 @@ for k in range(0,4):
     #ax[k].set_xlim(x0,x1)
     #ax[k].text(12,0.5,'ZP =%.3f $\pm$ %.3f'%(s[0],s[2]/np.sqrt(len(diff)-1)),fontsize='xx-large',color='g') 
     fig.text(0.5, 0.08, '$[%s]_{Zoc}$'%(band),fontsize=30, ha='center')
-    fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRref}$', va='center', rotation='vertical',fontsize=30)
+    fig.text(-0, 0.5, '$[H]_{Zoc}-[H]_{SIRcomm}$', va='center', rotation='vertical',fontsize=30)
     fig.text(0.5, 0.06, 'Red is std of stars in bins of 1mag width. Blue is #stars in that bin and orage is #stars out of 2$\sigma$',fontsize=12, ha='center')
    
 # In[ ]:
