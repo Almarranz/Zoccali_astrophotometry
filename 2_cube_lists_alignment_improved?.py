@@ -45,7 +45,7 @@ else:
 
 m=0# just in case the limits for lists need adjustments 
 #m=0
-for chip in range(1,5   ):
+for chip in range(1,5):
     n=np.loadtxt(jitter+'xy_off_xy_alig_chip'+str(chip)+'.txt')#to set a varible with the number of images.
     lim_x=[401,2150]
     lim_y=[401,2150]
@@ -63,12 +63,19 @@ for chip in range(1,5   ):
     
     for l in range(1,len(dic_stars)+1):
     #for l in range(1,4):    
-        distancia=1
+        
     #for j in range(2,3):
         
         im_a=1
         im_b=l
-        for loop in range(3): #numbers of loops. 3 seems to be good.
+        for loop in range(5): #numbers of loops. 3 seems to be good.
+            if band=='H':
+                ZP=26.32
+                lm_min=14
+                lm_max=16
+            else:
+                ZP=25.63
+            distancia=0.5
             diff=[]
             dic_whole['cube_stars_im'+str(i)+'_chip'+str(chip)]=lista
             list_E=[lista[r] for r in range(len(lista)) if lim_x[0]-m<lista[r,0]<lim_x[1]+m and lim_y[0]+m<lista[r,1]<=lim_y[1]-m ]
@@ -79,9 +86,24 @@ for chip in range(1,5   ):
                         dist=distance.cdist(dic_stars['listE_im'+str(im_a)][i:i+1,0:2],dic_stars['listE_im'+str(im_b)][:,0:2], 'euclidean')
                         d=np.where(dist<distancia)
                         if len(d[1])>0:
-                            diff.append((dic_stars['listE_im'+str(im_a)][i],dic_stars['listE_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
-            #Select the best quality stars for aligmente (that should be those with 14<H<16.5 
+                           diff.append((dic_stars['listE_im'+str(im_a)][i],dic_stars['listE_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
+            print('Common stars %s'%(len(diff)))    
             diff=[diff[ma] for ma in range(len(diff)) if (lm_min<ZP-2.5*np.log10(diff[ma][0][2]/10)<lm_max and lm_min<ZP-2.5*np.log10(diff[ma][1][2]/10)<lm_max)] 
+            if len(diff)<4:
+                while len(diff)<4:
+                    # In case thera are not enought stars for polywarp to work stars>((degree+1)^2))
+                    print(45*'#'+'\n','NOT enought stars, enlarging magnitude range','\n'+45*'#')
+                    diff=[]
+                    for i in range(dic_stars['listE_im'+str(im_a)].shape[0]): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
+                            dist=distance.cdist(dic_stars['listE_im'+str(im_a)][i:i+1,0:2],dic_stars['listE_im'+str(im_b)][:,0:2], 'euclidean')
+                            d=np.where(dist<distancia)
+                            if len(d[1])>0:
+                                diff.append((dic_stars['listE_im'+str(im_a)][i],dic_stars['listE_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
+                   #Select the best quality stars for aligmente (that should be those with 14<H<16.5 
+                    lm_min -= 0.1
+                    lm_max += 0.1 
+                    diff=[diff[ma] for ma in range(len(diff)) if (lm_min<ZP-2.5*np.log10(diff[ma][0][2]/10)<lm_max and lm_min<ZP-2.5*np.log10(diff[ma][1][2]/10)<lm_max)] 
+                
             dic_listas['stars_1'+str(l)]=[]
             dic_listas['stars_1'+str(l)]=diff
             print('comunes listas %s y %s ----> '%(im_a,im_b),len(diff))
@@ -153,11 +175,10 @@ for chip in range(1,5   ):
         np.savetxt(tmp+'cube_im'+str(l)+'_chip'+str(chip)+'_aligned_py.txt',dic_whole['cube_stars_im'+str(l)+'_chip'+str(chip)],fmt='%.5f')
         print(len(xi),l)
         print('Saved aligned list of im%s'%(l))
-print('Done with chip %s'%(chip))
+    print('Done with chip %s'%(chip))
         #print('comunes listas %s y %s ----> '%(im_a,l),len(diff))
 
 #%%
-
 
 
 
