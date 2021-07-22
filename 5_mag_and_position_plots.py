@@ -15,7 +15,8 @@ import numpy as np
 from scipy.spatial import distance
 from scipy.stats import gaussian_kde
 import json
-
+from astropy.stats import sigma_clip
+from astropy.stats import sigma_clipped_stats
 
 # In[2]:
 
@@ -33,9 +34,9 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 
 
 # In[3]:
+sig=3
 
-
-for chip in range(1,2):
+for chip in range(1,5):
     if band=='H':
         ind=['A','B','C','D','E','F','G','H']#,'I'] # solo las listas con mas de 3 pointings
     elif band=='Ks':
@@ -85,7 +86,16 @@ for chip in range(1,2):
                         diff.append((dic_stars['stars_im'+str(im_a)][i],dic_stars['stars_im'+str(im_b)][d[1][np.argmin(dist[d])]]))
                         diff_Ax.append((dic_stars['stars_im'+str(im_a)][i][0],dic_stars['stars_im'+str(im_b)][d[1][np.argmin(dist[d])]][0]))
                         diff_Ay.append((dic_stars['stars_im'+str(im_a)][i][1],dic_stars['stars_im'+str(im_b)][d[1][np.argmin(dist[d])]][1]))
-
+        print('Esto es sin clipping %s'%(len(diff))) 
+        # sigma clipping in function of diff in mag
+        ###########################################
+        diff_mag=[(zp_im[zp_ind[im_a-1]-1]-2.5*np.log10(diff[i][0][2]/10))-(zp_im[zp_ind[im_b-1]-1]-2.5*np.log10(diff[i][1][2]/10)) for i in range(len(diff))] 
+        diff_clip=sigma_clip(diff_mag,sigma=sig,masked=True)
+        good=np.where(diff_clip.mask==False)
+        diff=[diff[good[0][i]] for i in range(len(good[0]))] #this to apply good in a list without transform diff in a nu.array
+        diff_Ax=[diff_Ax[good[0][i]] for i in range(len(good[0]))]
+        diff_Ay=[diff_Ay[good[0][i]] for i in range(len(good[0]))]
+        ###########################################
         for i in range(len(diff)):
             mean_x=np.mean([diff[i][0][0],diff[i][1][0]])
             mean_y=np.mean([diff[i][0][1],diff[i][1][1]])
@@ -103,6 +113,16 @@ for chip in range(1,2):
                             aux.append((D[i],dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]]))
                             aux_x.append((diff_Ax[i]+(dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]][0],)))
                             aux_y.append((diff_Ay[i]+(dic_stars['stars_im'+str(j)][d[1][np.argmin(dist[d])]][1],)))
+            # sigma clipping in function of diff in mag
+            print('Esto es sin clipping %s'%(len(D)))
+            ###########################################
+            aux_mag=[(zp_im[zp_ind[im_a-1]-1]-2.5*np.log10(aux[i][0][2]/10))-(zp_im[zp_ind[j-1]-1]-2.5*np.log10(aux[i][1][2]/10)) for i in range(len(aux))] 
+            aux_clip=sigma_clip(aux_mag,sigma=sig,masked=True)
+            bueno=np.where(aux_clip.mask==False)
+            aux=[aux[bueno[0][i]] for i in range(len(bueno[0]))]
+            aux_x=[aux_x[bueno[0][i]] for i in range(len(bueno[0]))]
+            aux_y=[aux_y[bueno[0][i]] for i in range(len(bueno[0]))]
+            ###########################################
             D=np.zeros(shape=(len(aux),j+2))
             diff_Ax=aux_x
             diff_Ay=aux_y
@@ -183,7 +203,7 @@ for chip in range(1,2):
     ax[1].set_ylabel('Y std/sqrt(N) (arcsec)',fontsize=20)
     ax[1].grid()
     #ax[0].axhline(np.mean(std_x), color='r',linestyle='dashed', linewidth=3)
-    ax[1].plot(mag_med,dy,'.',scalex=True,alpha=0.3,color=c,markersize=1)
+    ax[1].plot(mag_med,dy,'.',scalex=True,alpha=0.6,color=c,markersize=4)
     #ax[1].axhline(np.mean(std_y), color='r',linestyle='dashed', linewidth=3)
     plt.suptitle('Total stars = %s.Chip=%s'%(len(dx),chip),fontsize=20)
     #if folder =='im_sky_ESOReflex/':
@@ -225,7 +245,7 @@ for chip in range(1,2):
 
 # In[ ]:
 
-print(fx[8000])
+
 
 
 
