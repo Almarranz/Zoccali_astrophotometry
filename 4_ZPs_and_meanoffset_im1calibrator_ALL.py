@@ -10,6 +10,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import distance
+from astropy.stats import sigma_clip
 
 
 
@@ -40,7 +41,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 # In[4]:
 
 for chip in range(1,5):
-    distancia=1
+    distancia=0.5
     
     
     # In[5]:
@@ -100,7 +101,13 @@ for chip in range(1,5):
         for i in range(len(dic_listas['stars_1'+str(j)])):
             zp=dic_mag1['mag1_lis_1'+str(j)][i]+2.5*np.log10(dic_listas['stars_1'+str(j)][i][1][2]/exptime)
             zp_im.append(zp)
+        print('zp_im sin clip %s'%(len(zp_im)))
+        print(np.mean(zp_im),np.std(zp_im))
+        zp_im=sigma_clip(zp_im,sigma=2,masked=False)
         dic_zp['zp_'+str(j)]=zp_im
+        print('zp_im con clip %s'%(len(zp_im)))
+        print(np.mean(zp_im),np.std(zp_im))
+    
     
     
     # In[9]:
