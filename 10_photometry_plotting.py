@@ -146,9 +146,9 @@ for k in range(0,4):
     chip=k+1
     ra ,dec , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip),unpack=True)
     haw_cal=np.loadtxt(tmp+'stars_calibrated_%s_chip%s_sirius.txt'%(band,chip))
-    dxy=np.sqrt(dx**2+dy**2)
     # Here we can select best Zoccali´s stars for aligment with GNS
     ###################################################################################
+    dxy=np.sqrt(dx**2+dy**2)
     for_ali=np.where((m>14) & (m<16) & (dxy<0.002))
     foralig=haw_cal[for_ali]
     np.savetxt(tmp+'For_alignment_calibrated_%s_chip%s_sirius.txt'%(band,chip),foralig)
