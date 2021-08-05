@@ -56,15 +56,16 @@ unc=10
 GNS_campo=0
 #Uses foreground stars for proper motions Zoc_campo =1
 #Doesnt use foreground stars for proper motions Zoc_campo =0
-#Uses all stars Zoc_campo=2
+#Uses all stars Vel_campo=2
 Vel_campo=0
 #############################################
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
 s=2.5
-unc_xy=1
-unc_v=100
+unc_xy= 1 #uncertainty limit for the position vector
+unc_v=1 # uncertainty limit for the velocity vector
+unc=0.005 #uncertainti limit for position on GNS stars
 field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
@@ -202,7 +203,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        ciclo+=5
+        #ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
@@ -362,98 +363,98 @@ for h in range(len(ls)):
             ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {xy}}$<%s"'%(unc_xy),color='k',fontsize=20,zorder=3,weight='bold') 
 if GNS_campo==1:
     if Vel_campo==0:
-        fig.suptitle('Foreground stars in alignm and NO Foreground stars in pm',fontsize=20)
+        fig.suptitle('Foreground stars in alignment and NO Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==1:
-        fig.suptitle('Foreground stars in alignm and Foreground stars in pm',fontsize=20)
+        fig.suptitle('Foreground stars in alignment and Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==2:
-        fig.suptitle('Foreground stars in alignm ALL stars in pm',fontsize=20)
+        fig.suptitle('Foreground stars in alignment ALL stars in proper motions',fontsize=20)
 elif GNS_campo==0:
     if Vel_campo==0:
-        fig.suptitle('NO Foreground stars in alignm and NO Foreground stars in pm',fontsize=20)
+        fig.suptitle('NO Foreground stars in alignment and NO Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==1:
-        fig.suptitle('NO Foreground stars in alignm and Foreground stars in pm',fontsize=20)
+        fig.suptitle('NO Foreground stars in alignment and Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==2:
-        fig.suptitle('NO Foreground stars in alignm ALL stars in pm',fontsize=20)
+        fig.suptitle('NO Foreground stars in alignment ALL stars in proper motions',fontsize=20)
 elif GNS_campo==2:
     if Vel_campo==0:
-        fig.suptitle('ALL stars in alignm and NO Foreground stars in pm',fontsize=20)
+        fig.suptitle('ALL stars in alignment and NO Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==1:
-        fig.suptitle('ALL stars in alignm and Foreground stars in pm',fontsize=20)
+        fig.suptitle('ALL stars in alignment and Foreground stars in proper motions',fontsize=20)
     elif Vel_campo==2:
-        fig.suptitle('ALL stars in alignm ALL stars in pm',fontsize=20)
+        fig.suptitle('ALL stars in alignment ALL stars in proper motions',fontsize=20)
 
 
 #fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s.'%(band),fontsize=20, ha='center'1.4
 
 #%% 
-########## Uncertainty in position or velocities plots ###############
-# if unc_v>unc_xy:
-#     #### Uncertainty in POSITION
-#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+######### Uncertainty in position or velocities plots ###############
+if unc_v>unc_xy:
+    #### Uncertainty in POSITION
+    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
     
-#     stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-#     ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-#     GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
+    stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+    ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+    GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-#     dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
-#     dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
-#     dxy=np.sqrt(dx_dis**2+dy_dis**2)
+    dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
+    dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
+    dxy=np.sqrt(dx_dis**2+dy_dis**2)
     
-#     menor=0
-#     for i in range(len(dxy)):
-#         if dxy[i]<unc_xy:
-#             menor+=1
-#     # stars=np.c_[stars,dxy]
-#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-#     fig, ax=plt.subplots(1,1,figsize=(10,10))
-#     ax.scatter(stars[:,2],dxy,color='k',alpha=0.3)
-#     ax.set_xlabel('[H]',fontsize=20)
-#     ax.set_ylabel(r'$\sigma_{\vec {xy}}$(arcsec)',fontsize=20)
-#     # ax.set_ylim(0,0.03)
-#     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
-#     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-#     if unc_xy <1:
-#         ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
-#         ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
-#     ax.tick_params(axis='x', labelsize=20)
-#     ax.tick_params(axis='y', labelsize=20)
+    menor=0
+    for i in range(len(dxy)):
+        if dxy[i]<unc_xy:
+            menor+=1
+    # stars=np.c_[stars,dxy]
+    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+    fig, ax=plt.subplots(1,1,figsize=(10,10))
+    ax.scatter(stars[:,2],dxy,color='k',alpha=0.3)
+    ax.set_xlabel('[H]',fontsize=20)
+    ax.set_ylabel(r'$\sigma_{\vec {xy}}$(arcsec)',fontsize=20)
+    # ax.set_ylim(0,0.03)
+    # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
+    # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
+    if unc_xy <1:
+        ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
+        ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+    ax.tick_params(axis='x', labelsize=20)
+    ax.tick_params(axis='y', labelsize=20)
     
 
-# else:
-#     #### Uncertainty in VELOCITY
-#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+else:
+    #### Uncertainty in VELOCITY
+    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
     
-#     stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-#     ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-#     GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
+    stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+    ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+    GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-#     dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
-#     dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
-#     dxy=np.sqrt(dx_dis**2+dy_dis**2)
+    dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
+    dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
+    dxy=np.sqrt(dx_dis**2+dy_dis**2)
     
-#     vel=np.sqrt(stars[:,10]**2+stars[:,11]**2)
-#     vx=stars[:,10]/4
-#     vy=stars[:,11]/4
+    vel=np.sqrt(stars[:,10]**2+stars[:,11]**2)
+    vx=stars[:,10]/4
+    vy=stars[:,11]/4
     
-#     dvel=np.sqrt(((vx*dx_dis/4)**2+(vy*dy_dis/4)**2)/(vx**2+vy**2))
-#     menor=0
-#     for i in range(len(dvel)):
-#         if dvel[i]<unc_v/4:
-#             menor+=1
-#     # stars=np.c_[stars,dxy]
-#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-#     fig, ax=plt.subplots(1,1,figsize=(10,10))
-#     ax.scatter(stars[:,2],dvel,color='k',alpha=0.3)
-#     ax.set_xlabel('[H]',fontsize=20)
-#     ax.set_ylabel(r'$\sigma_{\vec {v}}$(arcsec/yr)',fontsize=20)
-#     # ax.set_ylim(0,0.03)
-#     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
-#     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-#     if unc_v <1:
-#         ax.axhline(unc_v, color='g', linestyle='dashed', linewidth=3,zorder=3)
-#         ax.text(min(stars[:,2]),unc_v/4+unc_v/40,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
-#     ax.tick_params(axis='x', labelsize=20)
-#     ax.tick_params(axis='y', labelsize=20)
+    dvel=np.sqrt(((vx*dx_dis/4)**2+(vy*dy_dis/4)**2)/(vx**2+vy**2))
+    menor=0
+    for i in range(len(dvel)):
+        if dvel[i]<unc_v/4:
+            menor+=1
+    # stars=np.c_[stars,dxy]
+    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+    fig, ax=plt.subplots(1,1,figsize=(10,10))
+    ax.scatter(stars[:,2],dvel,color='k',alpha=0.3)
+    ax.set_xlabel('[H]',fontsize=20)
+    ax.set_ylabel(r'$\sigma_{\vec {v}}$(arcsec/yr)',fontsize=20)
+    # ax.set_ylim(0,0.03)
+    # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
+    # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
+    if unc_v <1:
+        ax.axhline(unc_v, color='g', linestyle='dashed', linewidth=3,zorder=3)
+        ax.text(min(stars[:,2]),unc_v/4+unc_v/40,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+    ax.tick_params(axis='x', labelsize=20)
+    ax.tick_params(axis='y', labelsize=20)
     
     
     
