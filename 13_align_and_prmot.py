@@ -32,7 +32,7 @@ pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
 folder='im_jitter_NOgains/'
 py_pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/py_pruebas/'
 images='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+str(exptime)+'/'+folder
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp/'
+tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
 sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
 GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
@@ -155,7 +155,7 @@ for chip in range(chip,chip+1):
     #now we are looping with a degree 1 ,2,...,
    
     ciclo=10
-    for degree in range(1,3):#Using degree 3 polynomial doesnt seem to improve things
+    for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
             diff=[]
@@ -202,7 +202,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        ciclo-=5
+        ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]

@@ -16,10 +16,10 @@ exptime=10
 #chip=1
 folder='im_jitter_NOgains/'
 #folder='im_sky_ESOReflex/'
-results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'/results/'
+results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'/results_bs/'
 pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
 psf='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp/'
+tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
 indir= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
 jitter='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+str(exptime)+'/'+folder
 pruebas_GNS=indir+'pruebas'
@@ -51,8 +51,8 @@ for chip in range(1,5):
     lim_y=[401,2150]
     dic_stars={}
     dic_whole={}
-    #for i in range(1,len(n)+1):
-    for i in range(1,len(n)):
+    for i in range(1,len(n)+1):
+    # for i in range(1,len(n)):
         #x,y,f,dx,dy,df,c='cube_stars_im'+str(i)+'_chip'+str(chip)+'.txt'
         lista=np.loadtxt(tmp+'cube_stars_im'+str(i)+'_chip'+str(chip)+'.txt')
         #print('lista len:%s Chip:%s im:%s'%(len(lista),chip,i))
