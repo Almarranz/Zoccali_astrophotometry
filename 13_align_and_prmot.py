@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Aug  3 10:33:43 2021
+Created on Fri Aug  6 09:45:23 2021
 
 @author: amartinez
 """
@@ -64,8 +64,9 @@ Vel_campo=0
 # bigger uncertainties  
 s=2.5
 unc_xy= 1 #uncertainty limit for the position vector
-unc_v=1 # uncertainty limit for the velocity vector
-unc=0.005 #uncertainti limit for position on GNS stars
+unc_v=2 # uncertainty limit for the velocity vector
+unc=0.005 #uncertainty limit for position on GNS stars
+unc_z=0.005 #uncertainty limit for position on GNS stars
 field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
@@ -85,7 +86,8 @@ field12[:,2]*=0.5
 #sys.exit("STOP")
 # Here we are to select GNS stars by their uncertainty.
 dxy_gns=np.sqrt((field12[:,1]*0.106)**2+(field12[:,3]*0.106)**2)
-low_g=np.where(dxy_gns<unc)
+# low_g=np.where(dxy_gns<unc)
+low_g=np.where((field12[:,1]*0.106<unc) & (field12[:,3]*0.106<unc) )
 field12=field12[low_g]
 x_gns=field12[:,0]
 y_gns=field12[:,2]
@@ -96,8 +98,9 @@ for chip in range(chip,chip+1):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
     brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
     # Here we are to select ZOC stars by their uncertainty.
-    dxy_zoc=np.sqrt(brick[:,8]**2+brick[:,9]**2)
-    low_z=np.where(dxy_zoc<unc)
+    # dxy_zoc=np.sqrt(brick[:,8]**2+brick[:,9]**2)
+    # low_z=np.where(dxy_zoc<unc)
+    low_z=np.where((brick[:,8]<unc_z)&(brick[:,9]<unc_z))
     brick=brick[low_z]
     #We have to add the coordinates offset between the two lists
     #I this case I have choose this bu coomparing in Aladin
@@ -155,7 +158,7 @@ for chip in range(chip,chip+1):
     ##########################################################
     #now we are looping with a degree 1 ,2,...,
    
-    ciclo=10
+    ciclo=5
     for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
@@ -203,7 +206,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        #ciclo+=5
+        ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
@@ -215,6 +218,8 @@ for chip in range(chip,chip+1):
 #     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
 #     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
 
+
+############ Histogram of common with GNS after aligment of Zocallis #################
 diff=[]
 field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
 field12[:,0]*=0.5
@@ -247,7 +252,7 @@ nam=['x diff (arcsec)','y diff (arcsec)']
 #ax[0]=plt.suptitle('Sigma Threshold at reconstruct = %s, CHIP  %s'%(th,ch),fontsize=20)
 #plt.clf()
 for h in range(len(ls)):
-    sig_h=sigma_clipped_stats(ls[h],sigma=3,maxiters=20,cenfunc='mean')
+    sig_h=sigma_clipped_stats(ls[h],sigma=5,maxiters=20,cenfunc='mean')
     ax[h].hist(ls[h], bins=10,alpha=0.7, rwidth=1,color='g',edgecolor='black',linewidth=2)
     #ax[h].axvline(np.mean(ls[h]), color='r', linestyle='dashed', linewidth=3)
     ax[h].axvline(sig_h[0], color='r', linestyle='dashed', linewidth=3)
@@ -260,8 +265,10 @@ for h in range(len(ls)):
     ax[h].tick_params(axis='x', labelsize=20)
     ax[h].tick_params(axis='y', labelsize=20)
 fig.text(0.5, 0, 'Difference in position for common stars to GNS, band %s. Degr=%s'%(band,degree),fontsize=20, ha='center')
+##########################################################
 
 #%%
+######### Savig common elements of both lits , plus a column for displacement on Zoc´s list
 gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
 x_dis=[diff[i][1][6]-diff[i][0][0] for i in range(len(diff))]
@@ -280,7 +287,7 @@ ureg = pint.UnitRegistry()# to give units to values
 # 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
 GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
 
-
+# Whether we what to use foreground, background or all stars for the pm analis.
 if Vel_campo==1:
     valid=np.where(GNS[:,14]<1.3)
 elif Vel_campo==0:
@@ -309,12 +316,13 @@ stars=np.c_[stars,dxy]
 
 
 
-vx=stars[:,10]/4
-vy=stars[:,11]/4
+vx=stars[:,10]/4*0.106
+vy=stars[:,11]/4*0.106
 dvel=np.sqrt(((vx*dx_dis/4)**2+(vy*dy_dis/4)**2)/(vx**2+vy**2))
 
-vel=np.sqrt(stars[:,10]**2+stars[:,11]**2)
+vel=np.sqrt((stars[:,10]*0.106)**2+(stars[:,11]*0.106)**2)
 stars=np.c_[stars,vel,dvel]
+# sys.exit("STOP")
 vel_clip=sigma_clip(vel,sigma=s)
 stars=stars[vel_clip.mask==False]
 #'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement,dxy,vel,dvel
@@ -361,6 +369,11 @@ for h in range(len(ls)):
             ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {v}}$<%s(ars/yr)'%(unc_v),color='k',fontsize=20,zorder=3,weight='bold') 
         else:
             ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {xy}}$<%s"'%(unc_xy),color='k',fontsize=20,zorder=3,weight='bold') 
+    if unc<1:
+         ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'GNS($\sigma_{x},\sigma_{y}$)<%s"'%(unc),color='k',fontsize=20,zorder=3,weight='bold')
+    if unc_z<1:
+         ax[h].text(his[1][0],max(his[0]/2-his[0]/10*1.5),r'Zoc($\sigma_{x},\sigma_{y}$)<%s"'%(unc_z),color='k',fontsize=20,zorder=3,weight='bold')
+
 if GNS_campo==1:
     if Vel_campo==0:
         fig.suptitle('Foreground stars in alignment and NO Foreground stars in proper motions',fontsize=20)
@@ -391,14 +404,13 @@ elif GNS_campo==2:
 if unc_v>unc_xy:
     #### Uncertainty in POSITION
     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+    stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+    # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+    GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-    stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-    ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-    GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
-    
-    dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
-    dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
-    dxy=np.sqrt(dx_dis**2+dy_dis**2)
+    dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
+    dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
+    dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
     
     menor=0
     for i in range(len(dxy)):
@@ -407,7 +419,7 @@ if unc_v>unc_xy:
     # stars=np.c_[stars,dxy]
     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
     fig, ax=plt.subplots(1,1,figsize=(10,10))
-    ax.scatter(stars[:,2],dxy,color='k',alpha=0.3)
+    ax.scatter(stars_all[:,2],dxy_all,color='k',alpha=0.3)
     ax.set_xlabel('[H]',fontsize=20)
     ax.set_ylabel(r'$\sigma_{\vec {xy}}$(arcsec)',fontsize=20)
     # ax.set_ylim(0,0.03)
@@ -415,28 +427,28 @@ if unc_v>unc_xy:
     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
     if unc_xy <1:
         ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
-        ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+        ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
     ax.tick_params(axis='x', labelsize=20)
     ax.tick_params(axis='y', labelsize=20)
     
 
 else:
     #### Uncertainty in VELOCITY
+  
     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+    stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+    # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+    GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-    stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-    ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-    GNS=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
+    dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
+    dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
+    dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
     
-    dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
-    dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
-    dxy=np.sqrt(dx_dis**2+dy_dis**2)
+    vel_all=np.sqrt((stars_all[:,10]*0.106)**2+(stars_all[:,11]*0.106)**2)
+    vx_all=stars_all[:,10]/4*0.106
+    vy_all=stars_all[:,11]/4*0.106
     
-    vel=np.sqrt(stars[:,10]**2+stars[:,11]**2)
-    vx=stars[:,10]/4
-    vy=stars[:,11]/4
-    
-    dvel=np.sqrt(((vx*dx_dis/4)**2+(vy*dy_dis/4)**2)/(vx**2+vy**2))
+    dvel_all=np.sqrt(((vx_all*dx_dis_all/4)**2+(vy_all*dy_dis_all/4)**2)/(vx_all**2+vy_all**2))
     menor=0
     for i in range(len(dvel)):
         if dvel[i]<unc_v/4:
@@ -444,7 +456,7 @@ else:
     # stars=np.c_[stars,dxy]
     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
     fig, ax=plt.subplots(1,1,figsize=(10,10))
-    ax.scatter(stars[:,2],dvel,color='k',alpha=0.3)
+    ax.scatter(stars_all[:,2],dvel_all,color='k',alpha=0.3)
     ax.set_xlabel('[H]',fontsize=20)
     ax.set_ylabel(r'$\sigma_{\vec {v}}$(arcsec/yr)',fontsize=20)
     # ax.set_ylim(0,0.03)
@@ -452,7 +464,7 @@ else:
     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
     if unc_v <1:
         ax.axhline(unc_v, color='g', linestyle='dashed', linewidth=3,zorder=3)
-        ax.text(min(stars[:,2]),unc_v/4+unc_v/40,'#stars= %s'%(menor), color='g',fontsize=20,weight='bold',zorder=3)
+        ax.text(min(stars[:,2]),unc_v+unc_v/40,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
     ax.tick_params(axis='x', labelsize=20)
     ax.tick_params(axis='y', labelsize=20)
     
