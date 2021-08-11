@@ -62,11 +62,11 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=2.5
+s=2
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
-unc=0.005 #uncertainty limit for position on GNS stars
-unc_z=0.005 #uncertainty limit for position on GNS stars
+unc=1 #uncertainty limit for position on GNS stars
+unc_z=1 #uncertainty limit for position on GNS stars
 field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
@@ -80,6 +80,8 @@ elif GNS_campo==2:
 field12=field12[in_place]
 field12[:,0]*=0.5
 field12[:,2]*=0.5
+field12[:,1]*=0.5
+field12[:,3]*=0.5
 #np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
@@ -224,6 +226,8 @@ diff=[]
 field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
 field12[:,0]*=0.5
 field12[:,2]*=0.5
+field12[:,1]*=0.5
+field12[:,3]*=0.5
 
 h_ks=field12[:,10]-field12[:,12]
 field12=np.c_[field12,h_ks]
@@ -346,7 +350,40 @@ vel_y=vel_y.to('rad')*dist
 
 fig,ax= plt.subplots(1,2,figsize=(20,10))
 ls=[np.array(vel_x),np.array(vel_y)]
+ls_tosave=np.array(ls).T
+#%%
+##############################################################################
+#save to try MCMC fitting
+#trnasfor dx and dy form GNS and Zoc to km/s and compute dvx and dvy separetly
+ls_tosave=np.array(ls).T
+GNS=GNS[low_xy]
 
+
+
+dx1_tosave=(GNS[:,1]*0.106)
+dx2_tosave=stars[:,8]
+
+dx1_tosave=dx1_tosave*ureg.arcsec
+dx2_tosave=dx2_tosave*ureg.arcsec
+
+dx1_tosave=dx1_tosave.to('rad')*dist
+dx2_tosave=dx2_tosave.to('rad')*dist
+dvx_tosave=np.sqrt((dx1_tosave/(4*365*24*3600))**2+(dx2_tosave/(4*365*24*3600))**2)
+
+
+dy1_tosave=(GNS[:,3]*0.106)*ureg.arcsec
+dy2_tosave=stars[:,9]*ureg.arcsec
+
+dy1_tosave=dy1_tosave.to('rad')*dist
+dy2_tosave=dy2_tosave.to('rad')*dist
+dvy_tosave=np.sqrt((dy1_tosave/(4*365*24*3600))**2+(dy2_tosave/(4*365*24*3600))**2)
+
+ls_tosave=np.c_[ls_tosave,dvx_tosave,dvy_tosave]
+np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'vx_vy_chip3.txt',ls_tosave,header='vx,vy,dvx,dvy (in km/s)')
+
+
+##############################################################################
+#%%
 nam=['$v_{x}$(km/s)','$v_{y}$(km/s)']
 #ax[0]=plt.suptitle('Sigma Threshold at reconstruct = %s, CHIP  %s'%(th,ch),fontsize=20)
 #plt.clf()
@@ -366,9 +403,9 @@ for h in range(len(ls)):
     # ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {v}}$(ars/yr)<%s'%(unc/4),color='k',fontsize=20,zorder=3,weight='bold') 
     if unc_v<1 or unc_xy<1:
         if unc_v<unc_xy:
-            ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {v}}$<%s(ars/yr)'%(unc_v),color='k',fontsize=20,zorder=3,weight='bold') 
+            ax[h].text(his[1][0],max(his[0]/2+1-his[0]/10),r'$\sigma_{\vec {v}}$<%s(ars/yr)'%(unc_v),color='k',fontsize=20,zorder=3,weight='bold') 
         else:
-            ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'$\sigma_{\vec {xy}}$<%s"'%(unc_xy),color='k',fontsize=20,zorder=3,weight='bold') 
+            ax[h].text(his[1][0],max(his[0]/2+1-his[0]/10),r'$\sigma_{\vec {xy}}$<%s"'%(unc_xy),color='k',fontsize=20,zorder=3,weight='bold') 
     if unc<1:
          ax[h].text(his[1][0],max(his[0]/2-his[0]/10),r'GNS($\sigma_{x},\sigma_{y}$)<%s"'%(unc),color='k',fontsize=20,zorder=3,weight='bold')
     if unc_z<1:
