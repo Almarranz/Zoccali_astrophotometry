@@ -37,7 +37,7 @@ exec(read_file)
 
 distancia=1
 chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
-unc=0.01
+unc=100000
 
 # In[3]:
 
@@ -52,7 +52,9 @@ in_place=np.where((h_ks>1.3))
 field12=field12[in_place]
 field12[:,0]*=0.5
 field12[:,2]*=0.5
-np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
+field12[:,1]*=0.5
+field12[:,3]*=0.5
+#np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
 #sys.exit("STOP")
@@ -329,8 +331,8 @@ for chip in range(chip,chip+1):
   
 #%%
 
-    dx_cgns=[diff[c][0][5] for c in range(len(diff))]
-    dy_cgns=[diff[c][0][7] for c in range(len(diff))]
+    dx_cgns=[diff[c][0][1] for c in range(len(diff))]
+    dy_cgns=[diff[c][0][3] for c in range(len(diff))]
     
     dx_czoc=[diff[c][1][8] for c in range(len(diff))]
     dy_czoc=[diff[c][1][9] for c in range(len(diff))]    
@@ -340,8 +342,8 @@ for chip in range(chip,chip+1):
     
     
     map_c='inferno'
-    uncx=[dx_cgns,dx_czoc]
-    uncy=[dy_cgns,dy_czoc]
+    uncx=[np.array(dx_cgns)*0.106,dx_czoc]
+    uncy=[np.array(dy_cgns)*0.106,dy_czoc]
     le=['GNS','Zoc.']
     
     fig, ax = plt.subplots(2,2,figsize=(15,10))

@@ -62,7 +62,7 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=2
+s=2.5
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
 unc=1 #uncertainty limit for position on GNS stars
@@ -160,7 +160,7 @@ for chip in range(chip,chip+1):
     ##########################################################
     #now we are looping with a degree 1 ,2,...,
    
-    ciclo=5
+    ciclo=10
     for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
@@ -208,7 +208,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        ciclo+=5
+        #ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
@@ -378,7 +378,7 @@ dy1_tosave=dy1_tosave.to('rad')*dist
 dy2_tosave=dy2_tosave.to('rad')*dist
 dvy_tosave=np.sqrt((dy1_tosave/(4*365*24*3600))**2+(dy2_tosave/(4*365*24*3600))**2)
 
-ls_tosave=np.c_[ls_tosave,dvx_tosave,dvy_tosave]
+# ls_tosave=np.c_[ls_tosave,dvx_tosave,dvy_tosave]
 np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'vx_vy_chip3.txt',ls_tosave,header='vx,vy,dvx,dvy (in km/s)')
 
 
