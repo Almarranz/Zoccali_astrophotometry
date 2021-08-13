@@ -37,7 +37,7 @@ exec(read_file)
 
 distancia=1
 chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
-unc=100000
+unc=0.2
 
 # In[3]:
 
@@ -59,8 +59,8 @@ field12[:,3]*=0.5
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
 #sys.exit("STOP")
 # Here we are to select GNS stars by their uncertainty.
-dxy_gns=np.sqrt((field12[:,1]*0.106)**2+(field12[:,3]*0.106)**2)
-low_g=np.where(dxy_gns<unc)
+#dxy_gns=np.sqrt((field12[:,3]*0.106)**2+(field12[:,3]*0.106)**2)
+low_g=np.where((field12[:,1]<unc) & (field12[:,3]<unc) )
 field12=field12[low_g]
 x_gns=field12[:,0]
 y_gns=field12[:,2]
