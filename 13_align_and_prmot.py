@@ -34,7 +34,7 @@ py_pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/py_pruebas/'
 images='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+str(exptime)+'/'+folder
 tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
 sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
-GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
+GNS_ori='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 
 #More than 1 ref star??? yes: more=1,no: more=0
@@ -62,12 +62,12 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=2.5
+s=10
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
 unc=1 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
-field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
+field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
 field12=np.c_[field12,h_ks]
@@ -82,10 +82,10 @@ field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
 field12[:,3]*=0.5
-#np.savetxt(GNS+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
+np.savetxt(GNS_ori+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
-#sys.exit("STOP")
+sys.exit("STOP")
 # Here we are to select GNS stars by their uncertainty.
 dxy_gns=np.sqrt((field12[:,1]*0.106)**2+(field12[:,3]*0.106)**2)
 # low_g=np.where(dxy_gns<unc)
@@ -223,7 +223,7 @@ for chip in range(chip,chip+1):
 
 ############ Histogram of common with GNS after aligment of Zocallis #################
 diff=[]
-field12=np.loadtxt(GNS+'field12_on_brick_accu.txt')
+field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
 field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
@@ -329,6 +329,8 @@ stars=np.c_[stars,vel,dvel]
 # sys.exit("STOP")
 vel_clip=sigma_clip(vel,sigma=s)
 stars=stars[vel_clip.mask==False]
+#Aslo clipping GNS stars
+GNS=GNS[vel_clip.mask==False]
 #'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement,dxy,vel,dvel
 
 low_xy=np.where(stars[:,12]<unc_xy)
@@ -354,11 +356,16 @@ ls_tosave=np.array(ls).T
 #%%
 ##############################################################################
 #save to try MCMC fitting
+# save list with velocities in arsec/year
+
+drap_x=np.sqrt(stars[:,8]**2+(GNS[:,1]*0.106)**2)/4
+drap_y=np.sqrt(stars[:,9]**2+(GNS[:,3]*0.106)**2)/4
+rap=np.c_[stars[:,10]*0.106/4,stars[:,11]*0.106/4,drap_x,drap_y]*1000
+np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'arcsec_vx_vy_chip3.txt',rap,header='vx,vy,dvx,dvy (in arcsec/yr)')
+
 #trnasfor dx and dy form GNS and Zoc to km/s and compute dvx and dvy separetly
 ls_tosave=np.array(ls).T
 GNS=GNS[low_xy]
-
-
 
 dx1_tosave=(GNS[:,1]*0.106)
 dx2_tosave=stars[:,8]
