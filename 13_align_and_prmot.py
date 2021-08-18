@@ -38,7 +38,7 @@ GNS_ori='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 
 #More than 1 ref star??? yes: more=1,no: more=0
-more=0
+more=2
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
@@ -53,7 +53,7 @@ unc=10
 #Uses foreground stars for alignment GNS_campo =1
 #Doesnt use foreground stars for alignment GNS_campo =0
 #Uses all stars GNS_campo=2
-GNS_campo=2
+GNS_campo=0
 #Uses foreground stars for proper motions Zoc_campo =1
 #Doesnt use foreground stars for proper motions Zoc_campo =0
 #Uses all stars Vel_campo=2
@@ -82,7 +82,7 @@ field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
 field12[:,3]*=0.5
-np.savetxt(GNS_ori+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
+np.savetxt(GNS_ori+'field12_no_foreground.txt',field12,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
 # sys.exit("STOP")
@@ -110,12 +110,10 @@ for chip in range(chip,chip+1):
         ##########################################################
         if more==0: #only 1 reference star
 
-
-
-            xm_ref,ym_ref=  939.344 ,   1808.33# xm_ref is GNS
-            xm_ref=xm_ref*0.5
-            ym_ref=ym_ref*0.5
-            xm,    ym    =1.110e+03,6.88e+02
+            xm_ref,ym_ref=  4.610115000000000123e+02 ,  8.537500000000000000e+02# xm_ref is GNS
+            # xm_ref=xm_ref*0.5
+            # ym_ref=ym_ref*0.5
+            xm,    ym    =1100.6245117 ,637.8439941
             xoff = xm_ref - xm
             yoff = ym_ref - ym
         if more==1: # 2 reference stars
@@ -125,12 +123,32 @@ for chip in range(chip,chip+1):
             yoff1 = ym_ref1 - ym1
      
             xm_ref2,ym_ref2=  1177.37*0.5 , 1607.42*0.5# xm_ref is GNS
-            xm2,    ym2    =1.227393066399999952e+03,5.856179809999999861e+02
+            xm2,    ym2    =1.2274e+03,5.8561e+02
             xoff2 = xm_ref2 - xm2
             yoff2 = ym_ref2 - ym2
         
             xoff=np.mean([xoff1,xoff2])
             yoff=np.mean([yoff1,yoff2])
+        if more==2:
+       
+            xm_ref1,ym_ref1=  4.008729999999999905e+02	,8.859400000000000546e+02# xm_ref is GNS
+            xm1,    ym1    =1041.3972168,	671.3027344
+            xoff1 = xm_ref1 - xm1
+            yoff1 = ym_ref1 - ym1
+     
+            xm_ref2,ym_ref2=  5.035749999999999886e+02 ,8.248450000000000273e+02# xm_ref is GNS
+            xm2,    ym2    =1143.1059570 ,608.6146851
+            xoff2 = xm_ref2 - xm2
+            yoff2 = ym_ref2 - ym2
+      
+
+            xm_ref3,ym_ref3=   4.610115000000000123e+02 ,8.537500000000000000e+02# xm_ref is GNS
+            xm3,    ym3    =1100.6245117, 637.8439941
+            xoff3 = xm_ref3 - xm3
+            yoff3 = ym_ref3 - ym3
+        
+            xoff=np.mean([xoff1,xoff2,xoff3])
+            yoff=np.mean([yoff1,yoff2,yoff3])
         ##########################################################
     elif band=='H' and chip==2:
         ##########################################################
@@ -164,7 +182,7 @@ for chip in range(chip,chip+1):
     #now we are looping with a degree 1 ,2,...,
    
     ciclo=10
-    for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
+    for degree in range(1,3):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
             diff=[]
@@ -211,7 +229,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        #ciclo+=5
+        # ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
