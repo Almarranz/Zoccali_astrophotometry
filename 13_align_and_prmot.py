@@ -53,7 +53,7 @@ unc=10
 #Uses foreground stars for alignment GNS_campo =1
 #Doesnt use foreground stars for alignment GNS_campo =0
 #Uses all stars GNS_campo=2
-GNS_campo=0
+GNS_campo=2
 #Uses foreground stars for proper motions Zoc_campo =1
 #Doesnt use foreground stars for proper motions Zoc_campo =0
 #Uses all stars Vel_campo=2
@@ -62,7 +62,7 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=10
+s=2.5
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
 unc=1 #uncertainty limit for position on GNS stars
@@ -85,7 +85,7 @@ field12[:,3]*=0.5
 np.savetxt(GNS_ori+'field12_no_foreground.txt',field12,fmt='%.6f',header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks,')
 
 # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H_Ks=np.loadtxt(GNS+'field12_no_foreground.txt',unpack=True)
-sys.exit("STOP")
+# sys.exit("STOP")
 # Here we are to select GNS stars by their uncertainty.
 dxy_gns=np.sqrt((field12[:,1]*0.106)**2+(field12[:,3]*0.106)**2)
 # low_g=np.where(dxy_gns<unc)
@@ -109,7 +109,12 @@ for chip in range(chip,chip+1):
     if band=='H' and chip==3:
         ##########################################################
         if more==0: #only 1 reference star
-            xm_ref,ym_ref=  939.344*0.5 ,   1808.33*0.5# xm_ref is GNS
+
+
+
+            xm_ref,ym_ref=  939.344 ,   1808.33# xm_ref is GNS
+            xm_ref=xm_ref*0.5
+            ym_ref=ym_ref*0.5
             xm,    ym    =1.110e+03,6.88e+02
             xoff = xm_ref - xm
             yoff = ym_ref - ym
@@ -118,9 +123,7 @@ for chip in range(chip,chip+1):
             xm1,    ym1    =1.110e+03,6.88e+02
             xoff1 = xm_ref1 - xm1
             yoff1 = ym_ref1 - ym1
-           
- 
-
+     
             xm_ref2,ym_ref2=  1177.37*0.5 , 1607.42*0.5# xm_ref is GNS
             xm2,    ym2    =1.227393066399999952e+03,5.856179809999999861e+02
             xoff2 = xm_ref2 - xm2
