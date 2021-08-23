@@ -37,8 +37,10 @@ sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
 GNS_ori='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 
-#More than 1 ref star??? yes: more=1,no: more=0
-more=2
+#More than 1 ref star??? 
+# yes: more=1(two stars) or more=2(three stars)
+# no: more=0
+more=1
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
@@ -62,12 +64,20 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=2.5
+s=30
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
-unc=1 #uncertainty limit for position on GNS stars
+unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
-field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
+# Chose one lists for aligment
+lst=1
+if lst ==3:
+    field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
+elif lst==2 :
+    field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
+elif lst==1:
+    field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
+
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
 field12=np.c_[field12,h_ks]
@@ -107,7 +117,9 @@ for chip in range(chip,chip+1):
     #We have to add the coordinates offset between the two lists
     #I this case I have choose this bu coomparing in Aladin
     if band=='H' and chip==3:
-        ##########################################################
+        ###########################################################################################################################
+        #### Important note: Check if the list from where you are taking the GNS stars have the coordinates rescaled by 0.5 factor. 
+        ###########################################################################################################################
         if more==0: #only 1 reference star
 
             xm_ref,ym_ref=  4.610115000000000123e+02 ,  8.537500000000000000e+02# xm_ref is GNS
@@ -182,7 +194,7 @@ for chip in range(chip,chip+1):
     #now we are looping with a degree 1 ,2,...,
    
     ciclo=10
-    for degree in range(1,3):#Using degree 3 polynomial doesnt seem to improve things
+    for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
         for loop in range(1,ciclo+1):
             print('Degree %s,iteration %s'%(degree,loop))
             diff=[]
@@ -244,7 +256,12 @@ for chip in range(chip,chip+1):
 
 ############ Histogram of common with GNS after aligment of Zocallis #################
 diff=[]
-field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
+if lst ==3:
+    field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
+elif lst==2 :
+    field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
+elif lst==1:
+    field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
 field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
@@ -322,16 +339,20 @@ elif Vel_campo==2:
 
 
 GNS=GNS[valid]
+### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+stars=stars[valid]
 
 
+low_g=np.where((GNS[:,1]*0.106<unc) & (GNS[:,3]*0.106<unc) )
+GNS=GNS[low_g]
+stars=stars[low_g]
 
 dist=8*ureg.kpc
 
 
 
-### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-stars=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-stars=stars[valid]
+
 dx_dis=np.sqrt((GNS[:,1]*0.106)**2+stars[:,8]**2)
 dy_dis=np.sqrt((GNS[:,3]*0.106)**2+stars[:,9]**2)
 dxy=np.sqrt(dx_dis**2+dy_dis**2)
