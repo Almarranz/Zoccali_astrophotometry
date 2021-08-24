@@ -40,14 +40,14 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 #More than 1 ref star??? 
 # yes: more=1(two stars) or more=2(three stars)
 # no: more=0
-more=1
+more=2
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
 exec(read_file)
 
 distancia=1
-chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
+chip=2# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
 unc=10
 
 #############################################
@@ -70,7 +70,7 @@ unc_v=2 # uncertainty limit for the velocity vector
 unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
 # Chose one lists for aligment
-lst=1
+lst=3
 if lst ==3:
     field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
 elif lst==2 :
@@ -122,20 +122,23 @@ for chip in range(chip,chip+1):
         ###########################################################################################################################
         if more==0: #only 1 reference star
 
-            xm_ref,ym_ref=  4.610115000000000123e+02 ,  8.537500000000000000e+02# xm_ref is GNS
-            # xm_ref=xm_ref*0.5
-            # ym_ref=ym_ref*0.5
-            xm,    ym    =1100.6245117 ,637.8439941
+
+
+            xm_ref,ym_ref=  842.86, 1610.33# xm_ref is GNS
+            xm_ref=xm_ref*0.5
+            ym_ref=ym_ref*0.5
+            xm,    ym    =1060.4852295,589.8535767
+
             xoff = xm_ref - xm
             yoff = ym_ref - ym
         if more==1: # 2 reference stars
-            xm_ref1,ym_ref1=  939.344*0.5 ,   1808.33*0.5# xm_ref is GNS
-            xm1,    ym1    =1.110e+03,6.88e+02
+            xm_ref1,ym_ref1=  437.241*0.5 ,   1376.74*0.5# xm_ref is GNS
+            xm1,    ym1    =856.1585693,476.8891296
             xoff1 = xm_ref1 - xm1
             yoff1 = ym_ref1 - ym1
-     
-            xm_ref2,ym_ref2=  1177.37*0.5 , 1607.42*0.5# xm_ref is GNS
-            xm2,    ym2    =1.2274e+03,5.8561e+02
+        
+            xm_ref2,ym_ref2=   869.029*0.5 , 1411.35*0.5# xm_ref is GNS
+            xm2,    ym2    =1072.1802979 ,490.4234009
             xoff2 = xm_ref2 - xm2
             yoff2 = ym_ref2 - ym2
         
@@ -164,7 +167,7 @@ for chip in range(chip,chip+1):
         ##########################################################
     elif band=='H' and chip==2:
         ##########################################################
-        xm_ref,ym_ref=332.838000 ,244.081000 # xm_ref is GNS
+        xm_ref,ym_ref=332.838000*0.5 ,244.081000*0.5 # xm_ref is GNS
         xm,ym        = 967.8858643, 2221.4008789
 
     
@@ -241,7 +244,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        # ciclo+=5
+        ciclo+=10
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
