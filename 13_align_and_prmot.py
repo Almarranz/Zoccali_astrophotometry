@@ -40,14 +40,14 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 #More than 1 ref star??? 
 # yes: more=1(two stars) or more=2(three stars)
 # no: more=0
-more=2
+more=1
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
 exec(read_file)
 
 distancia=1
-chip=2# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
+chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
 unc=10
 
 #############################################
@@ -70,7 +70,7 @@ unc_v=2 # uncertainty limit for the velocity vector
 unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
 # Chose one lists for aligment
-lst=3
+lst=1
 if lst ==3:
     field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
 elif lst==2 :
@@ -124,41 +124,57 @@ for chip in range(chip,chip+1):
 
 
 
-            xm_ref,ym_ref=  842.86, 1610.33# xm_ref is GNS
+
+
+            xm_ref,ym_ref= 1070.18   ,1768.7# xm_ref is GNS
             xm_ref=xm_ref*0.5
             ym_ref=ym_ref*0.5
-            xm,    ym    =1060.4852295,589.8535767
+            xm,    ym    =1.174991699200000085e+03, 6.671052856000000020e+02
 
             xoff = xm_ref - xm
             yoff = ym_ref - ym
         if more==1: # 2 reference stars
-            xm_ref1,ym_ref1=  437.241*0.5 ,   1376.74*0.5# xm_ref is GNS
-            xm1,    ym1    =856.1585693,476.8891296
+            xm_ref1,ym_ref1=  1070.18,   1768.7# xm_ref is GNS
+            xm_ref1=xm_ref1*0.5
+            ym_ref1=ym_ref1*0.5
+            xm1,    ym1    =1.174991699200000085e+03, 6.671052856000000020e+02
             xoff1 = xm_ref1 - xm1
             yoff1 = ym_ref1 - ym1
-        
-            xm_ref2,ym_ref2=   869.029*0.5 , 1411.35*0.5# xm_ref is GNS
-            xm2,    ym2    =1072.1802979 ,490.4234009
+            
+            xm_ref2,ym_ref2=   1206.31, 2003.85# xm_ref is GNS
+            xm_ref2=xm_ref2*0.5
+            ym_ref2=ym_ref2*0.5
+            xm2,    ym2    =1.244916381799999954e+03,7.833552246000000423e+02
+
             xoff2 = xm_ref2 - xm2
             yoff2 = ym_ref2 - ym2
         
             xoff=np.mean([xoff1,xoff2])
             yoff=np.mean([yoff1,yoff2])
         if more==2:
-       
-            xm_ref1,ym_ref1=  4.008729999999999905e+02	,8.859400000000000546e+02# xm_ref is GNS
-            xm1,    ym1    =1041.3972168,	671.3027344
+ 
+            xm_ref1,ym_ref1=  1070.18,   1768.7# xm_ref is GNS
+            xm_ref1=xm_ref1*0.5
+            ym_ref1=ym_ref1*0.5
+            xm1,    ym1    =1.174991699200000085e+03, 6.671052856000000020e+02
             xoff1 = xm_ref1 - xm1
             yoff1 = ym_ref1 - ym1
-     
-            xm_ref2,ym_ref2=  5.035749999999999886e+02 ,8.248450000000000273e+02# xm_ref is GNS
-            xm2,    ym2    =1143.1059570 ,608.6146851
+            
+            xm_ref2,ym_ref2=   1206.31, 2003.85# xm_ref is GNS
+            xm_ref2=xm_ref2*0.5
+            ym_ref2=ym_ref2*0.5
+            xm2,    ym2    =1.244916381799999954e+03,7.833552246000000423e+02
+
             xoff2 = xm_ref2 - xm2
             yoff2 = ym_ref2 - ym2
       
 
-            xm_ref3,ym_ref3=   4.610115000000000123e+02 ,8.537500000000000000e+02# xm_ref is GNS
-            xm3,    ym3    =1100.6245117, 637.8439941
+
+
+            xm_ref3,ym_ref3=   1564.25,1768.78# xm_ref is GNS
+            xm_ref3=xm_ref3*0.5
+            ym_ref3=ym_ref3*0.5
+            xm3,    ym3    =1.421817382799999905e+03 , 6.629620972000000165e+02
             xoff3 = xm_ref3 - xm3
             yoff3 = ym_ref3 - ym3
         
