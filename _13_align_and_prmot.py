@@ -40,7 +40,7 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 #More than 1 ref star??? 
 # yes: more=1(two stars) or more=2(three stars)
 # no: more=0
-more=1
+more=0
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
@@ -64,19 +64,21 @@ Vel_campo=0
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
 # it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
 # bigger uncertainties  
-s=30
+s=10
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
 unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
 # Chose one lists for aligment
-lst=1
+lst=3
 if lst ==3:
     field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
 elif lst==2 :
     field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
 elif lst==1:
     field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
+lst_save=[lst]   
+np.savetxt(tmp+'lst_chip%s.txt'%(chip),lst_save,fmt='%.0f')
 
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
@@ -183,15 +185,36 @@ for chip in range(chip,chip+1):
         ##########################################################
     elif band=='H' and chip==2:
         ##########################################################
-        xm_ref,ym_ref=332.838000*0.5 ,244.081000*0.5 # xm_ref is GNS
-        xm,ym        = 967.8858643, 2221.4008789
-
+        if more ==0:
+            xm_ref,ym_ref=694.834*0.5 , 569.783*0.5 # xm_ref is GNS
+            xm,ym        = 9.832876586999999518e+02,2.260803955100000167e+03
     
-        
-    
-        xoff = xm_ref - xm
-        yoff = ym_ref - ym
+            xoff = xm_ref - xm
+            yoff = ym_ref - ym
         ##########################################################
+        if more==1:
+           
+            xm_ref1,ym_ref1=694.834, 569.783 # xm_ref is GNS
+            xm1,ym1        = 9.832876586999999518e+02,2.260803955100000167e+03
+            xm_ref1=xm_ref1*0.5
+            ym_ref1=ym_ref1*0.5
+            xoff1 = xm_ref1 - xm1
+            yoff1 = ym_ref1 - ym1
+               
+
+
+            xm_ref2,ym_ref2=   1444.05 , 747.72# xm_ref is GNS
+            xm_ref2=xm_ref2*0.5
+            ym_ref2=ym_ref2*0.5
+            xm2,    ym2    =1.358597778300000073e+03,2.344092285199999878e+03
+
+            xoff2 = xm_ref2 - xm2
+            yoff2 = ym_ref2 - ym2
+        
+            xoff=np.mean([xoff1,xoff2])
+            yoff=np.mean([yoff1,yoff2])
+            
+            
     
     print(' #'*20,'\n','xoff=%s yoff=%s'%(xoff,yoff),'\n'+' #'*20)    
     brick[:,6]+=xoff
@@ -260,7 +283,7 @@ for chip in range(chip,chip+1):
                     yi=yi+Ky[k,m]*x**k*y**m
             brick[:,6]=xi
             brick[:,7]=yi
-        ciclo+=10
+        ciclo+=5
     ##########################################################
 #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
 #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
@@ -422,7 +445,7 @@ ls_tosave=np.array(ls).T
 drap_x=np.sqrt(stars[:,8]**2+(GNS[:,1]*0.106)**2)/4
 drap_y=np.sqrt(stars[:,9]**2+(GNS[:,3]*0.106)**2)/4
 rap=np.c_[stars[:,10]*0.106/4,stars[:,11]*0.106/4,drap_x,drap_y]*1000
-np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'arcsec_vx_vy_chip3.txt',rap,header='vx,vy,dvx,dvy (in arcsec/yr)')
+np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'arcsec_vx_vy_chip%s.txt'%(chip),rap,header='vx,vy,dvx,dvy (in arcsec/yr)')
 
 #trnasfor dx and dy form GNS and Zoc to km/s and compute dvx and dvy separetly
 ls_tosave=np.array(ls).T
@@ -447,7 +470,7 @@ dy2_tosave=dy2_tosave.to('rad')*dist
 dvy_tosave=np.sqrt((dy1_tosave/(4*365*24*3600))**2+(dy2_tosave/(4*365*24*3600))**2)
 
 # ls_tosave=np.c_[ls_tosave,dvx_tosave,dvy_tosave]
-np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'vx_vy_chip3.txt',ls_tosave,header='vx,vy,dvx,dvy (in km/s)')
+np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'vx_vy_chip%s.txt'%(chip),ls_tosave,header='vx,vy,dvx,dvy (in km/s)')
 
 
 ##############################################################################
@@ -506,72 +529,72 @@ elif GNS_campo==2:
 
 #%% 
 ######### Uncertainty in position or velocities plots ###############
-if unc_v>unc_xy:
-    #### Uncertainty in POSITION
-    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-    stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-    # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-    GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
+# if unc_v>unc_xy:
+#     #### Uncertainty in POSITION
+#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+#     stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+#     # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+#     GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-    dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
-    dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
-    dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
+#     dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
+#     dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
+#     dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
     
-    menor=0
-    for i in range(len(dxy)):
-        if dxy[i]<unc_xy:
-            menor+=1
-    # stars=np.c_[stars,dxy]
-    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-    fig, ax=plt.subplots(1,1,figsize=(10,10))
-    ax.scatter(stars_all[:,2],dxy_all,color='k',alpha=0.3)
-    ax.set_xlabel('[H]',fontsize=20)
-    ax.set_ylabel(r'$\sigma_{\vec {xy}}$(arcsec)',fontsize=20)
-    # ax.set_ylim(0,0.03)
-    # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
-    # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-    if unc_xy <1:
-        ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
-        ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
-    ax.tick_params(axis='x', labelsize=20)
-    ax.tick_params(axis='y', labelsize=20)
+#     menor=0
+#     for i in range(len(dxy)):
+#         if dxy[i]<unc_xy:
+#             menor+=1
+#     # stars=np.c_[stars,dxy]
+#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+#     fig, ax=plt.subplots(1,1,figsize=(10,10))
+#     ax.scatter(stars_all[:,2],dxy_all,color='k',alpha=0.3)
+#     ax.set_xlabel('[H]',fontsize=20)
+#     ax.set_ylabel(r'$\sigma_{\vec {xy}}$(arcsec)',fontsize=20)
+#     # ax.set_ylim(0,0.03)
+#     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
+#     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
+#     if unc_xy <1:
+#         ax.axhline(unc_xy, color='g', linestyle='dashed', linewidth=3,zorder=3)
+#         ax.text(min(stars[:,2]),unc_xy+unc_xy/10,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
+#     ax.tick_params(axis='x', labelsize=20)
+#     ax.tick_params(axis='y', labelsize=20)
     
 
-else:
-    #### Uncertainty in VELOCITY
+# else:
+#     #### Uncertainty in VELOCITY
   
-    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-    stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
-    # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
-    GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
+#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+#     stars_all=np.loadtxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip))
+#     # ### 'x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK,H-Ks'
+#     GNS_all=np.loadtxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip))
     
-    dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
-    dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
-    dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
+#     dx_dis_all=np.sqrt((GNS_all[:,1]*0.106)**2+stars_all[:,8]**2)
+#     dy_dis_all=np.sqrt((GNS_all[:,3]*0.106)**2+stars_all[:,9]**2)
+#     dxy_all=np.sqrt(dx_dis_all**2+dy_dis_all**2)
     
-    vel_all=np.sqrt((stars_all[:,10]*0.106)**2+(stars_all[:,11]*0.106)**2)
-    vx_all=stars_all[:,10]/4*0.106
-    vy_all=stars_all[:,11]/4*0.106
+#     vel_all=np.sqrt((stars_all[:,10]*0.106)**2+(stars_all[:,11]*0.106)**2)
+#     vx_all=stars_all[:,10]/4*0.106
+#     vy_all=stars_all[:,11]/4*0.106
     
-    dvel_all=np.sqrt(((vx_all*dx_dis_all/4)**2+(vy_all*dy_dis_all/4)**2)/(vx_all**2+vy_all**2))
-    menor=0
-    for i in range(len(dvel)):
-        if dvel[i]<unc_v/4:
-            menor+=1
-    # stars=np.c_[stars,dxy]
-    ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
-    fig, ax=plt.subplots(1,1,figsize=(10,10))
-    ax.scatter(stars_all[:,2],dvel_all,color='k',alpha=0.3)
-    ax.set_xlabel('[H]',fontsize=20)
-    ax.set_ylabel(r'$\sigma_{\vec {v}}$(arcsec/yr)',fontsize=20)
-    # ax.set_ylim(0,0.03)
-    # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
-    # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
-    if unc_v <1:
-        ax.axhline(unc_v, color='g', linestyle='dashed', linewidth=3,zorder=3)
-        ax.text(min(stars[:,2]),unc_v+unc_v/40,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
-    ax.tick_params(axis='x', labelsize=20)
-    ax.tick_params(axis='y', labelsize=20)
+#     dvel_all=np.sqrt(((vx_all*dx_dis_all/4)**2+(vy_all*dy_dis_all/4)**2)/(vx_all**2+vy_all**2))
+#     menor=0
+#     for i in range(len(dvel)):
+#         if dvel[i]<unc_v/4:
+#             menor+=1
+#     # stars=np.c_[stars,dxy]
+#     ### 'a ,d , m, dm, f, df,x,y,dx,dy,x_displacement,y_displacement.
+#     fig, ax=plt.subplots(1,1,figsize=(10,10))
+#     ax.scatter(stars_all[:,2],dvel_all,color='k',alpha=0.3)
+#     ax.set_xlabel('[H]',fontsize=20)
+#     ax.set_ylabel(r'$\sigma_{\vec {v}}$(arcsec/yr)',fontsize=20)
+#     # ax.set_ylim(0,0.03)
+#     # ax.axhline(l_min, color='r', linestyle='dashed', linewidth=3)
+#     # ax.axhline(l_max, color='r', linestyle='dashed', linewidth=3)
+#     if unc_v <1:
+#         ax.axhline(unc_v, color='g', linestyle='dashed', linewidth=3,zorder=3)
+#         ax.text(min(stars[:,2]),unc_v+unc_v/40,'#stars= %s'%(len(stars[:,2])), color='g',fontsize=20,weight='bold',zorder=3)
+#     ax.tick_params(axis='x', labelsize=20)
+#     ax.tick_params(axis='y', labelsize=20)
     
     
     
