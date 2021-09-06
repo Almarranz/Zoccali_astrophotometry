@@ -40,7 +40,7 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 #More than 1 ref star??? 
 # yes: more=1(two stars) or more=2(three stars)
 # no: more=0
-more=0
+more=1
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
@@ -70,7 +70,7 @@ unc_v=2 # uncertainty limit for the velocity vector
 unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
 # Chose one lists for aligment
-lst=3
+lst=2
 if lst ==3:
     field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
 elif lst==2 :
@@ -236,64 +236,79 @@ for chip in range(chip,chip+1):
     #now we are looping with a degree 1 ,2,...,
    
     ciclo=10
+   
     for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
+        count=0
+        a=[]
         for loop in range(1,ciclo+1):
-            print('Degree %s,iteration %s'%(degree,loop))
-            diff=[]
-            for i in range(len(gns_xy)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
-                dist=distance.cdist(gns_xy[i:i+1,0:2],brick[:,6:8], 'euclidean')
-                d=np.where(dist<distancia)
-                if len(d[1])>0:
-                    diff.append((field12[i],brick[d[1][np.argmin(dist[d])]]))
-            print('comunes listas %s y %s ----> '%('brick','GNS'),len(diff))
-            #diff=[diff[j] for j in range(len(diff)) if abs(diff[j][0][brillo]-diff[j][1][2])<l_mag]
-            #print(len(diff))
-            diff=np.array(diff)
-            x1=[]
-            x2=[]
-            y1=[]
-            y2=[]
-            for j in range(len(diff)):
-                x1.append(diff[j][0][0])
-                y1.append(diff[j][0][2])
-                x2.append(diff[j][1][6])
-                y2.append(diff[j][1][7])
-    
-            x1=np.array(x1)
-            y1=np.array(y1)
-            x2=np.array(x2)
-            y2=np.array(y2)
-    
-            Kx=[]
-            Ky=[]
-            #degree=1
-            Kx,Ky=polywarp(x1,y1,x2,y2,degree=degree)
-            #print(Kx[0,0])
-            xi=np.zeros(len(brick))
-            yi=np.zeros(len(brick))
-            x=[]
-            y=[]
-            x=brick[:,6]
-            y=brick[:,7]
-            x=np.array(x)
-            y=np.array(y)
-            for k in range(degree+1):
-                for m in range(degree+1):
-                    xi=xi+Kx[k,m]*x**k*y**m
-                    yi=yi+Ky[k,m]*x**k*y**m
-            brick[:,6]=xi
-            brick[:,7]=yi
-        ciclo+=5
-    ##########################################################
-#     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
-#     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
-#     x_dis=[diff[i][1][6]-diff[i][0][0] for i in range(len(diff))]
-#     y_dis=[diff[i][1][7]-diff[i][0][2] for i in range(len(diff))]
-#     displa=np.array([x_dis,y_dis]).T
-#     zoc_txt=np.c_[zoc_txt,displa]
-#     np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks')
-#     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
-#     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
+            while count<2:
+                loop+=1
+                print('Degree %s,iteration %s'%(degree,loop))
+                diff=[]
+                for i in range(len(gns_xy)): #compara las distancia entre los puntos y guarda las menores que a, si hay mas de dos puntos con distancias menores que a, guarda la más perqueña
+                    dist=distance.cdist(gns_xy[i:i+1,0:2],brick[:,6:8], 'euclidean')
+                    d=np.where(dist<distancia)
+                    if len(d[1])>0:
+                        diff.append((field12[i],brick[d[1][np.argmin(dist[d])]]))
+                print('comunes listas %s y %s ----> '%('brick','GNS'),len(diff))
+                #diff=[diff[j] for j in range(len(diff)) if abs(diff[j][0][brillo]-diff[j][1][2])<l_mag]
+                #print(len(diff))
+                diff=np.array(diff)
+                a.append(len(diff))
+                x1=[]
+                x2=[]
+                y1=[]
+                y2=[]
+                for j in range(len(diff)):
+                    x1.append(diff[j][0][0])
+                    y1.append(diff[j][0][2])
+                    x2.append(diff[j][1][6])
+                    y2.append(diff[j][1][7])
+        
+                x1=np.array(x1)
+                y1=np.array(y1)
+                x2=np.array(x2)
+                y2=np.array(y2)
+        
+                Kx=[]
+                Ky=[]
+                #degree=1
+                Kx,Ky=polywarp(x1,y1,x2,y2,degree=degree)
+                #print(Kx[0,0])
+                xi=np.zeros(len(brick))
+                yi=np.zeros(len(brick))
+                x=[]
+                y=[]
+                x=brick[:,6]
+                y=brick[:,7]
+                x=np.array(x)
+                y=np.array(y)
+                for k in range(degree+1):
+                    for m in range(degree+1):
+                        xi=xi+Kx[k,m]*x**k*y**m
+                        yi=yi+Ky[k,m]*x**k*y**m
+                brick[:,6]=xi
+                brick[:,7]=yi
+                if len(a)>1:
+                    if a[-2]==a[-1]:
+                        count=count+1
+                    else:
+                        count=0
+                print('count %s'%(count))
+            else:
+                print(' #'*20,'\n','Exit loop of degree %s'%(degree),'\n',' #'*20)
+                break
+            # ciclo+=5
+        ##########################################################
+    #     gns_txt=[diff[i][0][0:] for i in range(len(diff))]
+    #     zoc_txt=[diff[i][1][0:] for i in range(len(diff))]
+    #     x_dis=[diff[i][1][6]-diff[i][0][0] for i in range(len(diff))]
+    #     y_dis=[diff[i][1][7]-diff[i][0][2] for i in range(len(diff))]
+    #     displa=np.array([x_dis,y_dis]).T
+    #     zoc_txt=np.c_[zoc_txt,displa]
+    #     np.savetxt(tmp+'GNS_commons_w_Zoc_c%s.txt'%(chip),gns_txt,header='x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, H-Ks')
+    #     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
+    #     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
 
 
 ############ Histogram of common with GNS after aligment of Zocallis #################
