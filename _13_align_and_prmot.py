@@ -49,28 +49,28 @@ exec(read_file)
 distancia=1
 chip=3# in this case only chip 2 and chip 3 have common elements with the GNS on the brick
 unc=10
-
+#%%
 #############################################
 #Varibles for foreground or inplace stars
 #Uses foreground stars for alignment GNS_campo =1
 #Doesnt use foreground stars for alignment GNS_campo =0
 #Uses all stars GNS_campo=2
 GNS_campo=0
-#Uses foreground stars for proper motions Zoc_campo =1
-#Doesnt use foreground stars for proper motions Zoc_campo =0
+#Uses foreground stars for proper motions Vel_campo =1
+#Doesnt use foreground stars for proper motions Vel_campo =0
 #Uses all stars Vel_campo=2
 Vel_campo=0
 #############################################
 # Sigma cliping by velocityies and maximun limit in xy uncertainty fof proper motion calculation
-# it would make a graph of unc_xy or unc_v for the smaller value. If the smoller valueis <1 it would discard those stars with 
+# it would make a graph of unc_xy or unc_v for the smaller value. If the smaller valueis <1 it would discard those stars with 
 # bigger uncertainties  
 s=10
 unc_xy= 1 #uncertainty limit for the position vector
 unc_v=2 # uncertainty limit for the velocity vector
 unc=10 #uncertainty limit for position on GNS stars
 unc_z=1 #uncertainty limit for position on GNS stars
-# Chose one lists for aligment
-lst=2
+# Chose one lists for aligment. From 1 to 3 decreassing in number of stars, being number 3 more 'precisely centered' on Brick than 1
+lst=1
 if lst ==3:
     field12=np.loadtxt(GNS_ori+'field12_on_brick_reduced.txt')
 elif lst==2 :
@@ -79,8 +79,12 @@ elif lst==1:
     field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
 lst_save=[lst]   
 np.savetxt(tmp+'lst_chip%s.txt'%(chip),lst_save,fmt='%.0f')
-
-#eliminates stas with H-Ks<1.3
+valid_H=np.where(field12[:,10]<90) #Elimnates stars with no valid mesuarements for their magnitudes
+field12=field12[valid_H]
+valid_K=np.where(field12[:,12]<90)
+field12=field12[valid_K]
+#%%
+#selection of background or foreground stars (or both)
 h_ks=field12[:,10]-field12[:,12]
 field12=np.c_[field12,h_ks]
 if GNS_campo==1:
@@ -110,7 +114,9 @@ gns_xy=np.array([x_gns,y_gns]).T
 
 for chip in range(chip,chip+1):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
-    brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+    # brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt') # The differents between these lists is that the second one is cropped on the brick
+    brick=np.loadtxt(tmp+'Brick_stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+    
     # Here we are to select ZOC stars by their uncertainty.
     # dxy_zoc=np.sqrt(brick[:,8]**2+brick[:,9]**2)
     # low_z=np.where(dxy_zoc<unc)
@@ -216,32 +222,23 @@ for chip in range(chip,chip+1):
             
             
     
-    print(' #'*20,'\n','xoff=%s yoff=%s'%(xoff,yoff),'\n'+' #'*20)    
+    print(' #'*20,'\n','xoff=%s yoff=%s'%(xoff,yoff),'\n'+' #'*20) 
+    # Added the off sets to Zoc lists so GNS and Zoc stars will be in the same pixel reference plane
     brick[:,6]+=xoff
     brick[:,7]+=yoff
     
     brick=np.array(brick)
     # In[4]:
     
-    
-    
-    per=10# choose values with uncertainty in position smoller than 0.7 * mean(dx)
-    #valid=np.where((brick_all[:,8]<np.mean(brick_all[:,8])*per)&(brick_all[:,9]<np.mean(brick_all[:,9])*per))
-    #valid=np.where((brick[:,8]<0.013)&(brick[:,9]<0.013))#0.013pixels cooresponding to a distant of 2mas
-    #brick=brick_all[valid]
-    #print(len(brick),len(brick_all))
-    ##########################################################
-    
-    ##########################################################
     #now we are looping with a degree 1 ,2,...,
    
     ciclo=10
    
-    for degree in range(1,4):#Using degree 3 polynomial doesnt seem to improve things
+    for degree in range(1,4):#Using a higher degree polinomial is not necesary better
         count=0
         a=[]
         for loop in range(1,ciclo+1):
-            while count<2:
+            while count<3: # the iteration stop and jumps to the next degree poly. when the number of common stars is the same after count+1 consecutive interations
                 loop+=1
                 print('Degree %s,iteration %s'%(degree,loop))
                 diff=[]
@@ -310,7 +307,7 @@ for chip in range(chip,chip+1):
     #     np.savetxt(tmp+'Zoc_c%s_commons_w_GNS.txt'%(chip),zoc_txt,header='a ,d , m, dm, f, df,x,y,dx,dy,x_dis,y_dis. X and Y are the correspondig coorinates wit GNS, They are not the original ones!!!!')
     #     np.savetxt(tmp+'dis_xy_chip%s.txt'%(chip),displa,header='Displacement in pixels.')
 
-
+#%%
 ############ Histogram of common with GNS after aligment of Zocallis #################
 diff=[]
 if lst ==3:
@@ -319,6 +316,12 @@ elif lst==2 :
     field12=np.loadtxt(GNS_ori+'field12_on_brick_accu.txt')
 elif lst==1:
     field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
+    
+valid_H=np.where(field12[:,10]<90)
+field12=field12[valid_H]
+valid_K=np.where(field12[:,12]<90)
+field12=field12[valid_K]
+
 field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
@@ -343,7 +346,7 @@ x_shift=[(diff[t][1][6]-diff[t][0][0]) for t in range(len(diff))]# if abs(diff[t
 y_shift=[(diff[t][1][7]-diff[t][0][2]) for t in range(len(diff))]# if abs(diff[t][0][brillo]-diff[t][1][2])<l_mag]
 print(len(x_shift))
 
-x_shift=np.array(x_shift)*0.106
+x_shift=np.array(x_shift)*0.106 #transfor the shift from pixel to arsec
 y_shift=np.array(y_shift)*0.106
 fig,ax= plt.subplots(1,2,figsize=(20,10))
 ls=[x_shift,y_shift]
@@ -351,13 +354,13 @@ nam=['x diff (arcsec)','y diff (arcsec)']
 #ax[0]=plt.suptitle('Sigma Threshold at reconstruct = %s, CHIP  %s'%(th,ch),fontsize=20)
 #plt.clf()
 for h in range(len(ls)):
-    sig_h=sigma_clipped_stats(ls[h],sigma=5,maxiters=20,cenfunc='mean')
+    sig_h=sigma_clipped_stats(ls[h],sigma=10,maxiters=20,cenfunc='mean')
     ax[h].hist(ls[h], bins=10,alpha=0.7, rwidth=1,color='g',edgecolor='black',linewidth=2)
     #ax[h].axvline(np.mean(ls[h]), color='r', linestyle='dashed', linewidth=3)
     ax[h].axvline(sig_h[0], color='r', linestyle='dashed', linewidth=3)
     ax[h].grid(axis='both', alpha=0.75)
     #ax[h].legend(['Chip%s: mean= %.4f, std=%.4f'%(1,np.mean(ls[h]),np.std(ls[h]))],fontsize=20,markerscale=0,shadow=True,loc=3,handlelength=0)
-    ax[h].legend(['Chip=%s,dmax=%spix, #%s, mean= %.4f, std=%.4f'%(chip,distancia,len(x_shift),sig_h[0],sig_h[2])],fontsize=15,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
+    ax[h].legend([r'$Chip=%s,dmax=%spix, %s$, $mean= %.4f, std=%.4f$'%(chip,distancia,len(x_shift),sig_h[0],sig_h[2])],fontsize=15,markerscale=0,shadow=True,loc=3,handlelength=-0.0)
     #ax[h].legend([' #stars %s'%(len(x_shift))],fontsize=20,markerscale=0,shadow=True,loc=2,handlelength=0)
     ax[h].set_xlabel(nam[h],fontsize=20)
     ax[h].set_ylabel('# stars',fontsize=20)
@@ -455,10 +458,10 @@ ls_tosave=np.array(ls).T
 #%%
 ##############################################################################
 #save to try MCMC fitting
-# save list with velocities in arsec/year
+# save list with velocities in mas/year
 
-drap_x=np.sqrt(stars[:,8]**2+(GNS[:,1]*0.106)**2)/4
-drap_y=np.sqrt(stars[:,9]**2+(GNS[:,3]*0.106)**2)/4
+drap_x=np.sqrt(stars[:,8]**2+(GNS[:,1]*0.106)**2)/4.083
+drap_y=np.sqrt(stars[:,9]**2+(GNS[:,3]*0.106)**2)/4.083
 rap=np.c_[stars[:,10]*0.106/4,stars[:,11]*0.106/4,drap_x,drap_y]*1000
 np.savetxt('/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'arcsec_vx_vy_chip%s.txt'%(chip),rap,header='vx,vy,dvx,dvy (in arcsec/yr)')
 
