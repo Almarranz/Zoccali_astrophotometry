@@ -50,7 +50,7 @@ scripts='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/scripts/'
 #More than 1 ref star??? 
 # yes: more=1(two stars) or more=2(three stars)
 # no: more=0
-more=0
+more=1
 
 stream = open(scripts+'polywarp.py')
 read_file = stream.read()
@@ -83,7 +83,10 @@ unc_z=1 #uncertainty limit for position on GNS stars
 lst=0
 if lst ==0:
     field12=np.loadtxt(GNS_ori+'field16_out_of_brick.txt')
-
+valid_H=np.where(field12[:,10]<90) #Elimnates stars with no valid mesuarements for their magnitudes
+field12=field12[valid_H]
+valid_K=np.where(field12[:,12]<90)
+field12=field12[valid_K]
 
 #eliminates stas with H-Ks<1.3
 h_ks=field12[:,10]-field12[:,12]
@@ -119,7 +122,9 @@ gns_xy=np.array([x_gns,y_gns]).T
 
 for chip in range(chip,chip+1):
     #a ,d , m, dm, f, df,x,y,dx,dy=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',unpack=True)
-    brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+    # brick=np.loadtxt(tmp+'stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+    brick=np.loadtxt(tmp+'OUT_stars_calibrated_'+band+'_chip'+str(chip)+'_sirius.txt')
+
     # Here we are to select ZOC stars by their uncertainty.
     # dxy_zoc=np.sqrt(brick[:,8]**2+brick[:,9]**2)
     # low_z=np.where(dxy_zoc<unc)
@@ -317,6 +322,12 @@ elif lst==1:
     field12=np.loadtxt(GNS_ori+'field12_on_brick.txt')
 elif lst==0:
     field12=np.loadtxt(GNS_ori+'field16_out_of_brick.txt')
+
+valid_H=np.where(field12[:,10]<90) #Elimnates stars with no valid mesuarements for their magnitudes
+field12=field12[valid_H]
+valid_K=np.where(field12[:,12]<90)
+field12=field12[valid_K]
+
 field12[:,0]*=0.5
 field12[:,2]*=0.5
 field12[:,1]*=0.5
