@@ -14,25 +14,19 @@ results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit
 tmp_p=pruebas
 name='NPL_054'
 markstars=0
-if markstars eq 0 then begin
+rot_angle=0
+;~ lst=1
+if lst eq 0 then readcol, GNS+'field12_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 1 then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 2 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 3 then readcol, GNS+'field12_on_brick_reduced.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
-	;~ xm_ref=746*0.5 ; xm_ref is GNS
-	;~ ym_ref=988*0.5
-	
-	;~ xm=1007
-	;~ ym=280
-	xm_ref=888.505*0.5 ; xm_ref is GNS
-	ym_ref=1523.2*0.5
-	
-	xm=1082.6022949
-	ym=545.8816528
-endif
-
-rot_angle = 0
-;~ chip=2;Chip of Zoccalli's data.
-
-readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 0 then begin
+	readcol, tmp+'OUT_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol, tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+endif else begin
+    readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+endelse
 a=float(a)
 d=float(d)
 f=float(f)
@@ -44,10 +38,33 @@ y=float(y)
 dx=float(dx)
 dy=float(dy)
 
-;~ lst=1
-if lst eq 1 then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-if lst eq 2 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-if lst eq 3 then readcol, GNS+'field12_on_brick_reduced.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+
+if markstars eq 0 then begin
+    
+    if lst eq 0 then begin
+    xm_ref=1584.84*0.5    
+    ym_ref=1263.62*0.5
+
+    xm=1451.6275635 
+    ym=	1807.6610107
+
+    
+    endif else begin
+	;~ xm_ref=746*0.5 ; xm_ref is GNS
+	;~ ym_ref=988*0.5
+	
+	;~ xm=1007
+	;~ ym=280
+	xm_ref=888.505*0.5 ; xm_ref is GNS
+	ym_ref=1523.2*0.5
+	
+	xm=1082.6022949
+	ym=545.8816528
+	
+	endelse
+endif
+
+
 raH=float(raH)
 decH=float(decH)
 
@@ -151,8 +168,11 @@ EXTAST, header, astr
 
      ; iterative degree 1 alignment
 	 ; ------------------------------
-
-	 for it = 1, 4 do begin
+     count=0
+     comm=[]
+     it=0
+	 while count lt 5 do begin
+	  it=it+1
 	  degree = 1
 	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
 	  print, Kx
@@ -163,13 +183,26 @@ EXTAST, header, astr
 	  nc = n_elements(subc1)
 	  print, 'Iteration ' + strn(it)
 	  print, 'Found ' + strn(nc) + ' common stars.'
-	endfor
+	  comm=[comm,nc]
+	  if (n_elements(comm) gt 2) then begin
+	   if comm[-2] eq comm[-1] then begin
+	   count=count+1
+	  endif else begin
+	   count=0
+	  endelse
+	  endif
+	 endwhile
 
      ; iterative degree 2 alignment
  ; ------------------------------
-
+     print, '#######################'
 	 print, 'Now Degree 2 alignment.'
-	 for it = 1, 20 do begin
+	 print, '#######################'
+	 count=0
+     comm=[]
+     it=0
+	 while count lt 5 do begin
+	  it=it+1
 	  degree = 2
 	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
 	  print, Kx
@@ -180,7 +213,15 @@ EXTAST, header, astr
 	  nc = n_elements(subc1)
 	  print, 'Iteration ' + strn(it)
 	  print, 'Found ' + strn(nc) + ' common stars.'
-	endfor
+	  comm=[comm,nc]
+	  if (n_elements(comm) gt 2) then begin
+	   if comm[-2] eq comm[-1] then begin
+	   count=count+1
+	  endif else begin
+	   count=0
+	  endelse
+	  endif
+	endwhile
 	
 	
 	;~ readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
