@@ -9,6 +9,7 @@ indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+b
 pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
 sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
 GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
+GNS_ori='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field16/'
 tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/'
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
@@ -16,7 +17,7 @@ name='NPL_054'
 markstars=0
 rot_angle=0
 ;~ lst=1
-if lst eq 0 then readcol, GNS+'field12_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 0 then readcol, GNS_ori+'field16_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 1 then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 2 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 3 then readcol, GNS+'field12_on_brick_reduced.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
@@ -42,11 +43,18 @@ dy=float(dy)
 if markstars eq 0 then begin
     
     if lst eq 0 then begin
-    xm_ref=1584.84*0.5    
-    ym_ref=1263.62*0.5
+        
+ 
 
-    xm=1451.6275635 
-    ym=	1807.6610107
+    xm_ref= 1530.48 ; xm_ref is GNS
+    ym_ref=1409.32
+
+    xm_ref=xm_ref*0.5
+    ym_ref=ym_ref*0.5
+    
+
+    xm=1425.5838623
+    ym=1880.989624
 
     
     endif else begin
@@ -160,7 +168,7 @@ EXTAST, header, astr
 	; map = image_model(xi,yi,f,xsize_quad,ysize_quad,'gaussian', dat)
 	; writefits, tmp_path + 'align_sources.fits', map
 
-	 dmax = 1
+	 dmax = 2
 	 compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
@@ -171,7 +179,7 @@ EXTAST, header, astr
      count=0
      comm=[]
      it=0
-	 while count lt 5 do begin
+	 while count lt 3 do begin
 	  it=it+1
 	  degree = 1
 	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
@@ -201,7 +209,7 @@ EXTAST, header, astr
 	 count=0
      comm=[]
      it=0
-	 while count lt 5 do begin
+	 while count lt 3 do begin
 	  it=it+1
 	  degree = 2
 	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
@@ -263,7 +271,12 @@ EXTAST, header, astr
     mK=mK[subc1]
     
     forprint, TEXTOUT= tmp+'IDL_xdis_ydis_chip3.txt',x2c-x1c,y2c-y1c,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
+    if lst eq 0 then begin
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3_out_Brick.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
+		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
+    endif else begin
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT
+    endelse
     forprint, TEXTOUT= tmp +'IDL_lst_chip3.txt',lst, format='I', /NOCOMMENT 
     
     
