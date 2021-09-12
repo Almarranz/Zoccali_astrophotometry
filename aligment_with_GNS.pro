@@ -350,7 +350,7 @@ EXTAST, header, astr
     dx_gns=dx_gns[subc1]*0.106*1000
     dy_gns=dy_gns[subc1]*0.106*1000
     
-    dx=dx[subc2]*1000
+    dx=dx[subc2]*1000 # uncertanties in Zoc's data are already in arcsec
     dy=dy[subc2]*1000
     
     dvx=sqrt(dx^2+dx_gns^2)/4.083
@@ -370,7 +370,7 @@ EXTAST, header, astr
     
     
 
-	forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c ,dx , y2c, dy, x1c,dx_gns/0.106,y1c,dy_gns/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
+	;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c ,dx , y2c, dy, x1c,dx_gns/0.106,y1c,dy_gns/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
 
 end
 
