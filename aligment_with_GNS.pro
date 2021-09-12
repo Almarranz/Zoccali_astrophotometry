@@ -216,7 +216,8 @@ EXTAST, header, astr
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
 	 
-
+     ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
+     ;~ stop
      ; iterative degree 1 alignment
 	 ; ------------------------------
      count=0
@@ -345,21 +346,31 @@ EXTAST, header, astr
     
     x_dis=(x2c-x1c)*0.106/4.083*1000
     y_dis=(y2c-y1c)*0.106/4.083*1000
+    ;~ Adding velocities uncertanties for x and y directions
+    dx_gns=dx_gns[subc1]*0.106*1000
+    dy_gns=dy_gns[subc1]*0.106*1000
+    
+    dx=dx[subc2]*1000
+    dy=dy[subc2]*1000
+    
+    dvx=sqrt(dx^2+dx_gns^2)/4.083
+    dvy=sqrt(dy^2+dy_gns^2)/4.083
+    
     mH=mH[subc1]
     mK=mK[subc1]
     
-    forprint, TEXTOUT= tmp+'IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= tmp+'IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
     if lst gt 4 then begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
     endif else begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT
     endelse
     forprint, TEXTOUT= tmp +'IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
     
     
 
-;~ forprint, TEXTOUT= tmp_p+'aling_IDL_GNS.txt',a ,d , m, dm, f, df,xi,yi,dx,dy,format='(10(f, 4X))', /NOCOMMENT 
+	forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c ,dx , y2c, dy, x1c,dx_gns/0.106,y1c,dy_gns/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
 
 end
 
