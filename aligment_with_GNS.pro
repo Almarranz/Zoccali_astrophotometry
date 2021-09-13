@@ -350,7 +350,7 @@ EXTAST, header, astr
     dx_gns=dx_gns[subc1]*0.106*1000
     dy_gns=dy_gns[subc1]*0.106*1000
     
-    dx=dx[subc2]*1000 # uncertanties in Zoc's data are already in arcsec
+    dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
     dy=dy[subc2]*1000
     
     dvx=sqrt(dx^2+dx_gns^2)/4.083
@@ -361,10 +361,10 @@ EXTAST, header, astr
     
     forprint, TEXTOUT= tmp+'IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
     if lst gt 4 then begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
     endif else begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT
     endelse
     forprint, TEXTOUT= tmp +'IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
     
