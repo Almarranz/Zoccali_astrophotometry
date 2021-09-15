@@ -1,5 +1,10 @@
 pro aligment_with_GNS,lst
 
+;~ NOTE:
+;~ Lists 1 to 3 are on the brick
+;~ Lists 10 is on chip 2 out of brick
+;~ List 16 and 12 are on chip 3 out of brick
+
 if lst eq 10 then chip=2 else chip=3
 band='H'
 exptime=10
