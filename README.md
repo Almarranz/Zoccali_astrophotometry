@@ -15,7 +15,7 @@ Photometry for WHOLE images
 
 #####PYTHON#####
 1. coordinates_on_the_cube.py. Add the offsets of align_newrpro back to the coordinates´ lists
-2. cube_lists_alignment.
+2. cube_lists_alignment_improved?.py.We use this one in stars_selection branch. Also cube_lists_alignment.py can be used
 3. _divide_the_liits- Divide this lists of stars in regions that have this same wt and generates a txt with the images that makes up each list
 4. _ZPs_and_meanoffset_im1calibrator_WHOLE. Gets the zp of each image using ima1 as a calibrator
 5. _mag_and_position_plots. Plots mag vs drag and mag vs dx and dy for all list for each chip. Each uncertainty is the propagation error formula for the mean. Only data with al least four paintings. So NO list I.
@@ -43,7 +43,7 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
 stars using a distancia = 1 that I got using a distancia = 2. Anyway, the final improvent for the uncertainty in the position doesnt seem to be
 significt.
-A test script is (almost?) ready at:
+A test script is ready at:
 Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry/cube_lists_alignment_improved?.py.
 
 7_plotting_commons is not useful anymora. A plot of common stars is done on 11.
