@@ -15,7 +15,7 @@ Photometry for WHOLE images
 
 #####PYTHON#####
 1. coordinates_on_the_cube.py. Add the offsets of align_newrpro back to the coordinates´ lists
-2. cube_lists_alignment.
+2. cube_lists_alignment_improved?.py.We use this one in stars_selection branch. Also cube_lists_alignment.py can be used
 3. _divide_the_liits- Divide this lists of stars in regions that have this same wt and generates a txt with the images that makes up each list
 4. _ZPs_and_meanoffset_im1calibrator_WHOLE. Gets the zp of each image using ima1 as a calibrator
 5. _mag_and_position_plots. Plots mag vs drag and mag vs dx and dy for all list for each chip. Each uncertainty is the propagation error formula for the mean. Only data with al least four paintings. So NO list I.
