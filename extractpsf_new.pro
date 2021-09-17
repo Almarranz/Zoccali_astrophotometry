@@ -6,11 +6,12 @@ PRO EXTRACTPSF_new,band,exptime
 folder='im_jitter_NOgains/'
 ;folder='im_sky_ESOReflex/'
 
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-outdir='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07.1_Reduce_aligned/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+outdir='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder
 
-tmpdir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp/
+tmpdir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/
+
 
 
 for chip=1,4 do begin

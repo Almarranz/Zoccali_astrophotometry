@@ -3,14 +3,15 @@ PRO aling_new, band,exptime
 ;probando cambio para script_git dir.
 
 folder='im_jitter_NOgains/'
-py_pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07_Cleancubes/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-mask_path='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/04_Makemask/054_'+band+'/dit_'+strn(exptime)+'/im/'
-outdir='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-file_txt ='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/06_Reduce/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/'
+py_pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07_Cleancubes/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+mask_path='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/04_Makemask/058_'+band+'/dit_'+strn(exptime)+'/im/'
+outdir='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07.1_Reduce_aligned/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+file_txt ='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/06_Reduce/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'/'
 ;outdir=py_pruebas
 
-mask_path='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/04_Makemask/054_'+band+'/dit_'+strn(exptime)+'/im/'
+mask_path='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/04_Makemask/058_'+band+'/dit_'+strn(exptime)+'/im/'
+
 wx=1000
 wy=1000
 

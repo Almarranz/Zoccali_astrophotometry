@@ -1,5 +1,6 @@
 pro aligment_with_GNS,lst
 
+;~ Esto es una prueba para git pull
 ;~ NOTE:
 ;~ Lists 1 to 3 are on the brick , Zoc chip 3
 ;~ Lists 0 are on the brick , Zoc chip 2

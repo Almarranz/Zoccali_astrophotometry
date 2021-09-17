@@ -10,11 +10,12 @@ folder='im_jitter_NOgains/'
 s=500
 sx=[2048,2048]
 
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-py_pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/py_pruebas/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-outdir='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-tmp = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp/
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+py_pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/py_pruebas/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07.1_Reduce_aligned/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+outdir='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+tmp = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/
+
 
 
 
@@ -30,7 +31,7 @@ y_off=float(y_off)
 x_off_s=float(x_off_s)
 y_off_s=float(y_off_s)
 
-stop
+
 
 for i=1,cube_d do begin ;###############
 

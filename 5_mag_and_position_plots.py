@@ -26,11 +26,12 @@ exptime=10
 #chip=1
 folder='im_jitter_NOgains/'
 #folder='im_sky_ESOReflex/'
-results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'/results_bs/'
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
-psf='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
+results='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder+'/results_bs/'
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder
+psf='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder
+tmp='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
+
 
 
 # In[3]:
@@ -38,7 +39,7 @@ sig=3
 
 for chip in range(1,5):
     if band=='H':
-        ind=['A','B','C','D','E','F','G','H']#,'I'] # solo las listas con mas de 3 pointings
+        ind=['A','B','C','D','E','F','G','H','I'] # solo las listas con mas de 3 pointings
     elif band=='Ks':
         ind=['B','D','E','F','H']
     mag_med=[]
@@ -54,7 +55,7 @@ for chip in range(1,5):
         zp_list=np.loadtxt(results+"zp_%s_chip%s.txt"%(band,chip))
         print('Usando my sky, chip%s'%(chip))
     if band=='H':
-        zp1=26.32
+        zp1=26.71
     else:
         zp1=25.63
     zp_im=np.insert(zp_list,0,zp1)#'np.insert()' could be useful to add a whole column of galactic coordinates
