@@ -8,7 +8,7 @@ pro aligment_with_GNS,field,lst
 ;~ Lists 10 is on chip 2 out of brick
 ;~ List 16 and 12 are on chip 3 out of brick
 
-if (lst eq 10) || (lst eq 0) then chip=2 else chip=3
+
 band='H'
 
  
@@ -22,11 +22,11 @@ results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/dit
 tmp_p=pruebas
 name='NPL058_'
 
-markstars=1
+markstars=0
 rot_angle=0
 
 
-readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
 
 if field eq 3 then begin
 	readcol,tmp+'stars_calibrated_H_chip2_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
@@ -52,84 +52,81 @@ dy=float(dy)
 
 if markstars eq 0 then begin
     
-    if lst eq 16 then begin
+    if field eq 3 then begin
+    
+		if lst eq 1 then begin
+		       
+
+	
+			xm_ref= 1703.93  ; xm_ref is GNS
+			ym_ref= 1161.27  
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1000.1831055
+			ym=330.6050415
+    
+		endif
+		
+		if lst eq 4 then begin
+		       
  
-    xm_ref= 1530.48 ; xm_ref is GNS
-    ym_ref=1409.32
 
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
-    
+		
+		    xm_ref= 2639.51   ; xm_ref is GNS
+			ym_ref= 1032.54
 
-    xm=1425.5838623
-    ym=1880.989624
-    
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1478.5396729
+			ym=1109.546875
+		
+		endif 
     endif
     
-    if lst eq 12 then begin
-           
+    if field eq 20 then begin
+    
+		if lst eq 1 then begin
+		       
+
+	       
  
 
-    
-    xm_ref=  2587.55 ; xm_ref is GNS
-    ym_ref=1584.36 
+			xm_ref= 843.598   ; xm_ref is GNS
+			ym_ref= 805.357  
 
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
-    
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
 
-    xm=1931.8634033
-    ym=562.1767578
+			xm=595.5708008
+			ym=751.9746094
     
-    endif 
-    
- 
+		endif
+		
+		if lst eq 4 then begin
+		
+		
+		    xm_ref= 1785.32    ; xm_ref is GNS
+			ym_ref= 986.934 
 
-    
-    if lst eq 10 then begin
-           
- 
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
 
+			xm=1080.1188965
+			ym=1684.3498535
+		
+		endif 
+    endif
     
-    xm_ref= 1415.09   ; xm_ref is GNS
-    ym_ref=1530.07
-
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
     
-
-    xm=1317.0162354
-    ym=504.9793091
-    
-    endif 
-    
-    if (lst lt 4) && (lst gt 0) then begin
-	;~ xm_ref=746*0.5 ; xm_ref is GNS
-	;~ ym_ref=988*0.5
-	
-	;~ xm=1007
-	;~ ym=280
-	xm_ref=888.505*0.5 ; xm_ref is GNS
-	ym_ref=1523.2*0.5
-	
-	xm=1082.6022949
-	ym=545.8816528
-	
-	endif
-	
-	if lst eq 0 then begin
-	 xm_ref= 694.834*0.5
-	 ym_ref= 569.783*0.5 ;xm_ref is GNS
-	 
-	 
-     xm = 9.832876586999999518e+02
-     ym = 2.260803955100000167e+03
-	
-	
-	endif
-	
 	print, '#######################'
-	print, 'xm, ym ',xm, ym
+	print, 'xoff, yoo ',xm_ref-xm,ym_ref -ym
 	print, '#######################'
 endif
 
@@ -170,24 +167,25 @@ y_gns=y_gns[H_Ks]
 
 
 
+if (markstars gt 0) then begin
+	imagen=readfits(GNS+'field'+strn(field)+'_chip'+strn(lst)+'.fits',header)
+	sz = size(imagen)
+	xsize_ref = sz[1]*0.5
+	ysize_ref= sz[2]*0.5
+	EXTAST, header, astr 
 
-imagen=readfits(GNS+'field'+strn(field)+'_chip'+strn(lst)+'.fits',header)
-sz = size(imagen)
-xsize_ref = sz[1]*0.5
-ysize_ref= sz[2]*0.5
-EXTAST, header, astr 
 
 
+	AD2XY,raH, decH, astr, x_gns, y_gns
+	AD2XY,a,d,astr,x_brick,y_brick
 
-AD2XY,raH, decH, astr, x_gns, y_gns
-AD2XY,a,d,astr,x_brick,y_brick
-
-x=x_brick
-y=y_brick
+	x=x_brick
+	y=y_brick
+endif
 
 ; mark GNS stars first
 	 if (markstars gt 0) then begin
-	  RETURNMARKED, xsize_ref, ysize_ref, x_gns, y_gns, 10^((-mH)/2.5)*10, XM = xm_ref, YM = ym_ref, FM = fm_ref, BOXSIZE = 31, dmax = 2.0, g_sigma = 2.0, DISP_STRETCH = 'linear', DISP_LARGE=2
+	  RETURNMARKED, xsize_ref, ysize_ref, x_gns, y_gns, 10^((-mH)/2.5)*10, XM = xm_ref, YM = ym_ref, FM = fm_ref, BOXSIZE = 31, dmax = 1.0, g_sigma = 2.0, DISP_STRETCH = 'linear', DISP_LARGE=2
 	  SAVE, xm_ref, ym_ref, FILENAME= tmp + 'Refstars_GNS_' + band
 	  
 	  RESTORE, tmp + 'Refstars_GNS_' + band
@@ -197,7 +195,7 @@ y=y_brick
 
 ; now mark HAWK-I stars
 	 if (markstars gt 0) then begin
-	  RETURNMARKED, xsize_ref, ysize_ref, x_brick, y_brick, f, XM = xm, YM = ym, FM = fm, BOXSIZE = 21, dmax = 2., g_sigma = 3.0, DISP_STRETCH = 'linear', DISP_LARGE=2
+	  RETURNMARKED, xsize_ref, ysize_ref, x_brick, y_brick, f, XM = xm, YM = ym, FM = fm, BOXSIZE = 21, dmax = 1., g_sigma = 3.0, DISP_STRETCH = 'linear', DISP_LARGE=2
 	  SAVE, xm, ym, FILENAME= tmp + 'Refstars_BRICK_' + band
 	  
 	  RESTORE, tmp + 'Refstars_BRICK_' + band
@@ -353,30 +351,47 @@ y=y_brick
     f=f[subc2]
     print,N_ELEMENTS(f)
     
-    dat = ptr_new({X_size: 10, Y_size: 10, Sigma_x: 2, Sigma_y: 2, Angle: 0.0})
-	im = image_model(x_gns,y_gns,10^((-mH)/2.5),xsize_ref,xsize_ref,'gaussian', dat)
-	ima = image_model(xi,yi,f,xsize_ref,xsize_ref,'gaussian', dat)
+    if (markstars gt 0) then begin
+		dat = ptr_new({X_size: 10, Y_size: 10, Sigma_x: 2, Sigma_y: 2, Angle: 0.0})
+		im = image_model(x_gns,y_gns,10^((-mH)/2.5),xsize_ref,xsize_ref,'gaussian', dat)
+		ima = image_model(xi,yi,f,xsize_ref,xsize_ref,'gaussian', dat)
 	
 	
-	writefits, tmp_p +'gns'+strn(field)+'_chip' + strn(chip) + '.fits',im
+	writefits, tmp_p +'gns'+strn(field)+'_chip' + strn(lst) + '.fits',im
 
 	
-	writefits, tmp_p +'brick_chip' + strn(chip) + '.fits', ima
-	
+	writefits, tmp_p +'zoc_on_GNS_field'+ strn(field) + '.fits', ima
+	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    
-    x_dis=(x2c-x1c)*0.106/4.083*1000
-    y_dis=(y2c-y1c)*0.106/4.083*1000
-    ;~ Adding velocities uncertanties for x and y directions
-    dx_gns=dx_gns[subc1]*0.106*1000
-    dy_gns=dy_gns[subc1]*0.106*1000
-    
-    dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
-    dy=dy[subc2]*1000
-    
-    dvx=sqrt(dx^2+dx_gns^2)/4.083
-    dvy=sqrt(dy^2+dy_gns^2)/4.083
+    if field eq 3 then begin ; different dates for different fields
+		x_dis=(x2c-x1c)*0.106/4.3*1000
+		y_dis=(y2c-y1c)*0.106/4.3*1000
+		;~ Adding velocities uncertanties for x and y directions
+		dx_gns=dx_gns[subc1]*0.106*1000
+		dy_gns=dy_gns[subc1]*0.106*1000
+		
+		dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
+		dy=dy[subc2]*1000
+		
+		dvx=sqrt(dx^2+dx_gns^2)/4.3
+		dvy=sqrt(dy^2+dy_gns^2)/4.3
+	endif
+	
+	if field eq 20 then begin
+		x_dis=(x2c-x1c)*0.106/4.2*1000
+		y_dis=(y2c-y1c)*0.106/4.2*1000
+		;~ Adding velocities uncertanties for x and y directions
+		dx_gns=dx_gns[subc1]*0.106*1000
+		dy_gns=dy_gns[subc1]*0.106*1000
+		
+		dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
+		dy=dy[subc2]*1000
+		
+		dvx=sqrt(dx^2+dx_gns^2)/4.2
+		dvy=sqrt(dy^2+dy_gns^2)/4.2
+		
+	endif
     
     mH=mH[subc1]
     mK=mK[subc1]
