@@ -4,13 +4,14 @@ PRO calibrate_brick,band
 ;band='Ks'
 exptime=10
 folder='im_jitter_NOgains/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/'
-results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results_bs/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07.1_Reduce_aligned/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+sirius='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/SIRIUS/'
+tmp='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/'
+results='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results_bs/'
 tmp_p=pruebas
-name='NPL_054'
+name='NPL_058'
+
 
 ;chip=2
 
@@ -41,7 +42,8 @@ exp=readfits(tmp+'wt_chip'+strn(chip)+'.fits',ext=1)
 
 
 
-	readcol, sirius +'the_brick_idl.txt',a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si, Format = 'A,A,A,A,A,A,A,A'
+	;~ readcol, sirius +'the_brick_idl.txt',a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si, Format = 'A,A,A,A,A,A,A,A'
+	readcol, sirius +'SIRIUS_on_NPL058_c'+strn(chip)+'.txt',a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si, Format = 'A,A,A,A,A,A,A,A'
 	a_si=float(a_si)
 	dec_si=float(dec_si)
 	J_si=float(J_si)

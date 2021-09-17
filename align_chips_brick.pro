@@ -5,13 +5,14 @@ pro align_chips_brick,band,chip
 ;band='H'
 exptime=10
 folder='im_jitter_NOgains/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/07.1_Reduce_aligned/054_'+band+'/dit_'+strn(exptime)+'/'+folder
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-sirius='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/SIRIUS/'
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/'
-results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results_bs/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/07.1_Reduce_aligned/058_'+band+'/dit_'+strn(exptime)+'/'+folder
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+sirius='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/SIRIUS/'
+tmp='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'tmp_bs/'
+results='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results_bs/'
 tmp_p=pruebas
-name='NPL_054'
+name='NPL_058'
+
 
 magerr_si = 0.02 
 ;rot_angle = 0.4 * !PI/180. ; manually estimated angle of rotation between HAWK-I observations and VVV field
@@ -21,7 +22,7 @@ markstars = 1
 
 ;----------------------- Pixel coordinates from SIRUS on the brick -----------------------
 ; Read list of reference stars(the list from SIRIUS the brick)
-readcol, sirius +'the_brick_idl.txt',a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si, Format = 'A,A,A,A,A,A,A,A'
+readcol, sirius +'SIRIUS_on_NPL058_c'+strn(chip)+'.txt',a_si, dec_si, J_si,dJ_si,H_si,dH_si,K_si,dK_si, Format = 'A,A,A,A,A,A,A,A', SKIPLINE=1
 a_si=float(a_si)
 dec_si=float(dec_si)
 J_si=float(J_si)
@@ -31,7 +32,7 @@ dH_si=float(dH_si)
 K_si=float(K_si)
 dK_si=float(dK_si)   
 ;for chip =1, 4 do begin
-	readcol, tmp + 'NPL_054fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A', SKIPLINE=1
+	readcol, tmp + 'NPL_058fluxes_chip'+strn(chip)+'.txt', a,d,f,df,x,y,dx,dy, Format ='A,A,A,A,A,A,A,A', SKIPLINE=1
 	a=float(a)
 	d=float(d)
 	f=float(f)
@@ -86,11 +87,20 @@ dK_si=float(dK_si)
 	a_ref = a_si[good]
 	dec_ref = dec_si[good]
 	m_ref = m_si[good]
-	dm_ref = dm_si[good]  
+	dm_ref = dm_si[good] 
+	
+	
 
 	AD2XY, a_ref, dec_ref, astr, x_ref, y_ref
+	;~ AD2XY, a_si, dec_si, astr, x_all, y_all
 	AD2XY, a_si, dec_si, astr, x_all, y_all
-
+    
+    if (markstars eq 0) then begin
+  
+    AD2XY, 266.544952 ,-28.806427, astr, xm_ref, ym_ref
+	AD2XY, 266.545025 , -28.806649, astr, xm, ym
+    
+    endif 
 
 
 	; mark VVV stars first

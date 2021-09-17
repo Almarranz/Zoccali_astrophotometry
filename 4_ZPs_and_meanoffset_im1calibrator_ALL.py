@@ -31,11 +31,12 @@ exptime=10
 #chip=4
 folder='im_jitter_NOgains/'
 #folder='im_sky_ESOReflex/'
-results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'/results_bs/'
-pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
-indir = '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
-psf='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
+results='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder+'/results_bs/'
+pruebas='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/pruebas/'
+indir = '/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder
+psf='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder
+tmp='/Users/alvaromartinez/Desktop/PhD/HAWKI/The_Brick/photometry/058_'+band+'/dit_'+str(exptime)+'/'+folder+'tmp_bs/'
+
 
 
 # In[4]:
@@ -81,7 +82,7 @@ for chip in range(1,5):
     
     dic_mag1={} #magnitudes de las estrellas comunes de la primera lista con cada una de las otras
     if band=='H':
-        ZP=26.32
+        ZP=26.71
     else:
         ZP=25.63
     for j in range(2,len(dic_stars)+1):
