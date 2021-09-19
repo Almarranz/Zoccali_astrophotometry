@@ -498,7 +498,7 @@ endif
 	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) then begin ; different dates for different fields
+    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) (field eq 7) then begin ; different dates for different fields
 		x_dis=(x2c-x1c)*0.106/4.3*1000
 		y_dis=(y2c-y1c)*0.106/4.3*1000
 		;~ Adding velocities uncertanties for x and y directions
