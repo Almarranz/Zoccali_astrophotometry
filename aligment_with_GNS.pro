@@ -35,6 +35,13 @@ endif
 if field eq 20 then begin
 	readcol,tmp+'stars_calibrated_H_chip3_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endif
+
+if field eq 16 then begin
+	readcol,tmp+'stars_calibrated_H_chip2_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+endif
+if field eq 10 then begin
+	readcol,tmp+'stars_calibrated_H_chip1_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+endif
 a=float(a)
 d=float(d)
 f=float(f)
@@ -120,6 +127,76 @@ if markstars eq 0 then begin
 
 			xm=1080.1188965
 			ym=1684.3498535
+		
+		endif 
+	endif
+		
+	if field eq 16 then begin
+    
+		if lst eq 3 then begin
+
+			xm_ref=  1607.22   ; xm_ref is GNS mg: 18.860020  16.975086
+			ym_ref= 1269.01 
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1496.7492676
+			ym=1823.2287598
+    
+		endif
+		
+		if lst eq 2 then begin
+		
+		        
+ 
+
+		    xm_ref= 1432.55    ; xm_ref is GNS 16.829983  15.191847
+			ym_ref= 1541.23
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1397.8381348
+			ym=1110.1224365
+		
+		endif 
+    endif
+    
+    if field eq 10 then begin
+    
+		if lst eq 3 then begin
+		        
+ 
+
+
+			xm_ref=  731.097  ; xm_ref is GNS mg: 15.879695  13.938910
+			ym_ref= 1875.66
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1022.0848389
+			ym=1543.3221436
+    
+		endif
+		
+		if lst eq 2 then begin
+		        
+ 
+
+		    xm_ref=  879.621     ; xm_ref is GNS 117.055305           15.188314
+			ym_ref= 1578.72 
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1079.5262451
+			ym=544.4326172
 		
 		endif 
     endif
@@ -235,6 +312,9 @@ endif
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
 	 
+	 
+	 
+	 
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
      ;~ stop
      ; iterative degree 1 alignment
@@ -248,7 +328,7 @@ endif
 	  degree = 1
 	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
 	  print, Kx
-	  print, Ky
+	  print, Ky		
 	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y
 	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y
 	  compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
@@ -364,7 +444,7 @@ endif
 	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    if field eq 3 then begin ; different dates for different fields
+    if (field eq 3) or (field eq 10) or (field eq 16) then begin ; different dates for different fields
 		x_dis=(x2c-x1c)*0.106/4.3*1000
 		y_dis=(y2c-y1c)*0.106/4.3*1000
 		;~ Adding velocities uncertanties for x and y directions
