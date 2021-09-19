@@ -476,6 +476,14 @@ endif
     mH=mH[subc1]
     mK=mK[subc1]
     
+    ;~ same=where(abs(mH[subc1]-m[subc2]) lt 1)
+	;~ print,'Same stars',n_elements(mH[same])
+	;~ x_dis=x_dis[same]
+	;~ y_dis=y_dis[same]
+    ;~ dvx=dvx[same]
+    ;~ dvy=dvy[same]
+    ;~ mH=mH[same]
+    
     forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
    
 	;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
