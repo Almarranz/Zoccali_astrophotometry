@@ -10,7 +10,7 @@ pro aligment_with_GNS,field,lst
 
 
 band='H'
-
+select=1; add to the pm list only stars with same magnitudes (m1-m2<1) in boths lists
  
 exptime=10
 folder='im_jitter_NOgains/'
@@ -28,20 +28,10 @@ rot_angle=0
 
 readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
 
-if field eq 3 then begin
-	readcol,tmp+'stars_calibrated_H_chip2_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-endif
+readcol,tmp+'stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
-if field eq 20 then begin
-	readcol,tmp+'stars_calibrated_H_chip3_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-endif
 
-if field eq 16 then begin
-	readcol,tmp+'stars_calibrated_H_chip2_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-endif
-if field eq 10 then begin
-	readcol,tmp+'stars_calibrated_H_chip1_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-endif
+
 a=float(a)
 d=float(d)
 f=float(f)
@@ -150,8 +140,6 @@ if markstars eq 0 then begin
 		if lst eq 2 then begin
 		
 		        
- 
-
 		    xm_ref= 1432.55    ; xm_ref is GNS 16.829983  15.191847
 			ym_ref= 1541.23
 
@@ -197,6 +185,72 @@ if markstars eq 0 then begin
 
 			xm=1079.5262451
 			ym=544.4326172
+		
+		endif 
+    endif
+    
+    if field eq 12 then begin
+    
+		if lst eq 3 then begin
+
+			xm_ref=  2197.92  ; xm_ref is GNS mg: 15.340409  13.534920
+			ym_ref= 1547.91 
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1769.098999
+			ym=559.3864746
+    
+		endif
+		
+		if lst eq 2 then begin
+		        
+ 
+
+		    xm_ref=   1884.20   ; xm_ref is GNS 15.551764  13.882348
+			ym_ref= 1272.49
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1601.5830078
+			ym=1764.3426514
+		
+		endif 
+	endif	
+	if field eq 7 then begin
+    
+		if lst eq 1 then begin
+		
+			xm_ref=  1275.52   ; xm_ref is GNS mg: 115.217596  13.672145
+			ym_ref= 1655.58
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=837.2166138
+			ym=1935.4893799
+    
+		endif
+		
+		if lst eq 4 then begin
+	       
+ 
+
+
+		    xm_ref= 1976.07   ; xm_ref is GNS 17.248318  15.414783
+			ym_ref= 1084.36 
+
+			xm_ref=xm_ref*0.5
+			ym_ref=ym_ref*0.5
+			
+
+			xm=1191.6905518
+			ym=353.1671753
 		
 		endif 
     endif
@@ -322,7 +376,7 @@ endif
      count=0
      comm=[]
      it=0
-     lim_it=2
+     lim_it=3
 	 while count lt lim_it do begin
 	  it=it+1
 	  degree = 1
@@ -444,7 +498,7 @@ endif
 	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    if (field eq 3) or (field eq 10) or (field eq 16) then begin ; different dates for different fields
+    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) then begin ; different dates for different fields
 		x_dis=(x2c-x1c)*0.106/4.3*1000
 		y_dis=(y2c-y1c)*0.106/4.3*1000
 		;~ Adding velocities uncertanties for x and y directions
@@ -476,20 +530,29 @@ endif
     mH=mH[subc1]
     mK=mK[subc1]
     
-    ;~ same=where(abs(mH[subc1]-m[subc2]) lt 1)
-	;~ print,'Same stars',n_elements(mH[same])
-	;~ x_dis=x_dis[same]
-	;~ y_dis=y_dis[same]
-    ;~ dvx=dvx[same]
-    ;~ dvy=dvy[same]
-    ;~ mH=mH[same]
     
-    forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
-   
-	;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
-	forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+    
+    if select eq 0 then begin
+		forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
+	   
+		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+	
+	endif else begin
+	    
+		same=where(abs(mH[subc1]-m[subc2]) lt 1)
+		print,'Same stars',n_elements(mH[same])
+		x_dis=x_dis[same]
+		y_dis=y_dis[same]
+		dvx=dvx[same]
+		dvy=dvy[same]
+		mH=mH[same]
+	 	forprint, TEXTOUT= tmp+'select_'+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
+	   
+		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+'select_'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		
-    
+    endelse
     
     
 
