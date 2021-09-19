@@ -498,7 +498,7 @@ endif
 	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) (field eq 7) then begin ; different dates for different fields
+    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) or (field eq 7) then begin ; different dates for different fields
 		x_dis=(x2c-x1c)*0.106/4.3*1000
 		y_dis=(y2c-y1c)*0.106/4.3*1000
 		;~ Adding velocities uncertanties for x and y directions
@@ -532,13 +532,13 @@ endif
     
     
     
-    if select eq 0 then begin
+    ;~ if select eq 0 then begin
 		forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
 	   
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 	
-	endif else begin
+	;~ endif else begin
 	    
 		same=where(abs(mH[subc1]-m[subc2]) lt 1)
 		print,'Same stars',n_elements(mH[same])
@@ -552,7 +552,7 @@ endif
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		forprint, TEXTOUT= gaussian+'select_'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		
-    endelse
+    ;~ endelse
     
     
 
