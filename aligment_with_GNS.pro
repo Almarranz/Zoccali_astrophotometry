@@ -10,8 +10,7 @@ pro aligment_with_GNS,field,lst
 
 
 band='H'
-select=1; add to the pm list only stars with same magnitudes (m1-m2<1) in boths lists
- 
+
 exptime=10
 folder='im_jitter_NOgains/'
 pruebas='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/pruebas/'
@@ -529,30 +528,16 @@ endif
     
     mH=mH[subc1]
     mK=mK[subc1]
+    m=m[subc2]
     
     
     
-    ;~ if select eq 0 then begin
 		forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
 	   
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,format='(10(f, 4X))', /NOCOMMENT 
 	
-	;~ endif else begin
-	    
-		same=where(abs(mH[subc1]-m[subc2]) lt 1)
-		print,'Same stars',n_elements(mH[same])
-		x_dis=x_dis[same]
-		y_dis=y_dis[same]
-		dvx=dvx[same]
-		dvy=dvy[same]
-		mH=mH[same]
-	 	forprint, TEXTOUT= tmp+'select_'+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
-	   
-		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= gaussian+'select_'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
-		
-    ;~ endelse
+	
     
     
 
