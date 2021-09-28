@@ -49,7 +49,9 @@ for chip in range(1,5):
         for i in range(len(dic_x['x_chip%s'%(chip)]))]
     dy=[0.106*np.std(dic_y['y_chip%s'%(chip)][i])/np.sqrt(len(dic_x['x_chip%s'%(chip)][i]))
         for i in range(len(dic_x['x_chip%s'%(chip)]))]
-    
+    ##################################################
+    #dx and dy are transformed in arsec at the previous line !!!!!!!!!!!!!!!!
+    ##################################################
     flux=np.loadtxt(tmp+'f_chip%s.txt'%(chip))
     df=np.loadtxt(tmp+'df_med_chip%s.txt'%(chip))
     
