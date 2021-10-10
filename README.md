@@ -40,8 +40,9 @@ for here on is python alignment. Eventhoug they work, it is better to stop here.
 11. _aligment_with_GNS.py'you have to open the lists on Aladin locate a two common stars and copy and paste their X and Y coordinates on the variables xm_ref ym_ref for GNS star and xm and ym for Zoc stars. The code them aligns the two list with 5 loops of a degree1 pol. and 40 loops of a degree 2 poli. Tryed same conde with idl with same results, at aligme/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/pruebas_scripts_git/aligment_with_GNS.pro'
 12. _proper_motions_plots.py With the scritp like this, making the aligment at previos script using only stars h-ks>1.3 from GNS, and sigma clopping 2sig the velocities in this one, you get a xmen=-8 and vy=85 and verything looks ok
 13. _align_and_prmot.py Combine the alignment with GNS and the proper motion analisys in a single script. You can set where you do wahta to use foreground stars, background stars or al
+***
 
-###### NOTE ##########################
+###### NOTE 
 
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the kx ky to the whole list.
 When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
