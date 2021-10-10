@@ -7,13 +7,13 @@ at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astro
 README
 Photometry for WHOLE images
 
-#####IDL#####
+###### IDL
 1. aling_new.pro. Aligns the images with correl_optimize, put them in a cube and generate a list for offsets.
 2. cachos_new.pro. cut off the images from the cube using the offset list generated in aling_new
 3. extractpsf_new.pro. Gets the psf over cachos.
 4. deepastro_new. pro. Runs starfinder on the reduced aligned cachos (extracted from the cube)
 
-#####PYTHON#####
+###### PYTHON
 1. coordinates_on_the_cube.py. Add the offsets of align_newrpro back to the coordinates´ lists
 2. cube_lists_alignment_improved?.py.We use this one in stars_selection branch. Also cube_lists_alignment.py can be used
 3. _divide_the_liits- Divide this lists of stars in regions that have this same wt and generates a txt with the images that makes up each list
@@ -23,12 +23,11 @@ Photometry for WHOLE images
 6. _make_txt_of_chips. Make a text file for each chip with 'ra,dec,x_mean,dx,y_mean,dy,mag,dmag,l,b' (dx and dy are in arcsec).
 
 7. DO NOT USE
-
-################## WARNING ######################## 
+___
+#### WARNING 
 
 DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 
-###############################################
 
 8. _aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
