@@ -1,4 +1,4 @@
-pro aligment_with_GNS,lst
+pro aligment_with_GNS,lst,degree3
 
 ;~ NOTE:
 ;~ Lists 1 to 3 are on the brick , Zoc chip 3
@@ -21,12 +21,16 @@ tmp_p=pruebas
 name='NPL_054'
 markstars=0
 rot_angle=0
+
+;####################
+;degree3=1 ; if degree3 = 1 uses a deg3 polinomial in the alignment, if =0 only a second degree pol. is used
+;####################
 ;~ lst=1
 ;~ if lst eq 16 then readcol, GNS_ori+'field16_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst gt 4 then readcol, GNS_ori+'field'+strn(lst)+'_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ if lst gt 4 then GNS_ori+'field'+strn(lst)+'_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if (lst eq 10) || (lst eq 0) then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-if lst eq 1 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 1 then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 2 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 3 then readcol, GNS+'field12_on_brick_reduced.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 print, '#######################'
@@ -294,40 +298,40 @@ EXTAST, header, astr
 	  endif
 	endwhile
 	
-	
-     ; iterative degree 3 alignment
- ; ------------------------------
-     print, '#######################'
-	 print, 'Now Degree 3 alignment.'
-	 print, '#######################'
-	 count=0
-     comm=[]
-     it=0
-	 while count lt lim_it && it lt 101 do begin
-	  it=it+1
-	  degree = 3
-	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
-	  print, Kx
-	  print, Ky
-	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x +$
-		Kx[0,3]*x^3 + Kx[1,3]*x^3*y + Kx[2,3]*x^3*y^2 + Kx[3,0]*y^3 + Kx[3,1]*x*y^3 + Kx[3,2]*x^2*y^3 + Kx[3,3]*x^3*y^3
-	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x +$
-	   Ky[0,3]*x^3 + Ky[1,3]*x^3*y + Ky[2,3]*x^3*y^2 + Ky[3,0]*y^3 + Ky[3,1]*x*y^3 + Ky[3,2]*x^2*y^3 + Ky[3,3]*x^3*y^3
+	if degree3 eq 1 then begin
+		 ; iterative degree 3 alignment
+	 ; ------------------------------
+		 print, '#######################'
+		 print, 'Now Degree 3 alignment.'
+		 print, '#######################'
+		 count=0
+		 comm=[]
+		 it=0
+		 while count lt lim_it && it lt 101 do begin
+		  it=it+1
+		  degree = 3
+		  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
+		  print, Kx
+		  print, Ky
+		  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x +$
+			Kx[0,3]*x^3 + Kx[1,3]*x^3*y + Kx[2,3]*x^3*y^2 + Kx[3,0]*y^3 + Kx[3,1]*x*y^3 + Kx[3,2]*x^2*y^3 + Kx[3,3]*x^3*y^3
+		  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x +$
+		   Ky[0,3]*x^3 + Ky[1,3]*x^3*y + Ky[2,3]*x^3*y^2 + Ky[3,0]*y^3 + Ky[3,1]*x*y^3 + Ky[3,2]*x^2*y^3 + Ky[3,3]*x^3*y^3
 
-	  compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
-	  nc = n_elements(subc1)
-	  print, 'Iteration ' + strn(it)
-	  print, 'Found ' + strn(nc) + ' common stars.'
-	  comm=[comm,nc]
-	  if (n_elements(comm) gt 2) then begin
-	   if comm[-2] eq comm[-1] then begin
-	   count=count+1
-	  endif else begin
-	   count=0
-	  endelse
-	  endif
-	endwhile
-	
+		  compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+		  nc = n_elements(subc1)
+		  print, 'Iteration ' + strn(it)
+		  print, 'Found ' + strn(nc) + ' common stars.'
+		  comm=[comm,nc]
+		  if (n_elements(comm) gt 2) then begin
+		   if comm[-2] eq comm[-1] then begin
+		   count=count+1
+		  endif else begin
+		   count=0
+		  endelse
+		  endif
+		endwhile
+	endif
 	
 	
     

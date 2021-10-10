@@ -71,6 +71,8 @@ for chip in range(1,5):
                 ZP=26.32
                 lm_min=14
                 lm_max=16
+                # lm_min=0
+                # lm_max=160
             else:
                 ZP=25.63
             distancia=1
