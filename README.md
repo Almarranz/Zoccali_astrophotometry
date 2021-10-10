@@ -1,6 +1,6 @@
 # Zoccali_astrophotometry
 ********************************
-on branch: stars_selection
+on branch: astro_align
 ********************************
 
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
