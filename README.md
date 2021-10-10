@@ -41,7 +41,7 @@ for here on is python alignment. Eventhoug they work, it is better to stop here.
 12. _proper_motions_plots.py With the scritp like this, making the aligment at previos script using only stars h-ks>1.3 from GNS, and sigma clopping 2sig the velocities in this one, you get a xmen=-8 and vy=85 and verything looks ok
 13. _align_and_prmot.py Combine the alignment with GNS and the proper motion analisys in a single script. You can set where you do wahta to use foreground stars, background stars or al
 
-################# NOTE ##########################
+###### NOTE ##########################
 
 2. cube_lists_alignment. can be improved by looping the degree 1 polynomial over list_E and then apply the kx ky to the whole list.
 When looping with distancia =1 the improvement is huge from the first loop to the second one. This way I can reach the same number of aligment 
