@@ -125,7 +125,7 @@ EXTAST, header, astr
      count=0
      comm=[]
      it=0
-     lim_it=2
+     lim_it=1
 	 while count lt lim_it do begin
 	  it=it+1
 	  degree = 1
