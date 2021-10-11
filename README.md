@@ -1,6 +1,6 @@
 # Zoccali_astrophotometry
 ********************************
-on branch: iMac
+on branch: NPL058
 ********************************
 
 at /Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/WHOLE_im/Zoccali_astrophotometry
