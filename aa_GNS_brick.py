@@ -18,6 +18,7 @@ chip=3
 GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_H/dit_10/'+folder+'tmp_bs/'
 #%%
+#%%
 lst=1#1 is the biggest list and 3 the smallest one
 if lst==1:
     x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
@@ -25,7 +26,7 @@ elif lst==2:
         x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_accu.txt',unpack=True)
 elif lst==3:
         x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
-        
+ #%%       
 
 print(len(x_gns))
 # gns=np.loadtxt(GNS+'field12_on_brick_accu.txt')
