@@ -33,8 +33,8 @@ DO NOT USE 8_SIRIUS_alignment.py NO READY yet
 8. _aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
 10. _photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
-<<<<<<< HEAD
-11. aligment_with_GNS.pro. It does align with GNS using IDL code. It seems to be better some how that python alygnmnt. after this one you can jump to Gassuian_fit reposositoy.
+10. aa_GNS_brick.py. Alings GNs with NPL058, out of brick. You have to choose field and chip forn GNS and it generates a trasnformed list of Zoc data to being used in the next script
+11. aligment_with_GNS.pro. It does align with GNS using IDL code.  after this one you can jump to Gassuian_fit reposositoy.
 ######################################################################################################
 WARNING for here on is python alignment. Eventhoug they work, it is better to stop here. Use carefully
 ######################################################################################################
