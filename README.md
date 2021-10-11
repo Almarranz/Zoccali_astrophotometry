@@ -32,7 +32,8 @@ ___
 8. _aling_chips_brick.pro. Aligns the chips with SIRIUS.This is instead of SIRIUS_alignment
 9. calibrate_brick.pro Calibrate the potometry comparing with SIRIUS 
 10. _photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
-11. aligment_with_GNS.pro. It does align with GNS using IDL code. It seems to be better some how that python alygnmnt. after this one you can jump to Gassuian_fit reposositoy.
+12. aa_GNS_brick.py. It gets the transformation matrix between the lists using astroalign packge in python. Transfor the zocally list and storage it.
+13. aligment_with_GNS.pro. Using the list trasformed in 12. After this you can jump to gaussian_fit folder.
 ****
 #### WARNING 
 for here on is python alignment. Eventhoug they work, it is better to stop here. Use carefully
