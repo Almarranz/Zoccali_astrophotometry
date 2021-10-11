@@ -6,6 +6,8 @@ pro aligment_with_GNS,lst,degree3
 ;~ Lists 10 is on chip 2 out of brick
 ;~ List 16 and 12 are on chip 3 out of brick
 
+;~ On this branch (astro_aling) we dont need to click on stars, we get the matriz transformation with aa in python
+
 if (lst eq 10) || (lst eq 0) then chip=2 else chip=3
 band='H'
 exptime=10
@@ -41,7 +43,7 @@ if lst gt 4 then begin
 	readcol, tmp+'OUT'+strn(lst)+'_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol, tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endif else begin
-    readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endelse
 a=float(a)
 d=float(d)
@@ -55,88 +57,7 @@ dx=float(dx)
 dy=float(dy)
 
 
-if markstars eq 0 then begin
-    
-    if lst eq 16 then begin
- 
-    xm_ref= 1530.48 ; xm_ref is GNS
-    ym_ref=1409.32
 
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
-    
-
-    xm=1425.5838623
-    ym=1880.989624
-    
-    endif
-    
-    if lst eq 12 then begin
-           
- 
-
-    
-    xm_ref=  2587.55 ; xm_ref is GNS
-    ym_ref=1584.36 
-
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
-    
-
-    xm=1931.8634033
-    ym=562.1767578
-    
-    endif 
-    
- 
-
-    
-    if lst eq 10 then begin
-           
- 
-
-    
-    xm_ref= 1415.09   ; xm_ref is GNS
-    ym_ref=1530.07
-
-    xm_ref=xm_ref*0.5
-    ym_ref=ym_ref*0.5
-    
-
-    xm=1317.0162354
-    ym=504.9793091
-    
-    endif 
-    
-    if (lst lt 4) && (lst gt 0) then begin
-	;~ xm_ref=746*0.5 ; xm_ref is GNS
-	;~ ym_ref=988*0.5
-	
-	;~ xm=1007
-	;~ ym=280
-	xm_ref=888.505*0.5 ; xm_ref is GNS
-	ym_ref=1523.2*0.5
-	
-	xm=1082.6022949
-	ym=545.8816528
-	
-	endif
-	
-	if lst eq 0 then begin
-	 xm_ref= 694.834*0.5
-	 ym_ref= 569.783*0.5 ;xm_ref is GNS
-	 
-	 
-     xm = 9.832876586999999518e+02
-     ym = 2.260803955100000167e+03
-	
-	
-	endif
-endif
-
-print, '#######################'
-print, 'xm, ym ',xm, ym
-print, '#######################'
 
 raH=float(raH)
 decH=float(decH)
@@ -180,53 +101,7 @@ EXTAST, header, astr
 
 
 
-;AD2XY,ra, dec, astr, x_gns, y_gns
-;AD2XY,a,d,astr,x_brick,y_brick
 
-;x=x_brick
-;y=y_brick
-
-; mark GNS stars first
-	 if (markstars gt 0) then begin
-	  RETURNMARKED, xsize_ref, ysize_ref, x_gns, y_gns, 10^((-bri)/2.5)*10, XM = xm_ref, YM = ym_ref, FM = fm_ref, BOXSIZE = 31, dmax = 2.0, g_sigma = 2.0, DISP_STRETCH = 'linear', DISP_LARGE=2
-	  SAVE, xm_ref, ym_ref, FILENAME= tmp + 'Refstars_GNS_' + band
-	  
-	  RESTORE, tmp + 'Refstars_GNS_' + band
-	 endif
-	 
-	 
-
-; now mark HAWK-I stars
-	 if (markstars gt 0) then begin
-	  RETURNMARKED, xsize_ref, ysize_ref, x, y, f, XM = xm, YM = ym, FM = fm, BOXSIZE = 21, dmax = 2., g_sigma = 3.0, DISP_STRETCH = 'linear', DISP_LARGE=2
-	  SAVE, xm, ym, FILENAME= tmp + 'Refstars_BRICK_' + band
-	  
-	  RESTORE, tmp + 'Refstars_BRICK_' + band
-	 endif
-	 
-
-
-
-; preliminary offset and rotation
-	 ; -------------------------------
-
-	 xm = xm * cos(rot_angle) - ym * sin(rot_angle)
-	 ym = xm * sin(rot_angle) + ym * cos(rot_angle)
-	 if (n_elements(xm) gt 1) then xoff = median(xm_ref - xm) else xoff = xm_ref - xm
-	 if (n_elements(ym) gt 1) then yoff = median(ym_ref - ym) else yoff = ym_ref - ym
-	 xi = x * cos(rot_angle) - y * sin(rot_angle)
-	 yi = x * sin(rot_angle) + y * cos(rot_angle)
-	 ;~ xoff=-640.8315405000001 
-	 ;~ yoff=217.90724489999997 
-	 xi = xi + xoff
-	 yi = yi + yoff
-	 print,'This is x_off and y_off',xoff,yoff
-		
-
-
-     
-	 x0 = xi
-	 y0 = yi
 	 
 
 	; dat = ptr_new({X_size: 20, Y_size: 20, Sigma_x: 1.5, Sigma_y: 1.5, Angle: 0.0})
@@ -234,10 +109,10 @@ EXTAST, header, astr
 	; writefits, tmp_path + 'align_sources.fits', map
 
 	 dmax = 1
-	 compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+	 compare_lists, x_gns, y_gns, x, y, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
-	 
+	 stop
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
      ;~ stop
      ; iterative degree 1 alignment
@@ -372,14 +247,14 @@ EXTAST, header, astr
     mK=mK[subc1]
     m=m[subc2]
     
-    forprint, TEXTOUT= tmp+'IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= tmp+'aa_IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
     if lst gt 4 then begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
     endif else begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,format='(10(f, 4X))', /NOCOMMENT
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,format='(10(f, 4X))', /NOCOMMENT
     endelse
-    forprint, TEXTOUT= tmp +'IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
+    forprint, TEXTOUT= tmp +'aa_IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
     
     
 
