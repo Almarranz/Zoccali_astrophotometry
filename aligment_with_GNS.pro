@@ -3,10 +3,7 @@ pro aligment_with_GNS,field,lst
 ;~ field=20 ; fields can be 3 or 20 (refers to GNS fields)
 ;~ Esto es una prueba para git pull
 ;~ NOTE:
-;~ Lists 1 to 3 are on the brick , Zoc chip 3
-;~ Lists 0 are on the brick , Zoc chip 2
-;~ Lists 10 is on chip 2 out of brick
-;~ List 16 and 12 are on chip 3 out of brick
+
 
 
 band='H'
@@ -286,7 +283,7 @@ x_gns=x_gns[valid_H]
 y_gns=y_gns[valid_H]
 print,n_elements(raH)
 
-H_Ks=where(mH-mK>1.3)
+H_Ks=where((mH-mK) gt 1.3)
 
 raH=raH[H_Ks]
 decH=decH[H_Ks]
