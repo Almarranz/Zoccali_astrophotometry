@@ -39,11 +39,15 @@ print, '#######################'
 print, 'Reading lst = ',lst
 print, '#######################'
 
+
+
+
 if lst gt 4 then begin
 	readcol, tmp+'OUT'+strn(lst)+'_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol, tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endif else begin
     readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    print,'.....',n_elements(x),'.....'
 endelse
 a=float(a)
 d=float(d)
@@ -70,6 +74,7 @@ mK=float(mK)
 x_gns=x_gns*0.5
 y_gns=y_gns*0.5
 
+print,'Elemnts in GNS',n_elements(x_gns)
 
 
 valid_H=where(mH lt 90 and mK lt 90)
@@ -79,9 +84,10 @@ mH=mH[valid_H]
 mK=mK[valid_H]
 x_gns=x_gns[valid_H]
 y_gns=y_gns[valid_H]
-print,n_elements(raH)
 
-H_Ks=where(mH-mK>1.3)
+print,'Elemnts in GNS',n_elements(x_gns)
+
+H_Ks=where((mH-mK) gt 1.3)
 
 raH=raH[H_Ks]
 decH=decH[H_Ks]
@@ -90,7 +96,7 @@ mK=mK[H_Ks]
 x_gns=x_gns[H_Ks]
 y_gns=y_gns[H_Ks]
 
-
+print,'Elemnts in GNS',n_elements(x_gns)
 
 
 imagen=readfits(GNS+'field12_'+band+'.fits',header)
@@ -112,7 +118,6 @@ EXTAST, header, astr
 	 compare_lists, x_gns, y_gns, x, y, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
-	 stop
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
      ;~ stop
      ; iterative degree 1 alignment
