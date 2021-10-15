@@ -14,7 +14,7 @@ from astropy.io import fits
 from scipy.spatial import distance
 import sys
 folder='im_jitter_NOgains/'
-chip=2
+chip=3
 GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
 tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_H/dit_10/'+folder+'tmp_bs/'
 #%%
