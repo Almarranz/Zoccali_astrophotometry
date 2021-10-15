@@ -48,6 +48,8 @@ if lst gt 4 then begin
 endif else begin
     readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
     print,'.....',n_elements(x),'.....'
+    ;~ readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    ;~ print,'.....',n_elements(x),'.....'
 endelse
 a=float(a)
 d=float(d)
@@ -55,8 +57,12 @@ f=float(f)
 df=float(df)
 m=float(m)
 dm=float(dm)
+
+;~ xi=float(xi)
+;~ yi=float(yi)
 x=float(x)
 y=float(y)
+
 dx=float(dx)
 dy=float(dy)
 
