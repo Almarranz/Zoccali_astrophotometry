@@ -15,17 +15,28 @@ from scipy.spatial import distance
 import sys
 folder='im_jitter_NOgains/'
 chip=3
-GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
-tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_H/dit_10/'+folder+'tmp_bs/'
+
+
 #%%
 #%%
-lst=1#1 is the biggest list and 3 the smallest one
-if lst==1:
-    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
-elif lst==2:
-        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_accu.txt',unpack=True)
-elif lst==3:
-        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
+in_brick=0
+if in_brick==1:
+    GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field12/'
+    lst=1#1 is the biggest list and 3 the smallest one
+    if lst==1:
+        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
+    elif lst==2:
+            x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_accu.txt',unpack=True)
+    elif lst==3:
+            x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
+
+elif in_brick==0:
+    field=3# field 16(lst 2 ,3) field3(lst 1,4)
+    lst=4
+    GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field%s/'%(field)
+    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'cat_Ban_%s_%s.txt'%(field,lst),unpack=True)
+    
+    print('som')
  #%%       
 
 print(len(x_gns))
@@ -45,24 +56,32 @@ GNS_xy=np.array([x_gns,y_gns]).T
 print('Elements in GNS: %s'%(len(GNS_xy)))
 
 #%%
-a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',unpack=True)
-zoc= np.loadtxt(tmp+'BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt')
-zoca=np.array([x,y]).T
-print('Elements in Zoc: %s'%(len(x)))
+if in_brick==1:
+    tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_H/dit_10/'+folder+'tmp_bs/'
+    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',unpack=True)
+    zoc= np.loadtxt(tmp+'BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt')
+    zoca=np.array([x,y]).T
+    print('Elements in Zoc: %s'%(len(x)))
+elif in_brick==0:
+    tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_H/dit_10/'+folder+'tmp_bs/'
+    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)
+    zoc= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
+    zoca=np.array([x,y]).T
+    print('Elements in Zoc: %s'%(len(x)))
 #%%
 
  # -638.350, 215.718 manually stimated xoff yoff
 check_x,check_y=2,2
 while abs(check_x) >1 or abs(check_y)>1  :
-    m,(_,_)= aa.find_transform(zoca, GNS_xy,max_control_points=250)
-    print('For chip%s'%(3)+'\n'+"Translation: (x, y) = (%.2f, %.2f)"%(m.translation[0],m.translation[1]))
+    m,(_,_)= aa.find_transform(zoca, GNS_xy,max_control_points=200)
+    print('For fiel%s, chip%s'%(field,lst)+'\n'+"Translation: (x, y) = (%.2f, %.2f)"%(m.translation[0],m.translation[1]))
     print("Rotation: %.3f degrees"%(m.rotation * 180.0 / np.pi))
     print("Scale factor: %.4f"%(m.scale))
     
     test_gns = aa.matrix_transform(zoca, m.params)
             
     print(20*'#'+'\n'+'CHECKING'+'\n'+20*'#')
-    t,(_,_)= aa.find_transform(test_gns,GNS_xy,max_control_points=250)
+    t,(_,_)= aa.find_transform(test_gns,GNS_xy,max_control_points=200)
     print("Translation: (x, y) = (%.2f, %.2f)"%(t.translation[0],t.translation[1]))
     print("Rotation: %.3f degrees"%(t.rotation * 180.0 / np.pi))
     print("Scale factor: %.4f"%(t.scale))
@@ -72,7 +91,10 @@ print('___NOW TRANSFORMING GNS___')
 trans=aa.matrix_transform(zoca, m.params)
 zoc[:,6]=trans[:,0]
 zoc[:,7]=trans[:,1]
-np.savetxt(tmp+'aa_BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',zoc, fmt='%.5f') 
+if in_brick==1:
+    np.savetxt(tmp+'aa_BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',zoc, fmt='%.5f') 
+elif in_brick==0:
+    np.savetxt(tmp + 'aa_stars_calibrated_H_on_field%s_%s.txt'%(field,lst),zoc, fmt='%.5f')
 
 
 
