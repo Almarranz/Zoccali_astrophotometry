@@ -1,4 +1,4 @@
-pro aligment_with_GNS,lst,degree3
+pro aligment_with_GNS,lst,degree2,degree3,color
 
 ;~ NOTE:
 ;~ Lists 1 to 3 are on the brick , Zoc chip 3
@@ -46,10 +46,10 @@ if lst gt 4 then begin
 	readcol, tmp+'OUT'+strn(lst)+'_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol, tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endif else begin
-    readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,xi,yi,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
     print,'.....',n_elements(x),'.....'
-    ;~ readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-    ;~ print,'.....',n_elements(x),'.....'
+    readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    print,'.....',n_elements(x),'.....'
 endelse
 a=float(a)
 d=float(d)
@@ -58,8 +58,8 @@ df=float(df)
 m=float(m)
 dm=float(dm)
 
-;~ xi=float(xi)
-;~ yi=float(yi)
+xi=float(xi)
+yi=float(yi)
 x=float(x)
 y=float(y)
 
@@ -93,7 +93,7 @@ y_gns=y_gns[valid_H]
 
 print,'Elemnts in GNS',n_elements(x_gns)
 
-H_Ks=where((mH-mK) gt 1.3)
+H_Ks=where((mH-mK) gt color)
 
 raH=raH[H_Ks]
 decH=decH[H_Ks]
@@ -121,7 +121,7 @@ EXTAST, header, astr
 	; writefits, tmp_path + 'align_sources.fits', map
 
 	 dmax = 1
-	 compare_lists, x_gns, y_gns, x, y, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+	 compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
@@ -153,36 +153,37 @@ EXTAST, header, astr
 	  endelse
 	  endif
 	 endwhile
-
+    if degree2 eq 1 then begin
      ;~ ; iterative degree 2 alignment
  ;~ ; ------------------------------
-     ;~ print, '#######################'
-	 ;~ print, 'Now Degree 2 alignment.'
-	 ;~ print, '#######################'
-	 ;~ count=0
-     ;~ comm=[]
-     ;~ it=0
-	 ;~ while count lt lim_it do begin
-	  ;~ it=it+1
-	  ;~ degree = 2
-	  ;~ polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
-	  ;~ print, Kx
-	  ;~ print, Ky
-	  ;~ xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
-	  ;~ yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x
-	  ;~ compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
-	  ;~ nc = n_elements(subc1)
-	  ;~ print, 'Iteration ' + strn(it)
-	  ;~ print, 'Found ' + strn(nc) + ' common stars.'
-	  ;~ comm=[comm,nc]
-	  ;~ if (n_elements(comm) gt 2) then begin
-	   ;~ if comm[-2] eq comm[-1] then begin
-	   ;~ count=count+1
-	  ;~ endif else begin
-	   ;~ count=0
-	  ;~ endelse
-	  ;~ endif
-	;~ endwhile
+     print, '#######################'
+	 print, 'Now Degree 2 alignment.'
+	 print, '#######################'
+	 count=0
+     comm=[]
+     it=0
+	 while count lt lim_it do begin
+	  it=it+1
+	  degree = 2
+	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	  print, Kx
+	  print, Ky
+	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
+	  yi = Ky[0,0] + Ky[0,1]*x + Ky[1,0]*y + Ky[1,1]*x*y + Ky[0,2]*x^2 + Ky[1,2]*x^2*y + Ky[2,2]*x^2*y^2 + Ky[2,0]*y^2 + Ky[2,1]*y^2*x
+	  compare_lists, x_gns, y_gns, xi, yi, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+	  nc = n_elements(subc1)
+	  print, 'Iteration ' + strn(it)
+	  print, 'Found ' + strn(nc) + ' common stars.'
+	  comm=[comm,nc]
+	  if (n_elements(comm) gt 2) then begin
+	   if comm[-2] eq comm[-1] then begin
+	   count=count+1
+	  endif else begin
+	   count=0
+	  endelse
+	  endif
+	endwhile
+	endif
 	
 	if degree3 eq 1 then begin
 		 ; iterative degree 3 alignment
