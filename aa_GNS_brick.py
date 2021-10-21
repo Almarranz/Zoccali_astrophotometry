@@ -29,15 +29,19 @@ elif lst==3:
  #%%       
 
 print(len(x_gns))
-# gns=np.loadtxt(GNS+'field12_on_brick_accu.txt')
+
 valid=np.where((mH<90) & (mK<90) )
 x_gns=x_gns[valid]
 y_gns=y_gns[valid]
 mH=mH[valid]
 mK=mK[valid]
+
+#selecting only background stars for the alignemnt? uncoment
+###################
 H_Ks=np.where(mH-mK>1.3)
 x_gns=x_gns[H_Ks]
 y_gns=y_gns[H_Ks]
+####################
 
 x_gns=x_gns*0.5
 y_gns=y_gns*0.5
