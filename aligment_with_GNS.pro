@@ -1,6 +1,6 @@
 pro aligment_with_GNS,field,lst,degree
 ;lst  can be 1 or 4 (refers to the chip on GNS fields)
-;~ field=20 ; fields can be 3 or 20 (refers to GNS fields)
+;~ field=20 ; fields can be 3 or 20 or 16 (refers to GNS fields)
 ;~ Esto es una prueba para git pull
 ;~ NOTE:
 ;~ degree: degree of the poly. fit. (1 and 2=2. 1,2, and 3=3)
