@@ -20,13 +20,16 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_H/dit_10/'+folde
 #%%
 #%%
 lst=1#1 is the biggest list and 3 the smallest one
-if lst==1:
-    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
-elif lst==2:
-        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_accu.txt',unpack=True)
-elif lst==3:
-        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
- #%%       
+if chip == 3:
+    if lst==1:
+        x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
+    elif lst==2:
+            x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_accu.txt',unpack=True)
+    elif lst==3:
+            x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
+if chip == 2:
+     x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick.txt',unpack=True)
+#%%       
 
 print(len(x_gns))
 
@@ -38,7 +41,7 @@ mK=mK[valid]
 
 #selecting only background stars for the alignemnt? uncoment
 ###################
-H_Ks=np.where(mH-mK>1.3)
+H_Ks=np.where((mH-mK)>1.3)
 x_gns=x_gns[H_Ks]
 y_gns=y_gns[H_Ks]
 ####################
