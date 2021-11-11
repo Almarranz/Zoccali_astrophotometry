@@ -9,6 +9,10 @@ pro aligment_with_GNS,lst,degree2,degree3,color
 ;~ On this branch (astro_aling) we dont need to click on stars, we get the matriz transformation with aa in python
 
 if (lst eq 10) || (lst eq 0) then chip=2 else chip=3
+print,'################'
+print,'chip=',chip
+print,'################'
+
 band='H'
 exptime=10
 folder='im_jitter_NOgains/'
@@ -258,13 +262,17 @@ EXTAST, header, astr
     mH=mH[subc1]
     mK=mK[subc1]
     m=m[subc2]
+    a=a[subc2]
+    d=d[subc2]
+    raH=raH[subc1]
+    decH=decH[subc1]
     
     forprint, TEXTOUT= tmp+'aa_IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
     if lst gt 4 then begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
     endif else begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,format='(10(f, 4X))', /NOCOMMENT
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT
     endelse
     forprint, TEXTOUT= tmp +'aa_IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
     
