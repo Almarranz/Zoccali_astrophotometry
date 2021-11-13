@@ -8,7 +8,7 @@ pro aligment_with_GNS,lst,degree2,degree3,color
 
 ;~ On this branch (astro_aling) we dont need to click on stars, we get the matriz transformation with aa in python
 
-if (lst eq 10) || (lst eq 0) then chip=2 else chip=3
+if (lst eq 10) || (lst eq 0) || (lst eq 5) then chip=2 else chip=3
 print,'################'
 print,'chip=',chip
 print,'################'
@@ -25,6 +25,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
 name='NPL_054'
+name1='DOWN';Selecte up or down. Up with chip3 lst = 4, down with chip2, lst =5
 markstars=0
 rot_angle=0
 
@@ -33,26 +34,30 @@ rot_angle=0
 ;####################
 ;~ lst=1
 ;~ if lst eq 16 then readcol, GNS_ori+'field16_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-if lst gt 4 then readcol, GNS_ori+'field'+strn(lst)+'_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst gt 5 then readcol, GNS_ori+'field'+strn(lst)+'_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ if lst gt 4 then GNS_ori+'field'+strn(lst)+'_out_of_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if (lst eq 10) || (lst eq 0) then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 1 then readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 2 then readcol, GNS+'field12_on_brick_accu.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 if lst eq 3 then readcol, GNS+'field12_on_brick_reduced.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 4 then readcol, GNS+name1+'_field12_on_brick_c3.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+if lst eq 5 then readcol, GNS+name1+'_field12_on_brick_c2.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 print, '#######################'
-print, 'Reading lst = ',lst
+print, 'Reading lst = ',lst, name1
 print, '#######################'
 
 
 
 
-if lst gt 4 then begin
+if lst gt 5 then begin
 	readcol, tmp+'OUT'+strn(lst)+'_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol, tmp+'stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 endif else begin
-    readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,xi,yi,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
+    ;~ readcol, tmp+'aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,xi,yi,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
+    readcol, tmp+name1+'_aa_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,xi,yi,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
     print,'.....',n_elements(x),'.....'
-    readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    ;~ readcol, tmp+'BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+    readcol, tmp+name1+'_BRICK_stars_calibrated_'+band+'_chip'+strn(chip)+'_sirius.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
     print,'.....',n_elements(x),'.....'
 endelse
 a=float(a)
@@ -267,14 +272,14 @@ EXTAST, header, astr
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= tmp+'aa_IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
-    if lst gt 4 then begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= tmp+name1+'_aa_IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
+    if lst gt 5 then begin
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'UP_aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'IDL_arcsec_vx_vy_chip3.txt',x_dis,y_dis,mH,mK,format='(10(f, 4X))', /NOCOMMENT 
     endif else begin
-		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT
+		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'UP_aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT
     endelse
-    forprint, TEXTOUT= tmp +'aa_IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
+    forprint, TEXTOUT= tmp +name1+'_aa_IDL_lst_chip'+strn(chip)+'.txt',lst, format='I', /NOCOMMENT 
     
     
 
