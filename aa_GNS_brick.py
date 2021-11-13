@@ -31,11 +31,12 @@ if in_brick==1:
             x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'field12_on_brick_reduced.txt',unpack=True)
 
 elif in_brick==0:
-    field=3# field 16(lst 2 ,3) field3(lst 1,4)
-    lst=4
+    field=16# field 16(lst 2 ,3) field3(lst 1,4)
+    lst=3
     GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field%s/'%(field)
-    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'cat_Ban_%s_%s.txt'%(field,lst),unpack=True)
-    
+    # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'cat_Ban_%s_%s.txt'%(field,lst),unpack=True)
+    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'Z1_cat_Ban_%s_%s.txt'%(field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el brock
+ 
     print('som')
  #%%       
 
@@ -64,8 +65,12 @@ if in_brick==1:
     print('Elements in Zoc: %s'%(len(x)))
 elif in_brick==0:
     tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_H/dit_10/'+folder+'tmp_bs/'
-    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)
-    zoc= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
+    # a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)
+    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'Z1_stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el Brick
+ 
+
+    # zoc= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
+    zoc= np.loadtxt(tmp+'Z1_stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
     zoca=np.array([x,y]).T
     print('Elements in Zoc: %s'%(len(x)))
 #%%
@@ -92,9 +97,9 @@ trans=aa.matrix_transform(zoca, m.params)
 zoc[:,6]=trans[:,0]
 zoc[:,7]=trans[:,1]
 if in_brick==1:
-    np.savetxt(tmp+'aa_BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',zoc, fmt='%.5f') 
+    np.savetxt(tmp+'Z1_aa_BRICK_stars_calibrated_H_chip'+str(chip)+'_sirius.txt',zoc, fmt='%.5f') 
 elif in_brick==0:
-    np.savetxt(tmp + 'aa_stars_calibrated_H_on_field%s_%s.txt'%(field,lst),zoc, fmt='%.5f')
+    np.savetxt(tmp + 'Z1_aa_stars_calibrated_H_on_field%s_%s.txt'%(field,lst),zoc, fmt='%.5f')
 
 
 

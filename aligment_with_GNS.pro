@@ -1,9 +1,12 @@
 pro aligment_with_GNS,field,lst,degree
-;lst  can be 1 or 4 (refers to the chip on GNS fields)
+;lst  can be 1 to 4 (refers to the chip on GNS fields)
 ;~ field=20 ; fields can be 3 or 20 or 16 (refers to GNS fields)
 ;~ Esto es una prueba para git pull
 ;~ NOTE:
 ;~ degree: degree of the poly. fit. (1 and 2=2. 1,2, and 3=3)
+
+;~ IMPORTAT!!!!!!!!!!!!!!
+;~ Check if Z1 is in front of the lists names
 
 
 band='H'
@@ -16,14 +19,17 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/dit_'+s
 gaussian='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'Gaussian_fit/'
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
-name='aa_NPL058_'
+;~ name='aa_NPL058_'
+name='Z1_aa_NPL058'
 
 markstars=0
 
-readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
+;~ readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
+readcol, GNS + 'Z1_cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
 ;~ readcol,tmp+'stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-readcol,tmp+'aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+;~ readcol,tmp+'aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+readcol,tmp+'Z1_aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
 
 
@@ -96,17 +102,21 @@ y_gns=y_gns[H_Ks]
 	 
 	 
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
-     ;~ stop
+     ;~ stop	
      ; iterative degree 1 alignment
 	 ; ------------------------------
+	if (degree eq 1) || (degree eq 2) || (degree eq 3)  then begin
+     print, '#######################'
+	 print, 'Now Degree 1 alignment.'
+	 print, '#######################' 
      count=0
      comm=[]
      it=0
      lim_it=1
 	 while count lt lim_it do begin
 	  it=it+1
-	  degree = 1
-	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	 
+	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], 1, Kx, Ky
 	  print, Kx
 	  print, Ky		
 	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y
@@ -124,9 +134,10 @@ y_gns=y_gns[H_Ks]
 	  endelse
 	  endif
 	 endwhile
-    
+   endif
      ; iterative degree 2 alignment
  ; ------------------------------
+  if (degree eq 2) || (degree eq 3) then begin
      print, '#######################'
 	 print, 'Now Degree 2 alignment.'
 	 print, '#######################'
@@ -135,8 +146,8 @@ y_gns=y_gns[H_Ks]
      it=0
 	 while count lt lim_it do begin
 	  it=it+1
-	  degree = 2
-	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	  
+	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], 2, Kx, Ky
 	  print, Kx
 	  print, Ky
 	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x 
@@ -154,8 +165,9 @@ y_gns=y_gns[H_Ks]
 	  endelse
 	  endif
 	endwhile
-	
-	if degree eq 3 then begin
+ endif
+ 
+ if degree eq 3 then begin
      ; iterative degree 3 alignment
  ; ------------------------------
      print, '#######################'
@@ -166,8 +178,8 @@ y_gns=y_gns[H_Ks]
      it=0
 	 while count lt lim_it && it lt 101 do begin
 	  it=it+1
-	  degree = 3
-	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], degree, Kx, Ky
+	  
+	  polywarp, x_gns[subc1], y_gns[subc1], x[subc2], y[subc2], 3, Kx, Ky
 	  print, Kx
 	  print, Ky
 	  xi = Kx[0,0] + Kx[0,1]*x + Kx[1,0]*y + Kx[1,1]*x*y + Kx[0,2]*x^2 + Kx[1,2]*x^2*y + Kx[2,2]*x^2*y^2 + Kx[2,0]*y^2 + Kx[2,1]*y^2*x +$
@@ -188,8 +200,8 @@ y_gns=y_gns[H_Ks]
 	  endelse
 	  endif
 	endwhile
-	endif
-
+  endif
+  
 	;~ readcol, GNS+'field12_on_brick.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 	;~ raH=float(raH)
 	;~ decH=float(decH)
@@ -262,10 +274,12 @@ y_gns=y_gns[H_Ks]
     decH=decH[subc1]
     
     
-		forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 	   
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		;~ forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 	
 	
     
