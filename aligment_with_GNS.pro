@@ -98,7 +98,45 @@ y_gns=y_gns[H_Ks]
 	 nc = n_elements(subc1)
 	 print, 'Found ' + strn(nc) + ' common stars.'
 	 
+	 if (degree eq 0) then begin
 	 
+		x_dis=(x2c-x1c)*0.106/4.3*1000
+		y_dis=(y2c-y1c)*0.106/4.3*1000
+		;~ Adding velocities uncertanties for x and y directions
+		dx_gns=dx_gns[subc1]*0.106*1000
+		dy_gns=dy_gns[subc1]*0.106*1000
+		
+		dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
+		dy=dy[subc2]*1000
+		
+		dvx=sqrt(dx^2+dx_gns^2)/4.3
+		dvy=sqrt(dy^2+dy_gns^2)/4.3
+		
+		distancia=1
+		compare_lists, x_gns, y_gns, x, y, x1c, y1c, x2c, y2c, MAX_DISTANCE=distancia, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
+		nc = n_elements(subc1)
+		print, 'Found after '+strn(degree)+' degree alignment ' + strn(nc) + ' common stars.'
+		
+		mH=mH[subc1]
+		mK=mK[subc1]
+		m=m[subc2]
+		a=a[subc2]
+		d=d[subc2]
+		raH=raH[subc1]
+		decH=decH[subc1]
+		
+    
+		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+	   
+		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
+		;~ forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+	
+	stop
+    
+	 
+	 endif 
 	 
 	 
      ;~ forprint, TEXTOUT= tmp_p+'checking_lits.txt',x2c-xoff ,dx[subc2] , y2c-yoff, dy[subc2], x1c,dx_gns[subc1]/0.106,y1c,dy_gns[subc1]/0.106 ,format='(10(f, 4X))', /NOCOMMENT 
@@ -236,7 +274,7 @@ y_gns=y_gns[H_Ks]
 	endif
 	
     ;~ forprint, TEXTOUT= tmp_p+'2lists_IDL_GNS.txt',x1c ,x2c , y1c, y2c,format='(10(f, 4X))', /NOCOMMENT 
-    if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) or (field eq 7) then begin ; different dates for different fields
+    ;~ if (field eq 3) or (field eq 10) or (field eq 16) or (field eq 12) or (field eq 7) then begin ; different dates for different fields
 		x_dis=(x2c-x1c)*0.106/4.3*1000
 		y_dis=(y2c-y1c)*0.106/4.3*1000
 		;~ Adding velocities uncertanties for x and y directions
@@ -248,22 +286,22 @@ y_gns=y_gns[H_Ks]
 		
 		dvx=sqrt(dx^2+dx_gns^2)/4.3
 		dvy=sqrt(dy^2+dy_gns^2)/4.3
-	endif
+	;~ endif
 	
-	if field eq 20 then begin
-		x_dis=(x2c-x1c)*0.106/4.2*1000
-		y_dis=(y2c-y1c)*0.106/4.2*1000
-		;~ Adding velocities uncertanties for x and y directions
-		dx_gns=dx_gns[subc1]*0.106*1000
-		dy_gns=dy_gns[subc1]*0.106*1000
+	;~ if field eq 20 then begin
+		;~ x_dis=(x2c-x1c)*0.106/4.2*1000
+		;~ y_dis=(y2c-y1c)*0.106/4.2*1000
+		;~ ;Adding velocities uncertanties for x and y directions
+		;~ dx_gns=dx_gns[subc1]*0.106*1000
+		;~ dy_gns=dy_gns[subc1]*0.106*1000
 		
-		dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
-		dy=dy[subc2]*1000
+		;~ dx=dx[subc2]*1000 ; uncertanties in Zoc's data are already in arcsec
+		;~ dy=dy[subc2]*1000
 		
-		dvx=sqrt(dx^2+dx_gns^2)/4.2
-		dvy=sqrt(dy^2+dy_gns^2)/4.2
+		;~ dvx=sqrt(dx^2+dx_gns^2)/4.2
+		;~ dvy=sqrt(dy^2+dy_gns^2)/4.2
 		
-	endif
+	;~ endif
     
     mH=mH[subc1]
     mK=mK[subc1]
