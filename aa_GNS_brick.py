@@ -15,7 +15,7 @@ from scipy.spatial import distance
 import sys
 folder='im_jitter_NOgains/'
 chip=3
-
+zone='Z1'
 
 #%%
 #%%
@@ -35,7 +35,7 @@ elif in_brick==0:
     lst=3
     GNS='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/field%s/'%(field)
     # x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'cat_Ban_%s_%s.txt'%(field,lst),unpack=True)
-    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'Z1_cat_Ban_%s_%s.txt'%(field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el brock
+    x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK=np.loadtxt(GNS+'%s_cat_Ban_%s_%s.txt'%(zone,field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el brock
  
     print('som')
  #%%       
@@ -66,11 +66,11 @@ if in_brick==1:
 elif in_brick==0:
     tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_H/dit_10/'+folder+'tmp_bs/'
     # a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)
-    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'Z1_stars_calibrated_H_on_field%s_%s.txt'%(field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el Brick
+    a ,d , m, dm, f, df,x,y,dx,dy= np.loadtxt(tmp+'%s_stars_calibrated_H_on_field%s_%s.txt'%(zone,field,lst),unpack=True)#'Z1_..' hace referencia a una lista sobrre una zona del mismo tamaño de Zone A sobre el Brick
  
 
     # zoc= np.loadtxt(tmp+'stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
-    zoc= np.loadtxt(tmp+'Z1_stars_calibrated_H_on_field%s_%s.txt'%(field,lst))
+    zoc= np.loadtxt(tmp+'%s_stars_calibrated_H_on_field%s_%s.txt'%(zone,field,lst))
     zoca=np.array([x,y]).T
     print('Elements in Zoc: %s'%(len(x)))
 #%%
