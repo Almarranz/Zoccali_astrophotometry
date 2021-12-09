@@ -12,6 +12,7 @@ pro jk_aligment_with_GNS,field,lst,degree
 band='H'
 
 
+
 field=16
 lst=3
 
@@ -103,7 +104,7 @@ y_gns=y_gns[H_Ks]
 	 
 	
 	 
-	 nsample = 1400	
+	 nsample = 1477
 for i=0, nsample - 1 do begin
 
 	
@@ -119,11 +120,22 @@ for i=0, nsample - 1 do begin
 	 
 	 
 	imax = n_elements(x1c)
+	;removing randomly
+	;~ indb = RANDOM_SAMPLE(seed, FINDGEN(imax), imax-1)
 	
-	indb = RANDOM_SAMPLE(seed, FINDGEN(imax), imax-1)
+	;~ x_gns_jk = x1c[indb] ; after removing	
+	;~ y_gns_jk=  y1c[indb]
 	
-	x_gns_jk = x1c[indb] ; after removing	
-	y_gns_jk=  y1c[indb]
+	x_gns_jk=x1c
+	y_gns_jk=y1c
+	
+	
+	remove, i, x_gns_jk
+	remove, i, y_gns_jk
+	
+	print, n_elements(x_gns_jk),n_elements(x1c)
+		
+	
 	
 	dmax = 1
 	 compare_lists, x_gns_jk, y_gns_jk, x, y, x1c, y1c, x2c, y2c, MAX_DISTANCE=dmax, SUBSCRIPTS_1=subc1, SUBSCRIPTS_2 = subc2, SUB1 = sub1, SUB2 = sub2
