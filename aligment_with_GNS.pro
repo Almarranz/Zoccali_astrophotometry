@@ -20,16 +20,19 @@ gaussian='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/di
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/058_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
 ;~ name='aa_NPL058_'
-name='Z1_aa_NPL058'
+;~ name='Z1_aa_NPL058'
+zone='Z1' ;Zone refers to the little squares the same size of the one of the brick on zone B; Z1 is left, z2 is right
+name=strn(zone)+'_aa_NPL058'
+print, name
 
 markstars=0
 
 ;~ readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
-readcol, GNS + 'Z1_cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+readcol, GNS + strn(zone)+'_cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
 ;~ readcol,tmp+'stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 ;~ readcol,tmp+'aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
-readcol,tmp+'Z1_aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
+readcol,tmp+strn(zone)+'_aa_stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
 
 
