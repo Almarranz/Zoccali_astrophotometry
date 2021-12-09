@@ -34,6 +34,8 @@ ___
 10. _photometry_plotting.py. Plots dmag vs mag, ZPs, ZPs uncertainties in bins, and x diff with SIRIUS 
 10. aa_GNS_brick.py. Alings GNs with NPL058, out of brick. You have to choose field and chip forn GNS and it generates a trasnformed list of Zoc data to being used in the next script
 11. aligment_with_GNS.pro. It does align with the transdformed GNS using IDL code.  after this one you can jump to Gassuian_fit reposositoy.
+12. jk_aligment_with_GNS.pro. Repit the alignment process but getting rid of one of the common stars each time. i.e. repit the alignment one time for each common star, and store the list of stars in a list.
+13. jk_error_alignment.py. Compute the mu and sigma for the position of the stars after the differentes alignments (the ones done in the previous step). The sigma is the error of the aligment.
 ___
 ## WARNING 
 for here on is python alignment. Eventhoug they work, it is better to stop here. Use carefully
