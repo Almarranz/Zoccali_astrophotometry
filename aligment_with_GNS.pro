@@ -316,11 +316,11 @@ y_gns=y_gns[H_Ks]
     
     
 		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 	   
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 	
 	
     
