@@ -272,7 +272,7 @@ EXTAST, header, astr
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 8X))', /NOCOMMENT 
     
     stop
     
