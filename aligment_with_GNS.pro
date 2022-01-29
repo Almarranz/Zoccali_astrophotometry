@@ -1,4 +1,4 @@
-pro aligment_with_GNS,field,lst,degree
+pro aligment_with_GNS,field,lst,degree,color
 ;lst  can be 1 to 4 (refers to the chip on GNS fields)
 ;~ field=20 ; fields can be 3 or 20 or 16 (refers to GNS fields)
 ;~ Esto es una prueba para git pull
@@ -79,7 +79,7 @@ x_gns=x_gns[valid_H]
 y_gns=y_gns[valid_H]
 print,n_elements(raH)
 
-H_Ks=where((mH-mK) gt 1.3)
+H_Ks=where((mH-mK) gt color)
 
 raH=raH[H_Ks]
 decH=decH[H_Ks]
@@ -319,7 +319,7 @@ y_gns=y_gns[H_Ks]
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,dx,dy,format='(5(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 4X))', /NOCOMMENT 
     
     stop
     
