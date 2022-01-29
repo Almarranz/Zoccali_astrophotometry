@@ -27,7 +27,7 @@ print, name
 
 markstars=0
 
-;~ readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
+;~ readcol, GNS + 'cat_Ban_'+strn(field)+'_'+strn(lst)	+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A';,SKIPLINE = 1
 readcol, GNS + strn(zone)+'_cat_Ban_'+strn(field)+'_'+strn(lst)+'.txt',x_gns, dx_gns, y_gns, dy_gns, raH, draH, decH, ddecH, mJ, dmJ, mH, dmH, mK, dmK, Format='A,A,A,A,A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
 
 ;~ readcol,tmp+'stars_calibrated_H_on_field'+strn(field)+'_'+strn(lst)+'.txt',a ,d , m, dm, f, df,x,y,dx,dy,Format ='A,A,A,A,A,A,A,A,A,A',SKIPLINE = 1
@@ -290,6 +290,10 @@ y_gns=y_gns[H_Ks]
 		
 		dvx=sqrt(dx^2+dx_gns^2)/4.3
 		dvy=sqrt(dy^2+dy_gns^2)/4.3
+		
+		
+        
+		
 	;~ endif
 	
 	;~ if field eq 20 then begin
@@ -315,6 +319,9 @@ y_gns=y_gns[H_Ks]
     raH=raH[subc1]
     decH=decH[subc1]
     
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,dx,dy,format='(5(f, 4X))', /NOCOMMENT 
+    
+    stop
     
 		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
