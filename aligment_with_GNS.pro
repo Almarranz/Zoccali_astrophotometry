@@ -25,7 +25,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
 name='NPL_054'
-name1='DOWN';Selecte up or down. Up with chip3 lst = 4, down with chip2, lst =5
+name1='UP';Selecte up or down. Up with chip3 lst = 4, down with chip2, lst =5
 markstars=0
 rot_angle=0
 
@@ -272,7 +272,7 @@ EXTAST, header, astr
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,dx,dy,format='(5(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 4X))', /NOCOMMENT 
     
     stop
     
