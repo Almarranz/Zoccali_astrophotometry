@@ -272,6 +272,10 @@ EXTAST, header, astr
     raH=raH[subc1]
     decH=decH[subc1]
     
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,dx,dy,format='(5(f, 4X))', /NOCOMMENT 
+    
+    stop
+    
     forprint, TEXTOUT= tmp+name1+'_aa_IDL_xdis_ydis_chip'+strn(chip)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,format='(10(f, 4X))', /NOCOMMENT 
     if lst gt 5 then begin
 		forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+'aa_IDL_arcsec_vx_vy_chip'+strn(chip)+'_out_Brick'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
