@@ -46,6 +46,8 @@ x=float(x)
 y=float(y)
 dx=float(dx)
 dy=float(dy)
+dx_gns=float(dx_gns)
+dy_gns=float(dy_gns)  	
 
 
 
@@ -67,6 +69,10 @@ x_gns=x_gns*0.5
 y_gns=y_gns*0.5
 
 
+;~ dx_gns=dx_gns*0.5
+;~ dy_gns=dy_gns*0.5
+
+
 
 
 
@@ -77,6 +83,11 @@ mH=mH[valid_H]
 mK=mK[valid_H]
 x_gns=x_gns[valid_H]
 y_gns=y_gns[valid_H]
+
+dx_gns=dx_gns[valid_H]
+dy_gns=dy_gns[valid_H]
+
+
 print,n_elements(raH)
 
 H_Ks=where((mH-mK) gt color)
@@ -87,6 +98,9 @@ mH=mH[H_Ks]
 mK=mK[H_Ks]
 x_gns=x_gns[H_Ks]
 y_gns=y_gns[H_Ks]
+
+dx_gns=dx_gns[H_Ks]
+dy_gns=dy_gns[H_Ks]
 
 
 
@@ -128,6 +142,14 @@ y_gns=y_gns[H_Ks]
 		d=d[subc2]
 		raH=raH[subc1]
 		decH=decH[subc1]
+		
+		dx_gns=dx_gns[subc1]
+		dy_gns=dy_gns[subc1]
+		
+		dx=dx[subc2]
+		dy=dy_[subc2]
+		
+		
 		
     
 		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
@@ -319,7 +341,8 @@ y_gns=y_gns[H_Ks]
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 4X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 8X))', /NOCOMMENT 
+    ;~ forprint, TEXTOUT= pruebas +'dvx_mag_OUT1.txt',mH,dvx,format='(2(f, 8X))', /NOCOMMENT 
     
     stop
     
