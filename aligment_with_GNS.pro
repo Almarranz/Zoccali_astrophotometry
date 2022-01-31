@@ -25,7 +25,7 @@ tmp='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+s
 results='/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/054_'+band+'/dit_'+strn(exptime)+'/'+folder+'/results/'
 tmp_p=pruebas
 name='NPL_054'
-name1='UP';Selecte up or down. Up with chip3 lst = 4, down with chip2, lst =5
+name1='DOWN';Selecte up or down. Up with chip3 lst = 4, down with chip2, lst =5
 markstars=0
 rot_angle=0
 
@@ -95,6 +95,8 @@ print,'Elemnts in GNS',n_elements(x_gns)
 valid_H=where(mH lt 90 and mK lt 90)
 raH=raH[valid_H]
 decH=decH[valid_H]
+draH=draH[valid_H]
+ddecH=ddecH[valid_H]
 mH=mH[valid_H]
 mK=mK[valid_H]
 x_gns=x_gns[valid_H]
@@ -106,6 +108,8 @@ H_Ks=where((mH-mK) gt color)
 
 raH=raH[H_Ks]
 decH=decH[H_Ks]
+draH=draH[H_Ks]
+ddecH=ddecH[H_Ks]
 mH=mH[H_Ks]
 mK=mK[H_Ks]
 x_gns=x_gns[H_Ks]
@@ -272,7 +276,7 @@ EXTAST, header, astr
     raH=raH[subc1]
     decH=decH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,format='(6(f, 8X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,draH,ddecH,format='(8(f, 8X))', /NOCOMMENT 
     
     stop
     
