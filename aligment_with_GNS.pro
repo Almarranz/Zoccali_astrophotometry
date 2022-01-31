@@ -351,7 +351,7 @@ y_gns=y_gns[H_Ks]
     draH=draH[subc1]
     ddecH=ddecH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,dra,ddecformat='(8(f, 15X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,draH,ddecH,format='(8(f, 15X))', /NOCOMMENT 
     ;~ forprint, TEXTOUT= pruebas +'dvx_mag_OUT1.txt',mH,dvx,format='(2(f, 8X))', /NOCOMMENT 
     
     stop
