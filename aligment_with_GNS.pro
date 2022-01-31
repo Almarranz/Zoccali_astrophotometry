@@ -75,7 +75,8 @@ y=float(y)
 dx=float(dx)
 dy=float(dy)
 
-
+dx_gns=float(dx_gns)
+dy_gns=float(dy_gns)  
 
 
 raH=float(raH)
@@ -88,6 +89,9 @@ mK=float(mK)
 
 x_gns=x_gns*0.5
 y_gns=y_gns*0.5
+
+dx_gns=dx_gns*0.5
+dy_gns=dy_gns*0.5
 
 print,'Elemnts in GNS',n_elements(x_gns)
 
@@ -102,6 +106,10 @@ mK=mK[valid_H]
 x_gns=x_gns[valid_H]
 y_gns=y_gns[valid_H]
 
+dx_gns=dx_gns[valid_H]
+dy_gns=dy_gns[valid_H]
+
+
 print,'Elemnts in GNS',n_elements(x_gns)
 
 H_Ks=where((mH-mK) gt color)
@@ -114,6 +122,9 @@ mH=mH[H_Ks]
 mK=mK[H_Ks]
 x_gns=x_gns[H_Ks]
 y_gns=y_gns[H_Ks]
+
+dx_gns=dx_gns[H_Ks]
+dy_gns=dy_gns[H_Ks]
 
 print,'Elemnts in GNS',n_elements(x_gns)
 
