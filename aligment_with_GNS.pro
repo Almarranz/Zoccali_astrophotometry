@@ -286,8 +286,11 @@ EXTAST, header, astr
     d=d[subc2]
     raH=raH[subc1]
     decH=decH[subc1]
+    draH=draH[subc1]
+    ddecH=ddecH[subc1]
     
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,draH,ddecH,format='(8(f, 8X))', /NOCOMMENT 
+    ;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,draH,ddecH,format='(8(f, 8X))', /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'in'+strn(name1)+'_comm_GNS_ZOC.txt',mH,dx,dy,draH,ddecH,format='(5(f, 10X))',/NOCOMMENT 
     
     stop
     
