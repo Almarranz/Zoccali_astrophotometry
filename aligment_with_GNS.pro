@@ -352,17 +352,17 @@ print,'After color cut',n_elements(raH)
     ddecH=ddecH[subc1]
     
     ;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx_gns,dy_gns,m,dx,dy,draH,ddecH,format='(8(f, 15X))', /NOCOMMENT 
-    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC.txt',mH,dx,dy,draH,ddecH, /NOCOMMENT 
+    forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/HAWK/The_Brick/photometry/dxy_GNS_vs_ZOC/'+'out_comm_GNS_ZOC_special.txt',mH,dx,dy,draH,ddecH, /NOCOMMENT 
    
     
-    stop
+   
     
 		;~ forprint, TEXTOUT= tmp+name+'IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= tmp+name+'_IDL_xdis_ydis_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'_special.txt',x2c-x1c,y2c-y1c,dvx,dvy,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
 	   
 		;~ forprint, TEXTOUT= '/Users/amartinez/Desktop/PhD/python/Gaussian_fit/'+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,format='(10(f, 4X))', /NOCOMMENT 
 		;~ forprint, TEXTOUT= gaussian+name+'IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'.txt',x_dis,y_dis,dvx,dvy,mH,m,a,d,raH,decH,format='(10(f, 4X))', /NOCOMMENT 
-		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'.txt',x_dis,y_dis,dvx,dvy,mH,mK,m,a,d,raH,decH,format='(11(f, 4X))', /NOCOMMENT 
+		forprint, TEXTOUT= gaussian+name+'_IDL_mas_vx_vy_field'+strn(field)+'_chip'+strn(lst)+'_degree'+strn(degree)+'special.txt',x_dis,y_dis,dvx,dvy,mH,mK,m,a,d,raH,decH,format='(11(f, 4X))', /NOCOMMENT 
 	
 	
     
